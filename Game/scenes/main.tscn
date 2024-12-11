@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://buhi6arioj2je"]
 
-[ext_resource type="Script" path="res://scripts/network_client.gd" id="1_51f1j"]
+[ext_resource type="Script" path="res://scripts/network.gd" id="1_51f1j"]
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_uc6kl"]
 
 [node name="Main" type="Node"]
@@ -75,6 +75,5 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Join"
 
-[node name="NetworkClient" type="Node" parent="."]
+[node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
-websocket_url = "ws://127.0.0.1:9955"
