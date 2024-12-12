@@ -7,6 +7,8 @@
 
 use num_enum::{IntoPrimitive, TryFromPrimitive};
 
+use crate::client::Client;
+
 /// Represents a type of packet packets sent between the clients and the server.
 ///
 /// There are two types of packets:
@@ -24,6 +26,10 @@ pub enum PacketID {
     ClientRelayData = 2,
     /// Server tells client to disconnect
     ClientDisconnect = 3,
+    /// Server response to a JoinGame packet
+    JoinGameResult = 4,
+    /// Server encountering an error processing client request packet
+    ClientRequestError = 5,
 
     // SERVER PACKETS
     /// Client host attempts to register account with the server

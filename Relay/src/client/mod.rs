@@ -3,8 +3,13 @@
 //! Each client is represented by a [`Client`] struct, which includes ways to send and receive packets to and from the client.
 use std::sync::Arc;
 
-use crate::{packet::PacketID, utils::ByteBufferExt};
+use crate::{
+    packet::PacketID,
+    room_manager::RoomID,
+    utils::{ByteBufferExt, ByteBufferExtError},
+};
 use bytebuffer::ByteBuffer;
+use thiserror::Error;
 use tokio::sync::Mutex;
 
 use self::network_transport::{NetworkTransport, NetworkTransportError};
@@ -41,6 +46,20 @@ pub enum ClientStatus {
     Connected,
 }
 
+#[derive(Error, Debug)]
+pub enum ClientError {
+    #[error("problem feeding client {0} packets: {1}")]
+    NetworkTransportError(ClientID, NetworkTransportError),
+    #[error("byte buffer ext error: {0}")]
+    ByteBufferExtError(ByteBufferExtError),
+}
+
+impl From<ByteBufferExtError> for ClientError {
+    fn from(value: ByteBufferExtError) -> Self {
+        ClientError::ByteBufferExtError(value)
+    }
+}
+
 /// A client that is connected to the server
 pub struct Client {
     /// Unique ID for the client for the current client to server session.
@@ -51,7 +70,7 @@ pub struct Client {
     pub status: ClientStatus,
     pub network_transport: Arc<Mutex<dyn NetworkTransport>>,
     /// Set to the room that the client is in
-    pub game_code: Option<String>,
+    pub room_id: Option<RoomID>,
 }
 
 impl Client {
@@ -63,12 +82,8 @@ impl Client {
             id: 0,
             status: ClientStatus::Disconnected,
             network_transport,
-            game_code: None,
+            room_id: None,
         }
-    }
-
-    pub fn is_host(&self) -> bool {
-        return self.game_code.is_some();
     }
 
     /// Feeds client packets into the [`network_transport`] and then flushes the [`network_transport`]
@@ -80,12 +95,12 @@ impl Client {
     /// ```rust
     /// print("hi");
     /// ````
-    pub async fn feed_and_flush_packet(
-        &mut self,
-        packet: QueuedPacket,
-    ) -> Result<(), NetworkTransportError> {
+    pub async fn feed_and_flush_packet(&mut self, packet: QueuedPacket) -> Result<(), ClientError> {
         let mut network_transport = self.network_transport.lock().await;
-        network_transport.feed_and_flush_packet(packet).await
+        network_transport
+            .feed_and_flush_packet(packet)
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
     }
 
     /// Feeds client packets into the [`network_transport`] and then flushes the [`network_transport`].
@@ -94,17 +109,23 @@ impl Client {
     pub async fn feed_and_flush_packets(
         &mut self,
         packet_queue: Vec<QueuedPacket>,
-    ) -> Result<(), NetworkTransportError> {
+    ) -> Result<(), ClientError> {
         let mut network_transport = self.network_transport.lock().await;
-        network_transport.feed_and_flush_packets(packet_queue).await
+        network_transport
+            .feed_and_flush_packets(packet_queue)
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
     }
 
     /// Feeds a client packet into the [`network_transport`] and then flushes the [`network_transport`].
     ///
     /// Used to queue up packets to be sent to the client.
-    pub async fn feed_packet(&mut self, packet: QueuedPacket) -> Result<(), NetworkTransportError> {
+    pub async fn feed_packet(&mut self, packet: QueuedPacket) -> Result<(), ClientError> {
         let mut network_transport = self.network_transport.lock().await;
-        network_transport.feed_client_packet(packet).await
+        network_transport
+            .feed_client_packet(packet)
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
     }
 
     /// Feeds client packets into the [`network_transport`]
@@ -113,16 +134,77 @@ impl Client {
     pub async fn feed_packets(
         &mut self,
         packet_queue: Vec<QueuedPacket>,
-    ) -> Result<(), NetworkTransportError> {
+    ) -> Result<(), ClientError> {
         let mut network_transport = self.network_transport.lock().await;
-        network_transport.feed_client_packets(packet_queue).await
+        network_transport
+            .feed_client_packets(packet_queue)
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
     }
 
     /// Flushes the [`network_transport`].
     ///
     /// Any packets queued up using [`feed_client_packets`] or [`feed_client_packet`] will be sent to the client will be sent immediately.
-    pub async fn flush_packets(&mut self) -> Result<(), NetworkTransportError> {
+    pub async fn flush_packets(&mut self) -> Result<(), ClientError> {
         let mut network_transport = self.network_transport.lock().await;
-        network_transport.flush_client_packets().await
+        network_transport
+            .flush_client_packets()
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
+    }
+
+    /// Disconnects the [`network_transport`].
+    pub async fn disconnect(&mut self) -> Result<(), ClientError> {
+        let mut network_transport = self.network_transport.lock().await;
+        network_transport
+            .disconnect()
+            .await
+            .map_err(|e| ClientError::NetworkTransportError(self.id, e))
+    }
+
+    /// Sends a [`PackedID::ClientRequestError`] packet.
+    pub async fn send_client_request_error(&mut self, message: &str) -> Result<(), ClientError> {
+        let mut buffer = ByteBuffer::new_little_endian();
+        buffer.write_str_u32_len(message)?;
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::ClientRequestError,
+            buffer,
+        })
+        .await?;
+        Ok(())
+    }
+
+    /// Sends a [`PackedID::HostGameResult`] packet.
+    pub async fn send_host_game_result(&mut self, room_id: RoomID) -> Result<(), ClientError> {
+        let mut buffer = ByteBuffer::new_little_endian();
+        buffer.write_str_u32_len(&room_id)?;
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::HostGameResult,
+            buffer,
+        })
+        .await?;
+        Ok(())
+    }
+
+    /// Sends a [`PacketID::JoinGameResult`] packet. This tells the client it can start sending
+    /// and receiving data down its stream.
+    pub async fn send_join_game_result(&mut self) -> Result<(), ClientError> {
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::JoinGameResult,
+            buffer: ByteBuffer::new(),
+        })
+        .await?;
+        Ok(())
+    }
+
+    /// Sends a [`PacketID::ClientRelayData`] packet.
+    /// This packet contains data forwarded from a [`PacketID::ServerRelayData`] packet received from another client.
+    pub async fn send_client_relay_data(&mut self, buffer: ByteBuffer) -> Result<(), ClientError> {
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::JoinGameResult,
+            buffer,
+        })
+        .await?;
+        Ok(())
     }
 }
