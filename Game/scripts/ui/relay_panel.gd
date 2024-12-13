@@ -17,7 +17,7 @@ func _ready() -> void:
 	_on_connect_relay()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	_update_config_label()
 
 

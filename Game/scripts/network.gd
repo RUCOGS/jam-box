@@ -12,6 +12,7 @@ static var global: Network
 
 @export var server_address: String = "ws://127.0.0.1:9955"
 @export var connect_timeout: float = 5
+@export var auto_reconnect: bool = false
 
 enum State {
 	IDLE,
@@ -31,6 +32,7 @@ var connect_timer: float = 0
 
 var _socket = WebSocketPeer.new()
 var _peer_buffer = ByteBuffer.new_little_endian()
+var _suppress_auto_reconnect = false
 
 
 func _enter_tree() -> void:
@@ -49,7 +51,9 @@ func _notification(what: int) -> void:
 
 func connect_socket(_server_address: String = self.server_address):
 	if state != State.IDLE:
+		_suppress_auto_reconnect = true
 		await disconnect_socket()
+		_suppress_auto_reconnect = false
 	self.server_address = _server_address
 	_socket.connect_to_url(_server_address)
 	state = State.CONNECTING
@@ -101,6 +105,8 @@ func _process(delta):
 		var code = _socket.get_close_code()
 		print("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
 		set_process(false)
+		if auto_reconnect and not _suppress_auto_reconnect:
+			restart_socket()
 		disconnected.emit()
 
 
@@ -135,9 +141,10 @@ func send_packet(bytes: PackedByteArray):
 	_socket.send(bytes)
 
 
-func send_host_room():
+func send_host_room(max_players: int):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.HOST_ROOM)
+	_peer_buffer.put_u16(max_players)
 	send_packet(_peer_buffer.data_array)
 
 
@@ -149,8 +156,21 @@ func send_join_room(code: String, username: String):
 	send_packet(_peer_buffer.data_array)
 
 
-func send_relay_data(bytes: PackedByteArray):
+# Player sends a packet to the host
+# Should only be called on the player client!
+func player_send_relay_data(bytes: PackedByteArray):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_data(bytes)
+	send_packet(_peer_buffer.data_array)
+
+
+# Host sends a packet to either all players or a specific player
+# Should only be called on the host client!
+# Leave dest_id = 0 if you want to broadcast to all players
+func host_send_relay_data(bytes: PackedByteArray, dest_id: int = 0):
+	_peer_buffer.clear()
+	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_u16(dest_id)
 	_peer_buffer.put_data(bytes)
 	send_packet(_peer_buffer.data_array)

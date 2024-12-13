@@ -14,12 +14,14 @@ func _ready() -> void:
 	_join_button.pressed.connect(_on_join_pressed)
 	_host_button.pressed.connect(_on_host_pressed)
 	_room_manager.state_changed.connect(_on_room_state_changed)
+	_network.state_changed.connect(_on_room_state_changed)
 	_on_room_state_changed()
 
 
 func _on_room_state_changed():
-	_join_button.disabled = _room_manager.state == RoomManager.State.CONNECTING
-	_host_button.disabled = _room_manager.state == RoomManager.State.CONNECTING
+	var disable_buttons = _room_manager.state == RoomManager.State.CONNECTING or _network.state != Network.State.CONNECTED
+	_join_button.disabled = disable_buttons
+	_host_button.disabled = disable_buttons
 	if _room_manager.state == RoomManager.State.IN_ROOM:
 		if _room_manager.is_host:
 			_menu_manager.go_to_menu("HostLobbyPanel")

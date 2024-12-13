@@ -5,7 +5,6 @@ extends PanelContainer
 @export var _room_manager: RoomManager
 @export var _code_label: Label
 @export var _players_label: Label
-@export var _start_button: Button
 @export var _quit_button: Button
 
 # [player_id: int] -> bool (pressed)
@@ -22,7 +21,6 @@ func _ready() -> void:
 
 func _on_state_changed():
 	if _room_manager.state == RoomManager.State.IN_ROOM:
-		_code_label.text = "[%s]" % _room_manager.room_code
 		_player_to_test_pressed.clear()
 	_update_visuals()
 
@@ -45,9 +43,15 @@ func _on_player_disconnected(player_id: int):
 
 
 func _update_visuals():
+	_code_label.text = "[%s]   %s/%s (min: %s)" % [_room_manager.room_code, len(_room_manager.players), _room_manager.max_players, _room_manager.min_players]
 	var text = ""
 	for player_id in _room_manager.players:
-		text += "[%s]: %s %s\n" % [player_id, _room_manager.players[player_id], "(TEST)" if _player_to_test_pressed[player_id] else ""]
+		text += "[%s]: %s" % [player_id, _room_manager.players[player_id]]
+		if player_id == _room_manager.player_host:
+			text += " (HOST)"
+		if _player_to_test_pressed[player_id]:
+			text += " (TEST)"
+		text += "\n"
 	text = text.rstrip("\n")
 	_players_label.text = text
 

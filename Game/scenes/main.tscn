@@ -35,6 +35,7 @@ grow_vertical = 2
 script = ExtResource("1_1hdj3")
 
 [node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button")]
+visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -99,8 +100,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Host"
 
-[node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_start_button", "_quit_button")]
-visible = false
+[node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -119,7 +119,6 @@ _network = NodePath("../../../../Network")
 _room_manager = NodePath("../../../../RoomManager")
 _code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
 _players_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/PlayersLabel")
-_start_button = NodePath("MarginContainer/VBoxContainer/StartButton")
 _quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel"]
@@ -148,15 +147,11 @@ layout_mode = 2
 layout_mode = 2
 text = "P1"
 
-[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Start"
-
 [node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
 
-[node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_test_button", "_quit_button")]
+[node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_username_label", "_test_button", "_quit_button", "_start_button")]
 visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -175,8 +170,10 @@ script = ExtResource("5_o4tag")
 _network = NodePath("../../../../Network")
 _room_manager = NodePath("../../../../RoomManager")
 _code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
+_username_label = NodePath("MarginContainer/VBoxContainer/UsernameLabel")
 _test_button = NodePath("MarginContainer/VBoxContainer/TestButton")
 _quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
+_start_button = NodePath("MarginContainer/VBoxContainer/StartButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel"]
 layout_mode = 2
@@ -196,6 +193,10 @@ text = "COGS Box Lobby"
 layout_mode = 2
 text = "[55446]"
 
+[node name="UsernameLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Username"
+
 [node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
@@ -203,6 +204,10 @@ layout_mode = 2
 [node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Test Input"
+
+[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start"
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -291,7 +296,9 @@ autowrap_mode = 3
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
+auto_reconnect = true
 
 [node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_network")]
 script = ExtResource("6_olaue")
 _network = NodePath("../Network")
+max_players = 3

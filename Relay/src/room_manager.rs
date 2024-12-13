@@ -29,6 +29,8 @@ pub enum RoomManagerError {
     UnhandledPacketID(PacketID),
     #[error("byte buffer error: {0}")]
     ByteBufferError(ByteBufferExtError),
+    #[error("buffer io error: {0}")]
+    BufferIOError(std::io::Error),
 }
 
 impl From<ByteBufferExtError> for RoomManagerError {
@@ -43,6 +45,12 @@ impl From<ClientError> for RoomManagerError {
     }
 }
 
+impl From<std::io::Error> for RoomManagerError {
+    fn from(value: std::io::Error) -> Self {
+        RoomManagerError::BufferIOError(value)
+    }
+}
+
 // RoomID is unique for a room, and is also the string users use to access a room.
 pub type RoomID = String;
 
@@ -53,16 +61,22 @@ pub struct Room {
     pub owner: ClientID,
     pub players: HashSet<ClientID>,
     pub usernames: HashSet<String>,
+    pub max_players: u16,
 }
 
 impl Room {
-    pub fn new(id: RoomID, owner: ClientID) -> Self {
+    pub fn new(id: RoomID, owner: ClientID, max_players: u16) -> Self {
         Self {
             id,
             owner,
             players: HashSet::new(),
             usernames: HashSet::new(),
+            max_players,
         }
+    }
+
+    pub fn is_full(&self) -> bool {
+        self.players.len() >= self.max_players as usize
     }
 }
 
@@ -100,6 +114,10 @@ impl RoomManager {
         client.status = ClientStatus::Connected;
         self.clients.insert(client_id, client);
         self.next_client_id += 1;
+        // We reserve client_id of 0 to mean a broadcast packet
+        if self.next_client_id == 0 {
+            self.next_client_id = 1;
+        }
         return client_id;
     }
 
@@ -125,6 +143,7 @@ impl RoomManager {
                         // If we are a player, then remove ourselves from the room and
                         // notify the host that we disconnected
                         room.usernames.remove(&client.username);
+                        room.players.remove(&client_id);
                         if let Some(host) = self.clients.get_mut(&room.owner) {
                             host.send_room_player_disconnected(client_id).await?;
                         }
@@ -141,7 +160,6 @@ impl RoomManager {
         client_id: ClientID,
         mut packet: QueuedPacket,
     ) -> Result<(), RoomManagerError> {
-        info!("Client {} -> Packet {:?}", client_id, packet.packet_id);
         let client = self
             .clients
             .get_mut(&client_id)
@@ -151,11 +169,13 @@ impl RoomManager {
         match packet.packet_id {
             PacketID::HostRoom => {
                 // Create room with a random game code, and make the client a host using that game code
+                let max_players = p_buffer.read_u16()?;
+
                 let mut room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 while self.rooms.contains_key(&room_id) {
                     room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 }
-                let room = Room::new(room_id.clone(), client_id);
+                let room = Room::new(room_id.clone(), client_id, max_players);
                 client.room_id = Some(room_id.clone());
                 self.rooms.insert(room_id.clone(), room);
 
@@ -177,6 +197,10 @@ impl RoomManager {
                         .send_client_request_error("Username cannot be blank.")
                         .await?;
                 } else if let Some(room) = self.rooms.get_mut(&room_id) {
+                    if room.is_full() {
+                        client.send_client_request_error("Room is full.").await?;
+                        return Ok(());
+                    }
                     if !room.usernames.contains(&username) {
                         room.usernames.insert(username.clone());
                         room.players.insert(client_id);
@@ -203,19 +227,36 @@ impl RoomManager {
                 //  - Player sends data to host
                 if let Some(room_id) = &client.room_id {
                     let mut p_data = Vec::<u8>::new();
-                    p_buffer
-                        .read_to_end(&mut p_data)
-                        .expect("Expect ServerRelayData to fit in Vec<u8>.");
                     if let Some(room) = self.rooms.get(room_id) {
                         if room.owner == client_id {
-                            // We are the host, forward data to all clients
-                            for client_id in room.players.iter() {
-                                if let Some(client) = self.clients.get_mut(client_id) {
-                                    client.send_client_relay_data(*client_id, &p_data).await?;
+                            // We are the host, we can either broadcast packet to all players or specify a specific player
+                            let dest_client_id = p_buffer.read_u16()?;
+                            p_buffer
+                                .read_to_end(&mut p_data)
+                                .expect("Expect ServerRelayData to fit in Vec<u8>.");
+                            info!("host sending packet to {}", dest_client_id);
+                            if dest_client_id > 0 {
+                                // Send packet to specific player
+                                if let Some(dest_client) = self.clients.get_mut(&dest_client_id) {
+                                    dest_client
+                                        .send_client_relay_data(client_id, &p_data)
+                                        .await?;
+                                }
+                            } else {
+                                // Broadcast packet to all players
+                                for dest_client_id in room.players.iter() {
+                                    if let Some(client) = self.clients.get_mut(dest_client_id) {
+                                        client
+                                            .send_client_relay_data(*dest_client_id, &p_data)
+                                            .await?;
+                                    }
                                 }
                             }
                         } else {
-                            // We are a player, forward data to the host
+                            // We are a player, we can only forward data to the host
+                            p_buffer
+                                .read_to_end(&mut p_data)
+                                .expect("Expect ServerRelayData to fit in Vec<u8>.");
                             if let Some(host) = self.clients.get_mut(&room.owner) {
                                 host.send_client_relay_data(client_id, &p_data).await?;
                             }

@@ -3,7 +3,6 @@
 //! Each client is represented by a [`Client`] struct, which includes ways to send and receive packets to and from the client.
 use std::{
     fmt::{self, Debug},
-    io::Read,
     sync::Arc,
 };
 
@@ -13,7 +12,6 @@ use crate::{
     utils::{ByteBufferExt, ByteBufferExtError},
 };
 use bytebuffer::ByteBuffer;
-use log::info;
 use thiserror::Error;
 use tokio::sync::Mutex;
 
@@ -41,7 +39,7 @@ impl From<QueuedPacket> for Vec<u8> {
     }
 }
 
-pub type ClientID = u32;
+pub type ClientID = u16;
 
 /// Status of the client
 #[derive(Debug)]
@@ -244,7 +242,7 @@ impl Client {
         bytes: &Vec<u8>,
     ) -> Result<(), ClientError> {
         let mut new_buffer = ByteBuffer::new_little_endian();
-        new_buffer.write_u32(sender_id);
+        new_buffer.write_u16(sender_id);
         new_buffer.write_bytes(bytes);
         self.feed_and_flush_packet(QueuedPacket {
             packet_id: PacketID::ClientRelayData,
@@ -260,7 +258,7 @@ impl Client {
         username: &str,
     ) -> Result<(), ClientError> {
         let mut buffer = ByteBuffer::new_little_endian();
-        buffer.write_u32(client_id);
+        buffer.write_u16(client_id);
         buffer.write_str_u32_len(username)?;
         self.feed_and_flush_packet(QueuedPacket {
             packet_id: PacketID::RoomPlayerConnected,
@@ -275,7 +273,7 @@ impl Client {
         client_id: ClientID,
     ) -> Result<(), ClientError> {
         let mut buffer = ByteBuffer::new_little_endian();
-        buffer.write_u32(client_id);
+        buffer.write_u16(client_id);
         self.feed_and_flush_packet(QueuedPacket {
             packet_id: PacketID::RoomPlayerDisconnected,
             buffer,
