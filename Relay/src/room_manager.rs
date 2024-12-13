@@ -192,13 +192,16 @@ impl RoomManager {
                             // We are the host, forward data to all clients
                             for client_id in room.players.iter() {
                                 if let Some(client) = self.clients.get_mut(client_id) {
-                                    client.send_client_relay_data(packet.buffer.clone()).await?;
+                                    client
+                                        .send_client_relay_data(*client_id, packet.buffer.clone())
+                                        .await?;
                                 }
                             }
                         } else {
                             // We are a player, forward data to the host
                             if let Some(host) = self.clients.get_mut(&room.owner) {
-                                host.send_client_relay_data(packet.buffer).await?;
+                                host.send_client_relay_data(client_id, packet.buffer)
+                                    .await?;
                             }
                         }
                     } else {

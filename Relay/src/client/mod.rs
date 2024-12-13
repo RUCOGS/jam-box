@@ -199,7 +199,12 @@ impl Client {
 
     /// Sends a [`PacketID::ClientRelayData`] packet.
     /// This packet contains data forwarded from a [`PacketID::ServerRelayData`] packet received from another client.
-    pub async fn send_client_relay_data(&mut self, buffer: ByteBuffer) -> Result<(), ClientError> {
+    pub async fn send_client_relay_data(
+        &mut self,
+        sender_id: ClientID,
+        mut buffer: ByteBuffer,
+    ) -> Result<(), ClientError> {
+        buffer.write_u32(sender_id);
         self.feed_and_flush_packet(QueuedPacket {
             packet_id: PacketID::JoinRoomResult,
             buffer,

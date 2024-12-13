@@ -3,7 +3,9 @@ class_name Network
 
 
 signal connected
+signal state_changed
 signal disconnected
+signal received_packet(packet_id: PacketID, buffer: ByteBuffer)
 
 
 static var global: Network
@@ -17,7 +19,12 @@ enum State {
 	CONNECTED,
 }
 
-var state: State = State.IDLE
+var state: State = State.IDLE :
+	set(v):
+		var old = state
+		state = v
+		if old != v:
+			state_changed.emit()
 # [PacketID]: packet_handler
 var packet_handlers_dict: Dictionary = {}
 var connect_timer: float = 0
@@ -40,14 +47,6 @@ func _notification(what: int) -> void:
 			global = null
 
 
-func add_packet_handler(packet_id: PacketID, callable: Callable):
-	packet_handlers_dict[packet_id] = callable
-
-
-func remove_packet_handler(packet_id: PacketID):
-	packet_handlers_dict.erase(packet_id)
-
-
 func connect_socket(_server_address: String = self.server_address):
 	if state != State.IDLE:
 		await disconnect_socket()
@@ -56,6 +55,10 @@ func connect_socket(_server_address: String = self.server_address):
 	state = State.CONNECTING
 	connect_timer = connect_timeout
 	set_process(true)
+
+
+func restart_socket():
+	await connect_socket()
 
 
 func disconnect_socket():
@@ -85,9 +88,7 @@ func _process(delta):
 			var buffer = ByteBuffer.new_little_endian()
 			buffer.data_array = packet
 			var packet_id = buffer.get_u8() as PacketID
-			var callable = packet_handlers_dict.get(packet_id)
-			if callable != null:
-				(callable as Callable).call(buffer)
+			received_packet.emit(packet_id, buffer)
 	# WebSocketPeer.STATE_CLOSING means the _socket is closing.
 	# It is important to keep polling for a clean close.
 	elif socket_state == WebSocketPeer.STATE_CLOSING:
@@ -146,4 +147,11 @@ func send_join_room(code: String):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.JOIN_ROOM)
 	_peer_buffer.put_utf8_string(code)
+	send_packet(_peer_buffer.data_array)
+
+
+func send_relay_data(bytes: PackedByteArray):
+	_peer_buffer.clear()
+	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_data(bytes)
 	send_packet(_peer_buffer.data_array)

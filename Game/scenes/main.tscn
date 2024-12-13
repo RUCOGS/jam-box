@@ -1,14 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=9 format=3 uid="uid://buhi6arioj2je"]
 
+[ext_resource type="Script" path="res://scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://scripts/network.gd" id="1_51f1j"]
-[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_uc6kl"]
-[ext_resource type="Script" path="res://scripts/relay_panel.gd" id="2_8edrq"]
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_uc6kl"]
+[ext_resource type="Script" path="res://scripts/ui/relay_panel.gd" id="2_8edrq"]
+[ext_resource type="Script" path="res://scripts/ui/join_host_panel.gd" id="3_ah6gk"]
+[ext_resource type="Script" path="res://scripts/ui/host_lobby_panel.gd" id="4_86h1h"]
+[ext_resource type="Script" path="res://scripts/ui/player_lobby_panel.gd" id="5_o4tag"]
+[ext_resource type="Script" path="res://scripts/room_manager.gd" id="6_olaue"]
 
 [node name="Main" type="Node"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MainMenu" type="Control" parent="CanvasLayer"]
+[node name="MainMenu" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("_network", "_menu_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,8 +21,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uc6kl")
+_network = NodePath("../../Network")
+_menu_manager = NodePath("MenuManager")
 
-[node name="JoinRoomPanel" type="PanelContainer" parent="CanvasLayer/MainMenu"]
+[node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1hdj3")
+
+[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_menu_manager", "_code_line_edit", "_join_button", "_host_button")]
+visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -25,39 +42,158 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -100.0
+offset_top = -108.0
+offset_right = 100.0
+offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_ah6gk")
+_network = NodePath("../../../../Network")
+_menu_manager = NodePath("..")
+_code_line_edit = NodePath("MarginContainer/VBoxContainer/CodeLineEdit")
+_join_button = NodePath("MarginContainer/VBoxContainer/JoinButton")
+_host_button = NodePath("MarginContainer/VBoxContainer/HostButton")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/JoinRoomPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/JoinRoomPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/JoinRoomPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "COGS Box"
 
-[node name="Control" type="Control" parent="CanvasLayer/MainMenu/JoinRoomPanel/MarginContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/JoinRoomPanel/MarginContainer/VBoxContainer"]
+[node name="CodeLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Code"
+max_length = 6
 
-[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/JoinRoomPanel/MarginContainer/VBoxContainer"]
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Join"
+
+[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_room_manager", "_code_label", "_start_button", "_quit_button")]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -108.0
+offset_right = 100.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_86h1h")
+_room_manager = NodePath("../../../../RoomManager")
+_code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
+_start_button = NodePath("MarginContainer/VBoxContainer/StartButton")
+_quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "COGS Box Lobby"
+
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "[55446]"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+text = "P1"
+
+[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+
+[node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_room_manager", "_code_label", "_quit_button")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -108.0
+offset_right = 100.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_o4tag")
+_room_manager = NodePath("../../../../RoomManager")
+_code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
+_quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "COGS Box Lobby"
+
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "[55446]"
+
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Test Input"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
 
 [node name="RelayPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_network", "_config_relay_button", "_connect_relay_button", "_relay_address_line_edit", "_config_panel", "_config_label")]
 layout_mode = 1
@@ -66,8 +202,8 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -64.0
+offset_left = -232.0
+offset_top = -204.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_left = 16
@@ -121,3 +257,7 @@ text = "Config Relay"
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
+
+[node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_network")]
+script = ExtResource("6_olaue")
+_network = NodePath("../Network")
