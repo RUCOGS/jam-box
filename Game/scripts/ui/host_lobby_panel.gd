@@ -17,12 +17,14 @@ func _ready() -> void:
 	_room_manager.received_packet.connect(_on_received_packet)
 	_room_manager.player_connected.connect(_on_player_connected)
 	_room_manager.player_disconnected.connect(_on_player_disconnected)
+	_quit_button.pressed.connect(_on_quit_pressed)
 
 
 func _on_state_changed():
 	if _room_manager.state == RoomManager.State.IN_ROOM:
 		_code_label.text = "[%s]" % _room_manager.room_code
 		_player_to_test_pressed.clear()
+	_update_visuals()
 
 
 func _on_received_packet(sender_id: int, packet_id: RoomManager.PacketID, buffer: ByteBuffer):
@@ -32,7 +34,7 @@ func _on_received_packet(sender_id: int, packet_id: RoomManager.PacketID, buffer
 		_update_visuals()
 
 
-func _on_player_connected(player_id: int):
+func _on_player_connected(player_id: int, _username: String):
 	_player_to_test_pressed[player_id] = false
 	_update_visuals()
 
@@ -44,8 +46,8 @@ func _on_player_disconnected(player_id: int):
 
 func _update_visuals():
 	var text = ""
-	for player in _room_manager.players:
-		text += "[%s] %s\n" % [player, "(TEST)" if _player_to_test_pressed[player] else ""]
+	for player_id in _room_manager.players:
+		text += "[%s]: %s %s\n" % [player_id, _room_manager.players[player_id], "(TEST)" if _player_to_test_pressed[player_id] else ""]
 	text = text.rstrip("\n")
 	_players_label.text = text
 

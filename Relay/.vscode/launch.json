@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'cogs-box-relay'",
+      "cargo": {
+        "args": ["build", "--bin=cogs-box-relay", "--package=cogs-box-relay"],
+        "filter": {
+          "name": "cogs-box-relay",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'cogs-box-relay'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=cogs-box-relay",
+          "--package=cogs-box-relay"
+        ],
+        "filter": {
+          "name": "cogs-box-relay",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

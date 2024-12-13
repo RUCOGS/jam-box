@@ -4,6 +4,7 @@
 use std::{error::Error, fmt::Display, future::Future, sync::Arc};
 
 use async_trait::async_trait;
+use log::info;
 use tokio::sync::Mutex;
 
 use super::QueuedPacket;

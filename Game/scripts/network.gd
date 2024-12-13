@@ -127,9 +127,7 @@ enum PacketID {
 	# Client player attempts to join a game room.
 	JOIN_ROOM = 129,
 	# Client (Player/Host) is sending data.
-	SERVER_RELAY_DATA = 130,
-	# Client host attempts to end its game room. Only works when the client is hosting a room.
-	HOST_END_ROOM = 131,
+	SERVER_RELAY_DATA = 130
 }
 
 
@@ -143,10 +141,11 @@ func send_host_room():
 	send_packet(_peer_buffer.data_array)
 
 
-func send_join_room(code: String):
+func send_join_room(code: String, username: String):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.JOIN_ROOM)
 	_peer_buffer.put_utf8_string(code)
+	_peer_buffer.put_utf8_string(username)
 	send_packet(_peer_buffer.data_array)
 
 

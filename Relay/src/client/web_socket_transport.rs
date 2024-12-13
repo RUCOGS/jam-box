@@ -73,10 +73,7 @@ impl WebSocketTransport {
     /// Attempts to convert a WebSocket binary message (an array of bytes) into a [`QueuedPacket`].
     ///
     /// This is used by [`NetworkTransportRunner`] to process the incoming bytes from the client to server WebSocket stream.   
-    async fn process_binary_message(
-        &mut self,
-        bytes: Vec<u8>,
-    ) -> Result<QueuedPacket, NetworkTransportError> {
+    async fn process_binary_message(bytes: Vec<u8>) -> Result<QueuedPacket, NetworkTransportError> {
         let mut buffer = ByteBuffer::from_vec(bytes);
         buffer.set_endian(bytebuffer::Endian::LittleEndian);
         let packet_id = PacketID::try_from_primitive(buffer.read_u8()?)?;
@@ -138,15 +135,12 @@ impl NetworkTransportRunner for WebSocketTransport {
                             Message::Close(_) => return Ok(()),
                             // Convert binary messages into QueuedPackets
                             Message::Binary(bytes) => {
-                                let mut transport = transport.lock().await;
-                                match transport.process_binary_message(bytes.clone()).await {
+                                match WebSocketTransport::process_binary_message(bytes).await {
                                     Err(e) => {
                                         error!("Error processing message: {}", e);
-                                        return Err(e);
                                     }
                                     Ok(packet) => {
                                         process_fn(packet).await;
-                                        return Ok(());
                                     }
                                 }
                             }

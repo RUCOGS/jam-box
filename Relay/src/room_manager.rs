@@ -1,16 +1,20 @@
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    io::Read,
+};
 
 use bytebuffer::ByteBuffer;
 use log::info;
 use rand::{
     distributions::{Alphanumeric, DistString},
+    prelude::Distribution,
     rngs::StdRng,
-    SeedableRng,
+    Rng, SeedableRng,
 };
 use thiserror::Error;
 
 use crate::{
-    client::{Client, ClientError, ClientID, QueuedPacket},
+    client::{Client, ClientError, ClientID, ClientStatus, QueuedPacket},
     packet::PacketID,
     utils::{ByteBufferExt, ByteBufferExtError},
 };
@@ -43,10 +47,12 @@ impl From<ClientError> for RoomManagerError {
 pub type RoomID = String;
 
 /// A group of clients who are playing a game together
+#[derive(Debug)]
 pub struct Room {
     pub id: RoomID,
     pub owner: ClientID,
     pub players: HashSet<ClientID>,
+    pub usernames: HashSet<String>,
 }
 
 impl Room {
@@ -55,6 +61,7 @@ impl Room {
             id,
             owner,
             players: HashSet::new(),
+            usernames: HashSet::new(),
         }
     }
 }
@@ -87,8 +94,10 @@ impl RoomManager {
     }
 
     /// Called whenever a client connects to the server
-    pub fn on_client_connected(&mut self, client: Client) -> ClientID {
+    pub fn on_client_connected(&mut self, mut client: Client) -> ClientID {
         let client_id = self.next_client_id;
+        client.id = client_id;
+        client.status = ClientStatus::Connected;
         self.clients.insert(client_id, client);
         self.next_client_id += 1;
         return client_id;
@@ -103,9 +112,22 @@ impl RoomManager {
             // If client is in a room, we must notify room host that the client
             // has just disconnected
             if let Some(room_id) = &client.room_id {
-                if let Some(room) = self.rooms.get(room_id) {
-                    if let Some(host) = self.clients.get_mut(&room.owner) {
-                        host.send_room_player_disconnected(client_id).await?;
+                if let Some(room) = self.rooms.get_mut(room_id) {
+                    if room.owner == client_id {
+                        // If the host themselves is disconnecting, then take down the room
+                        for client_id in room.players.iter() {
+                            if let Some(mut client) = self.clients.remove(client_id) {
+                                client.disconnect().await?;
+                            }
+                        }
+                        self.rooms.remove(room_id);
+                    } else {
+                        // If we are a player, then remove ourselves from the room and
+                        // notify the host that we disconnected
+                        room.usernames.remove(&client.username);
+                        if let Some(host) = self.clients.get_mut(&room.owner) {
+                            host.send_room_player_disconnected(client_id).await?;
+                        }
                     }
                 }
             }
@@ -129,35 +151,15 @@ impl RoomManager {
         match packet.packet_id {
             PacketID::HostRoom => {
                 // Create room with a random game code, and make the client a host using that game code
-                let mut room_id = Alphanumeric.sample_string(&mut self.rng, 6);
+                let mut room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 while self.rooms.contains_key(&room_id) {
-                    room_id = Alphanumeric.sample_string(&mut self.rng, 6);
+                    room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 }
-                let room = Room::new(room_id.clone(), client.id);
+                let room = Room::new(room_id.clone(), client_id);
                 client.room_id = Some(room_id.clone());
                 self.rooms.insert(room_id.clone(), room);
 
                 client.send_host_game_result(room_id).await?;
-            }
-            PacketID::HostEndRoom => {
-                // Remove room and disconnect clients
-                if let Some(room_id) = &client.room_id {
-                    if let Some(room) = self.rooms.remove(room_id.as_str()) {
-                        for client_id in room.players.iter() {
-                            if let Some(mut client) = self.clients.remove(client_id) {
-                                client.disconnect().await?;
-                            }
-                        }
-                    } else {
-                        client
-                            .send_client_request_error("Failed to end game, room does not exist.")
-                            .await?;
-                    }
-                } else {
-                    client
-                        .send_client_request_error("Failed to end game, client not in room.")
-                        .await?;
-                }
             }
             PacketID::JoinRoom => {
                 // Add player to room
@@ -168,13 +170,26 @@ impl RoomManager {
                     return Ok(());
                 }
                 let room_id = p_buffer.read_str_u32_len()?;
-                if let Some(room) = self.rooms.get_mut(&room_id) {
-                    room.players.insert(client_id);
-                    client.room_id = Some(room_id);
-                    client.send_join_game_result().await?;
+                let mut username = p_buffer.read_str_u32_len()?;
+                username.truncate(12);
+                if username.len() == 0 {
+                    client
+                        .send_client_request_error("Username cannot be blank.")
+                        .await?;
+                } else if let Some(room) = self.rooms.get_mut(&room_id) {
+                    if !room.usernames.contains(&username) {
+                        room.usernames.insert(username.clone());
+                        room.players.insert(client_id);
+                        client.room_id = Some(room_id);
+                        client.username = username.clone();
+                        client.send_join_game_result().await?;
 
-                    if let Some(host) = self.clients.get_mut(&room.owner) {
-                        host.send_room_player_connected(client_id).await?;
+                        if let Some(host) = self.clients.get_mut(&room.owner) {
+                            host.send_room_player_connected(client_id, &username)
+                                .await?;
+                        }
+                    } else {
+                        client.send_client_request_error("Username taken.").await?;
                     }
                 } else {
                     client
@@ -187,21 +202,22 @@ impl RoomManager {
                 //  - Host sends data to all connected players
                 //  - Player sends data to host
                 if let Some(room_id) = &client.room_id {
+                    let mut p_data = Vec::<u8>::new();
+                    p_buffer
+                        .read_to_end(&mut p_data)
+                        .expect("Expect ServerRelayData to fit in Vec<u8>.");
                     if let Some(room) = self.rooms.get(room_id) {
-                        if room.owner == client.id {
+                        if room.owner == client_id {
                             // We are the host, forward data to all clients
                             for client_id in room.players.iter() {
                                 if let Some(client) = self.clients.get_mut(client_id) {
-                                    client
-                                        .send_client_relay_data(*client_id, packet.buffer.clone())
-                                        .await?;
+                                    client.send_client_relay_data(*client_id, &p_data).await?;
                                 }
                             }
                         } else {
                             // We are a player, forward data to the host
                             if let Some(host) = self.clients.get_mut(&room.owner) {
-                                host.send_client_relay_data(client_id, packet.buffer)
-                                    .await?;
+                                host.send_client_relay_data(client_id, &p_data).await?;
                             }
                         }
                     } else {
@@ -217,6 +233,29 @@ impl RoomManager {
             }
             _ => return Err(RoomManagerError::UnhandledPacketID(packet.packet_id)),
         }
+        // info!("Rooms: {:?}", self.rooms);
+        // info!("Clients: {:?}", self.clients);
         Ok(())
+    }
+}
+
+/// Random distribution made of capitalized English letters.
+struct AlphabetCaps;
+
+impl Distribution<u8> for AlphabetCaps {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> u8 {
+        const RANGE: u32 = 26;
+        const GEN_CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let var = rng.next_u32() % RANGE;
+        return GEN_CHARSET[var as usize];
+    }
+}
+
+impl DistString for AlphabetCaps {
+    fn append_string<R: Rng + ?Sized>(&self, rng: &mut R, string: &mut String, len: usize) {
+        unsafe {
+            let v = string.as_mut_vec();
+            v.extend(self.sample_iter(rng).take(len));
+        }
     }
 }

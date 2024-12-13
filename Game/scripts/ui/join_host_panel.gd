@@ -5,6 +5,7 @@ extends PanelContainer
 @export var _room_manager: RoomManager
 @export var _menu_manager: MenuManager
 @export var _code_line_edit: LineEdit
+@export var _name_line_edit: LineEdit
 @export var _join_button: Button
 @export var _host_button: Button
 
@@ -27,7 +28,7 @@ func _on_room_state_changed():
 
 
 func _on_join_pressed():
-	_room_manager.join_room(_code_line_edit.text)
+	_room_manager.join_room(_code_line_edit.text, _name_line_edit.text)
 
 
 func _on_host_pressed():

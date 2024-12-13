@@ -7,6 +7,7 @@ extends Control
 
 func _ready() -> void:
 	_network.disconnected.connect(_on_disconnected)
+	_on_disconnected()
 
 
 func _on_disconnected():

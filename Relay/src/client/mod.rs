@@ -1,7 +1,11 @@
 //! Module that contains client related structs and traits.
 //!
 //! Each client is represented by a [`Client`] struct, which includes ways to send and receive packets to and from the client.
-use std::sync::Arc;
+use std::{
+    fmt::{self, Debug},
+    io::Read,
+    sync::Arc,
+};
 
 use crate::{
     packet::PacketID,
@@ -9,6 +13,7 @@ use crate::{
     utils::{ByteBufferExt, ByteBufferExtError},
 };
 use bytebuffer::ByteBuffer;
+use log::info;
 use thiserror::Error;
 use tokio::sync::Mutex;
 
@@ -39,6 +44,7 @@ impl From<QueuedPacket> for Vec<u8> {
 pub type ClientID = u32;
 
 /// Status of the client
+#[derive(Debug)]
 pub enum ClientStatus {
     /// Client is not connected yet or has been disconnected and is awaiting cleanup
     Disconnected,
@@ -71,6 +77,38 @@ pub struct Client {
     pub network_transport: Arc<Mutex<dyn NetworkTransport>>,
     /// Set to the room that the client is in
     pub room_id: Option<RoomID>,
+    pub username: String,
+}
+
+impl Debug for Client {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        #[allow(dead_code)]
+        #[derive(Debug)]
+        struct Client<'a> {
+            id: &'a ClientID,
+            status: &'a ClientStatus,
+            room_id: &'a Option<RoomID>,
+            username: &'a String,
+        }
+
+        let Self {
+            id,
+            status,
+            network_transport: _,
+            room_id,
+            username,
+        } = self;
+
+        fmt::Debug::fmt(
+            &Client {
+                id,
+                status,
+                room_id,
+                username,
+            },
+            f,
+        )
+    }
 }
 
 impl Client {
@@ -83,6 +121,7 @@ impl Client {
             status: ClientStatus::Disconnected,
             network_transport,
             room_id: None,
+            username: "".to_string(),
         }
     }
 
@@ -202,12 +241,14 @@ impl Client {
     pub async fn send_client_relay_data(
         &mut self,
         sender_id: ClientID,
-        mut buffer: ByteBuffer,
+        bytes: &Vec<u8>,
     ) -> Result<(), ClientError> {
-        buffer.write_u32(sender_id);
+        let mut new_buffer = ByteBuffer::new_little_endian();
+        new_buffer.write_u32(sender_id);
+        new_buffer.write_bytes(bytes);
         self.feed_and_flush_packet(QueuedPacket {
-            packet_id: PacketID::JoinRoomResult,
-            buffer,
+            packet_id: PacketID::ClientRelayData,
+            buffer: new_buffer,
         })
         .await?;
         Ok(())
@@ -216,9 +257,11 @@ impl Client {
     pub async fn send_room_player_connected(
         &mut self,
         client_id: ClientID,
+        username: &str,
     ) -> Result<(), ClientError> {
         let mut buffer = ByteBuffer::new_little_endian();
         buffer.write_u32(client_id);
+        buffer.write_str_u32_len(username)?;
         self.feed_and_flush_packet(QueuedPacket {
             packet_id: PacketID::RoomPlayerConnected,
             buffer,
