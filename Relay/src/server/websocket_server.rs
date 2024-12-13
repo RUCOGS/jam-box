@@ -72,7 +72,7 @@ impl Server for WebSocketServer {
                 let client = Client::new(web_socket_transport.clone());
 
                 let mut games_manager = self.games_manager.lock().await;
-                let client_id = games_manager.connect_client(client);
+                let client_id = games_manager.on_client_connected(client);
 
                 tokio::spawn(start_transport_process(
                     self.games_manager.clone(),
@@ -98,7 +98,9 @@ async fn start_transport_process(
     if let Err(e) = WebSocketTransport::start_transport_process(
         |packet| async {
             let mut games_manager = games_manager.lock().await;
-            games_manager.process_packet(client_id, packet).await;
+            if let Err(e) = games_manager.process_packet(client_id, packet).await {
+                error!("Client {} packet error: {}", client_id, e);
+            }
         },
         web_socket_transport,
     )
@@ -107,5 +109,5 @@ async fn start_transport_process(
         error!("Client {} websocket error: {}", client_id, e);
     }
     let mut games_manager = games_manager.lock().await;
-    let _ = games_manager.disconnect_client(client_id).await;
+    let _ = games_manager.on_client_disconnected(client_id).await;
 }

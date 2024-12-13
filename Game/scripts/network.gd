@@ -3,13 +3,13 @@ class_name Network
 
 
 signal connected
-signal disconnected(error: String)
+signal disconnected
 
 
 static var global: Network
 
-# The URL we will connect to.
-@export var websocket_url = "ws://127.0.0.1:9955"
+@export var server_address: String = "ws://127.0.0.1:9955"
+@export var connect_timeout: float = 5
 
 enum State {
 	IDLE,
@@ -20,12 +20,13 @@ enum State {
 var state: State = State.IDLE
 # [PacketID]: packet_handler
 var packet_handlers_dict: Dictionary = {}
+var connect_timer: float = 0
 
 var _socket = WebSocketPeer.new()
 var _peer_buffer = ByteBuffer.new_little_endian()
 
 
-func _ready():
+func _enter_tree() -> void:
 	if global != null:
 		queue_free()
 		return
@@ -48,27 +49,37 @@ func remove_packet_handler(packet_id: PacketID):
 
 
 func connect_socket(_server_address: String = self.server_address):
+	if state != State.IDLE:
+		await disconnect_socket()
 	self.server_address = _server_address
 	_socket.connect_to_url(_server_address)
 	state = State.CONNECTING
+	connect_timer = connect_timeout
 	set_process(true)
 
 
 func disconnect_socket():
 	_socket.close()
+	await disconnected
 
 
-func _process(_delta):
-	# Call this in _process or _physics_process. Data transfer and state updates
-	# will only happen when calling this function.
+func _process(delta):
+	# Poll for new incoming packets from the web socket
 	_socket.poll()
 
 	# get_ready_state() tells you what state the _socket is in.
-	var state = _socket.get_ready_state()
+	var socket_state = _socket.get_ready_state()
 
 	# WebSocketPeer.STATE_OPEN means the _socket is connected and ready
 	# to send and receive data.
-	if state == WebSocketPeer.STATE_OPEN:
+	if socket_state == WebSocketPeer.STATE_CONNECTING:
+		connect_timer -= delta
+		if connect_timer < 0:
+			disconnect_socket()
+	elif socket_state == WebSocketPeer.STATE_OPEN:
+		if state != State.CONNECTED:
+			state = State.CONNECTED
+			connected.emit()
 		while _socket.get_available_packet_count():
 			var packet = _socket.get_packet()
 			var buffer = ByteBuffer.new_little_endian()
@@ -79,28 +90,45 @@ func _process(_delta):
 				(callable as Callable).call(buffer)
 	# WebSocketPeer.STATE_CLOSING means the _socket is closing.
 	# It is important to keep polling for a clean close.
-	elif state == WebSocketPeer.STATE_CLOSING:
+	elif socket_state == WebSocketPeer.STATE_CLOSING:
 		pass
 	# WebSocketPeer.STATE_CLOSED means the connection has fully closed.
 	# It is now safe to stop polling.
-	elif state == WebSocketPeer.STATE_CLOSED:
+	elif socket_state == WebSocketPeer.STATE_CLOSED:
+		state = State.IDLE
 		# The code will be -1 if the disconnection was not properly notified by the remote peer.
 		var code = _socket.get_close_code()
 		print("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
-		set_process(false) # Stop procesing
+		set_process(false)
+		disconnected.emit()
 
 
 enum PacketID {
 	# CLIENT PACKETS
-	HOST_GAME_RESULT = 1,
-	CLIENT_RELAY_DATA = 2,
-	CLIENT_DISCONNECT = 3,
+	# Server response to a HostRoom packet
+	HOST_ROOM_RESULT = 1,
+	# Server response to a JoinRoom packet.
+	JOIN_ROOM_RESULT = 2,
+	# Server is relaying data to Client (Player/Host)
+	CLIENT_RELAY_DATA = 3,
+	# Server tells client to disconnect
+	CLIENT_DISCONNECT = 4,
+	# Server tells host a player has disconnected
+	ROOM_PLAYER_DISCONNECTED = 5,
+	# Server tells host a player has connected.
+	ROOM_PLAYER_CONNECTED = 6,
+	# Server encountering an error processing client request packet.
+	CLIENT_REQUEST_ERROR = 7,
 
 	# SERVER PACKETS
-	HOST_GAME = 128,
-	JOIN_GAME = 129,
+	# Client host attempts to register account with the server.
+	HOST_ROOM = 128,
+	# Client player attempts to join a game room.
+	JOIN_ROOM = 129,
+	# Client (Player/Host) is sending data.
 	SERVER_RELAY_DATA = 130,
-	HOST_END_GAME = 131,
+	# Client host attempts to end its game room. Only works when the client is hosting a room.
+	HOST_END_ROOM = 131,
 }
 
 
@@ -108,14 +136,14 @@ func send_packet(bytes: PackedByteArray):
 	_socket.send(bytes)
 
 
-func send_host_game_packet():
+func send_host_room():
 	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.HOST_GAME)
+	_peer_buffer.put_u8(PacketID.HOST_ROOM)
 	send_packet(_peer_buffer.data_array)
 
 
-func send_join_game_packet(code: String):
+func send_join_room(code: String):
 	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.JOIN_GAME)
+	_peer_buffer.put_u8(PacketID.JOIN_ROOM)
 	_peer_buffer.put_utf8_string(code)
 	send_packet(_peer_buffer.data_array)

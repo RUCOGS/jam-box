@@ -1,7 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
 use bytebuffer::ByteBuffer;
-use futures_util::future;
 use log::info;
 use rand::{
     distributions::{Alphanumeric, DistString},
@@ -9,8 +8,6 @@ use rand::{
     SeedableRng,
 };
 use thiserror::Error;
-use tokio::join;
-use tokio_tungstenite::tungstenite::buffer;
 
 use crate::{
     client::{Client, ClientError, ClientID, QueuedPacket},
@@ -89,29 +86,34 @@ impl RoomManager {
         }
     }
 
-    /// Connect a client to the server
-    pub fn connect_client(&mut self, client: Client) -> ClientID {
+    /// Called whenever a client connects to the server
+    pub fn on_client_connected(&mut self, client: Client) -> ClientID {
         let client_id = self.next_client_id;
         self.clients.insert(client_id, client);
         self.next_client_id += 1;
         return client_id;
     }
 
-    /// Disconnect a client from the server
-    pub async fn disconnect_client(&mut self, client_id: ClientID) -> Result<(), RoomManagerError> {
-        if let Some(mut client) = self.clients.remove(&client_id) {
-            client
-                .feed_and_flush_packet(QueuedPacket {
-                    packet_id: PacketID::ClientDisconnect,
-                    buffer: ByteBuffer::new(),
-                })
-                .await?;
-            client.disconnect().await?;
+    /// Called whenever a client disconnects from the server
+    pub async fn on_client_disconnected(
+        &mut self,
+        client_id: ClientID,
+    ) -> Result<(), RoomManagerError> {
+        if let Some(client) = self.clients.remove(&client_id) {
+            // If client is in a room, we must notify room host that the client
+            // has just disconnected
+            if let Some(room_id) = &client.room_id {
+                if let Some(room) = self.rooms.get(room_id) {
+                    if let Some(host) = self.clients.get_mut(&room.owner) {
+                        host.send_room_player_disconnected(client_id).await?;
+                    }
+                }
+            }
         }
         Ok(())
     }
 
-    /// Proceses the packet for a specifict client.
+    /// Proceses the packet for a specific client.
     pub async fn process_packet(
         &mut self,
         client_id: ClientID,
@@ -125,7 +127,7 @@ impl RoomManager {
         let p_buffer = &mut packet.buffer;
 
         match packet.packet_id {
-            PacketID::HostGame => {
+            PacketID::HostRoom => {
                 // Create room with a random game code, and make the client a host using that game code
                 let mut room_id = Alphanumeric.sample_string(&mut self.rng, 6);
                 while self.rooms.contains_key(&room_id) {
@@ -137,7 +139,7 @@ impl RoomManager {
 
                 client.send_host_game_result(room_id).await?;
             }
-            PacketID::HostEndGame => {
+            PacketID::HostEndRoom => {
                 // Remove room and disconnect clients
                 if let Some(room_id) = &client.room_id {
                     if let Some(room) = self.rooms.remove(room_id.as_str()) {
@@ -157,7 +159,7 @@ impl RoomManager {
                         .await?;
                 }
             }
-            PacketID::JoinGame => {
+            PacketID::JoinRoom => {
                 // Add player to room
                 if client.room_id.is_some() {
                     client
@@ -170,6 +172,10 @@ impl RoomManager {
                     room.players.insert(client_id);
                     client.room_id = Some(room_id);
                     client.send_join_game_result().await?;
+
+                    if let Some(host) = self.clients.get_mut(&room.owner) {
+                        host.send_room_player_connected(client_id).await?;
+                    }
                 } else {
                     client
                         .send_client_request_error("Room does not exist.")
@@ -191,8 +197,8 @@ impl RoomManager {
                             }
                         } else {
                             // We are a player, forward data to the host
-                            if let Some(owner) = self.clients.get_mut(&room.owner) {
-                                owner.send_client_relay_data(packet.buffer).await?;
+                            if let Some(host) = self.clients.get_mut(&room.owner) {
+                                host.send_client_relay_data(packet.buffer).await?;
                             }
                         }
                     } else {

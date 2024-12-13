@@ -179,7 +179,7 @@ impl Client {
         let mut buffer = ByteBuffer::new_little_endian();
         buffer.write_str_u32_len(&room_id)?;
         self.feed_and_flush_packet(QueuedPacket {
-            packet_id: PacketID::HostGameResult,
+            packet_id: PacketID::HostRoomResult,
             buffer,
         })
         .await?;
@@ -190,7 +190,7 @@ impl Client {
     /// and receiving data down its stream.
     pub async fn send_join_game_result(&mut self) -> Result<(), ClientError> {
         self.feed_and_flush_packet(QueuedPacket {
-            packet_id: PacketID::JoinGameResult,
+            packet_id: PacketID::JoinRoomResult,
             buffer: ByteBuffer::new(),
         })
         .await?;
@@ -201,7 +201,35 @@ impl Client {
     /// This packet contains data forwarded from a [`PacketID::ServerRelayData`] packet received from another client.
     pub async fn send_client_relay_data(&mut self, buffer: ByteBuffer) -> Result<(), ClientError> {
         self.feed_and_flush_packet(QueuedPacket {
-            packet_id: PacketID::JoinGameResult,
+            packet_id: PacketID::JoinRoomResult,
+            buffer,
+        })
+        .await?;
+        Ok(())
+    }
+
+    pub async fn send_room_player_connected(
+        &mut self,
+        client_id: ClientID,
+    ) -> Result<(), ClientError> {
+        let mut buffer = ByteBuffer::new_little_endian();
+        buffer.write_u32(client_id);
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::RoomPlayerConnected,
+            buffer,
+        })
+        .await?;
+        Ok(())
+    }
+
+    pub async fn send_room_player_disconnected(
+        &mut self,
+        client_id: ClientID,
+    ) -> Result<(), ClientError> {
+        let mut buffer = ByteBuffer::new_little_endian();
+        buffer.write_u32(client_id);
+        self.feed_and_flush_packet(QueuedPacket {
+            packet_id: PacketID::RoomPlayerDisconnected,
             buffer,
         })
         .await?;

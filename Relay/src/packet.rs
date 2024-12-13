@@ -7,8 +7,6 @@
 
 use num_enum::{IntoPrimitive, TryFromPrimitive};
 
-use crate::client::Client;
-
 /// Represents a type of packet packets sent between the clients and the server.
 ///
 /// There are two types of packets:
@@ -20,44 +18,52 @@ use crate::client::Client;
 #[repr(u8)]
 pub enum PacketID {
     // CLIENT PACKETS
-    /// Server response to a HostGame packet
-    HostGameResult = 1,
+    /// Server response to a HostRoom packet
+    HostRoomResult = 1,
+    /// Server response to a JoinRoom packet.
+    JoinRoomResult = 2,
     /// Server is relaying data to Client (Player/Host)
-    ClientRelayData = 2,
+    ClientRelayData = 3,
     /// Server tells client to disconnect
-    ClientDisconnect = 3,
-    /// Server response to a JoinGame packet
-    JoinGameResult = 4,
-    /// Server encountering an error processing client request packet
-    ClientRequestError = 5,
+    ClientDisconnect = 4,
+    /// Server tells host a player has disconnected
+    RoomPlayerDisconnected = 5,
+    /// Server tells host a player has connected.
+    RoomPlayerConnected = 6,
+    /// Server encountering an error processing client request packet.
+    ClientRequestError = 7,
 
     // SERVER PACKETS
-    /// Client host attempts to register account with the server
-    HostGame = 128,
-    /// Client player attempts to join a game
-    JoinGame = 129,
-    /// Client (Player/Host) is sending data
+    /// Client host attempts to register account with the server.
+    HostRoom = 128,
+    /// Client player attempts to join a game room.
+    JoinRoom = 129,
+    /// Client (Player/Host) is sending data.
     ServerRelayData = 130,
-    /// Client host attempts to end game
-    HostEndGame = 131,
+    /// Client host attempts to end its game room. Only works when the client is hosting a room.
+    HostEndRoom = 131,
 }
 
 /// Packets destined for the server. Clients send server packets to the server.
 /// These packets are meant to be processed by the server.
-pub const SERVER_PACKETS: [PacketID; 3] = [
+pub const SERVER_PACKETS: [PacketID; 7] = [
     // SERVER PACKETS
-    PacketID::HostGameResult,
+    PacketID::HostRoomResult,
     PacketID::ClientRelayData,
     PacketID::ClientDisconnect,
+    PacketID::RoomPlayerDisconnected,
+    PacketID::RoomPlayerConnected,
+    PacketID::JoinRoomResult,
+    PacketID::ClientRequestError,
 ];
 
 /// Packets destined for the client. The server sends client packets to a client.
 /// These packets are meant to be processed by the client.
 pub const CLIENT_PACKETS: [PacketID; 4] = [
-    PacketID::HostGame,
-    PacketID::JoinGame,
+    PacketID::HostRoom,
+    PacketID::JoinRoom,
     PacketID::ServerRelayData,
-    PacketID::HostEndGame,
+    PacketID::HostEndRoom,
 ];
 
 impl PacketID {

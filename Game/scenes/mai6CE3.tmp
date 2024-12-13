@@ -76,45 +76,44 @@ theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("2_8edrq")
 _network = NodePath("../../../Network")
-_config_relay_button = NodePath("VBoxContainer/ConfigButton")
-_connect_relay_button = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/ConnectButton")
-_relay_address_line_edit = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/AddressLineEdit")
-_config_panel = NodePath("VBoxContainer/ConfigPanel")
-_config_label = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/ConfigLabel")
+_config_relay_button = NodePath("Control/ConfigButton")
+_connect_relay_button = NodePath("Control/ConfigPanel/MarginContainer/VBoxContainer/ConnectButton")
+_relay_address_line_edit = NodePath("Control/ConfigPanel/MarginContainer/VBoxContainer/AddressLineEdit")
+_config_panel = NodePath("Control/ConfigPanel")
+_config_label = NodePath("Control/ConfigPanel/MarginContainer/VBoxContainer/ConfigLabel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel"]
+[node name="Control" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel"]
 layout_mode = 2
-theme_override_constants/separation = 16
 
-[node name="ConfigPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer"]
+[node name="ConfigPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/RelayPanel/Control"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/RelayPanel/Control/ConfigPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/Control/ConfigPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/Control/ConfigPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Relay"
 
-[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/Control/ConfigPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "ws://127.0.0.1:9955"
 placeholder_text = "Address"
 
-[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/Control/ConfigPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Connect"
 
-[node name="ConfigButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer"]
+[node name="ConfigButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/Control"]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Config Relay"
