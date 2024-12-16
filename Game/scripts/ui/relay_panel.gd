@@ -10,18 +10,23 @@ extends MarginContainer
 
 
 func _ready() -> void:
-	_config_relay_button.pressed.connect(_on_config_relay_pressed)
+	_config_relay_button.pressed.connect(_toggled_config_panel)
 	_config_panel.visible = false
 	_connect_relay_button.pressed.connect(_on_connect_relay)
 	_relay_address_line_edit.text = _network.server_address
 	_on_connect_relay()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.keycode == KEY_R and event.is_pressed():
+		_toggled_config_panel()
+
+
 func _process(_delta: float) -> void:
 	_update_config_label()
 
 
-func _on_config_relay_pressed():
+func _toggled_config_panel():
 	_config_panel.visible = not _config_panel.visible
 
 

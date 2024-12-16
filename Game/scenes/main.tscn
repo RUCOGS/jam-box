@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=11 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://scripts/network.gd" id="1_51f1j"]
+[ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://assets/cogs_box_theme.tres" id="1_p0d0r"]
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_uc6kl"]
 [ext_resource type="Script" path="res://scripts/ui/relay_panel.gd" id="2_8edrq"]
 [ext_resource type="Script" path="res://scripts/ui/join_host_panel.gd" id="3_ah6gk"]
@@ -21,6 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_p0d0r")
 script = ExtResource("1_uc6kl")
 _network = NodePath("../../Network")
 _menu_manager = NodePath("MenuManager")
@@ -53,54 +55,50 @@ script = ExtResource("3_ah6gk")
 _network = NodePath("../../../../Network")
 _room_manager = NodePath("../../../../RoomManager")
 _menu_manager = NodePath("..")
-_code_line_edit = NodePath("MarginContainer/VBoxContainer/CodeLineEdit")
-_name_line_edit = NodePath("MarginContainer/VBoxContainer/UsernameLineEdit")
-_join_button = NodePath("MarginContainer/VBoxContainer/JoinButton")
-_host_button = NodePath("MarginContainer/VBoxContainer/HostButton")
+_code_line_edit = NodePath("VBoxContainer/CodeLineEdit")
+_name_line_edit = NodePath("VBoxContainer/UsernameLineEdit")
+_join_button = NodePath("VBoxContainer/JoinButton")
+_host_button = NodePath("VBoxContainer/HostButton")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"HeaderLarge"
 text = "COGS Box"
+uppercase = true
 
-[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="CodeLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="CodeLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter 4-Letter Code"
 max_length = 6
 
-[node name="UsernameLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="UsernameLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter Your Name"
 max_length = 12
 
-[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 text = "Join"
 
-[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/MarginContainer/VBoxContainer"]
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 text = "Host"
 
 [node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
+visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -117,42 +115,37 @@ grow_vertical = 2
 script = ExtResource("4_86h1h")
 _network = NodePath("../../../../Network")
 _room_manager = NodePath("../../../../RoomManager")
-_code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
-_players_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/PlayersLabel")
-_quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
+_code_label = NodePath("VBoxContainer/CodeLabel")
+_players_label = NodePath("VBoxContainer/ScrollContainer/PlayersLabel")
+_quit_button = NodePath("VBoxContainer/QuitButton")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
 layout_mode = 2
-text = "COGS Box Lobby"
+theme_type_variation = &"HeaderLarge"
+text = "LOBBY"
+uppercase = true
 
-[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
 layout_mode = 2
-text = "[55446]"
+theme_type_variation = &"HeaderMedium"
+text = "QVWD"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
-[node name="PlayersLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="PlayersLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 text = "P1"
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
 
 [node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_username_label", "_test_button", "_quit_button", "_start_button")]
-visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -169,47 +162,42 @@ grow_vertical = 2
 script = ExtResource("5_o4tag")
 _network = NodePath("../../../../Network")
 _room_manager = NodePath("../../../../RoomManager")
-_code_label = NodePath("MarginContainer/VBoxContainer/CodeLabel")
-_username_label = NodePath("MarginContainer/VBoxContainer/UsernameLabel")
-_test_button = NodePath("MarginContainer/VBoxContainer/TestButton")
-_quit_button = NodePath("MarginContainer/VBoxContainer/QuitButton")
-_start_button = NodePath("MarginContainer/VBoxContainer/StartButton")
+_code_label = NodePath("VBoxContainer/CodeLabel")
+_username_label = NodePath("VBoxContainer/UsernameLabel")
+_test_button = NodePath("VBoxContainer/TestButton")
+_quit_button = NodePath("VBoxContainer/QuitButton")
+_start_button = NodePath("VBoxContainer/StartButton")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
-text = "COGS Box Lobby"
+theme_type_variation = &"HeaderLarge"
+text = "LOBBY"
 
-[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
-text = "[55446]"
+theme_type_variation = &"HeaderMedium"
+text = "QVWD"
 
-[node name="UsernameLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="UsernameLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
 text = "Username"
 
-[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
 text = "Test Input"
 
-[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
 text = "Start"
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/MarginContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
 
@@ -231,10 +219,10 @@ theme_override_constants/margin_bottom = 16
 script = ExtResource("2_8edrq")
 _network = NodePath("../../../Network")
 _config_relay_button = NodePath("VBoxContainer/ConfigButton")
-_connect_relay_button = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/ConnectButton")
-_relay_address_line_edit = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/AddressLineEdit")
+_connect_relay_button = NodePath("VBoxContainer/ConfigPanel/VBoxContainer/ConnectButton")
+_relay_address_line_edit = NodePath("VBoxContainer/ConfigPanel/VBoxContainer/AddressLineEdit")
 _config_panel = NodePath("VBoxContainer/ConfigPanel")
-_config_label = NodePath("VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer/ConfigLabel")
+_config_label = NodePath("VBoxContainer/ConfigPanel/VBoxContainer/ConfigLabel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel"]
 layout_mode = 2
@@ -245,31 +233,25 @@ alignment = 2
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel"]
 layout_mode = 2
 
-[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
 layout_mode = 2
 text = "Relay"
 
-[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "ws://127.0.0.1:9955"
 placeholder_text = "Address"
 
-[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/MarginContainer/VBoxContainer"]
+[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
 layout_mode = 2
 text = "Connect"
 
 [node name="ConfigButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Config Relay"
