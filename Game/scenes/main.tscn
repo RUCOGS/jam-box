@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=14 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://scripts/network.gd" id="1_51f1j"]
@@ -6,8 +6,11 @@
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_uc6kl"]
 [ext_resource type="Script" path="res://scripts/ui/relay_panel.gd" id="2_8edrq"]
 [ext_resource type="Script" path="res://scripts/ui/join_host_panel.gd" id="3_ah6gk"]
+[ext_resource type="Texture2D" uid="uid://cs7pm0utdn8i5" path="res://assets/art/cogs-bg.PNG" id="3_iobb2"]
+[ext_resource type="Texture2D" uid="uid://qxuxsf10ddot" path="res://assets/art/jambox-full.PNG" id="4_3u43p"]
 [ext_resource type="Script" path="res://scripts/ui/host_lobby_panel.gd" id="4_86h1h"]
 [ext_resource type="Script" path="res://scripts/ui/player_lobby_panel.gd" id="5_o4tag"]
+[ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://assets/art/gradient.png" id="5_q1q6t"]
 [ext_resource type="Script" path="res://scripts/room_manager.gd" id="6_olaue"]
 [ext_resource type="Script" path="res://scripts/ui/error_panel.gd" id="7_rwkk3"]
 
@@ -26,6 +29,54 @@ theme = ExtResource("1_p0d0r")
 script = ExtResource("1_uc6kl")
 _network = NodePath("../../Network")
 _menu_manager = NodePath("MenuManager")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_iobb2")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4, 0, 0.101961, 0.403922)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect"]
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -250.0
+offset_bottom = 250.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("4_3u43p")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect"]
+self_modulate = Color(0, 0, 0, 0.470588)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_q1q6t")
+expand_mode = 1
 
 [node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu"]
 layout_mode = 1
