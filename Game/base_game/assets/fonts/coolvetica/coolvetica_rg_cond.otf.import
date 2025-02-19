@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://b38xyqjga3ph1"
-path="res://.godot/imported/coolvetica_rg_cram.otf-198be1318bb952bd75b61e1064074208.fontdata"
+uid="uid://dgblvpni8xs2b"
+path="res://.godot/imported/coolvetica_rg_cond.otf-af523dcba2b216e38fa75f7b092e6581.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/coolvetica/coolvetica_rg_cram.otf"
-dest_files=["res://.godot/imported/coolvetica_rg_cram.otf-198be1318bb952bd75b61e1064074208.fontdata"]
+source_file="res://base_game/assets/fonts/coolvetica/coolvetica_rg_cond.otf"
+dest_files=["res://.godot/imported/coolvetica_rg_cond.otf-af523dcba2b216e38fa75f7b092e6581.fontdata"]
 
 [params]
 

@@ -111,7 +111,7 @@ func _process(delta):
 
 
 enum PacketID {
-	# CLIENT PACKETS
+	# CLIENT DEST PACKETS
 	# Server response to a HostRoom packet
 	HOST_ROOM_RESULT = 1,
 	# Server response to a JoinRoom packet.
@@ -127,7 +127,7 @@ enum PacketID {
 	# Server encountering an error processing client request packet.
 	CLIENT_REQUEST_ERROR = 7,
 
-	# SERVER PACKETS
+	# SERVER DEST PACKETS
 	# Client host attempts to register account with the server.
 	HOST_ROOM = 128,
 	# Client player attempts to join a game room.
@@ -170,7 +170,7 @@ func player_send_relay_data(bytes: PackedByteArray):
 # Leave dest_id = 0 if you want to broadcast to all players
 func host_send_relay_data(bytes: PackedByteArray, dest_id: int = 0):
 	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_u8(PacketID.CLIENT_RELAY_DATA)
 	_peer_buffer.put_u16(dest_id)
 	_peer_buffer.put_data(bytes)
 	send_packet(_peer_buffer.data_array)

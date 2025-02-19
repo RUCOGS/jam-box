@@ -176,13 +176,15 @@ func _host_update_player_host():
 # Packets for communicating within a room
 # These are passed through SERVER_RELAY_DATA and CLIENT_RELAY_DATA packets
 enum PacketID {
-	# PLAYER PACKETS
-	TEST_INPUT = 1,		# Players tell the sever if they are pressing down the test button in the lobby screen
+	# SERVER DEST PACKETS
+	TEST_INPUT = 1,				# Players tell the sever if they are pressing down the test button in the lobby screen
 	START_GAME = 2,
+	SERVER_RELAY_DATA = 3, 		# Client (Player/Host) is sending data.
 	
-	# HOST PACKETS
-	SET_PLAYER_HOST = 128,	# Server tells player whether they are the host or not
-	SET_CAN_START = 129		# Server tells player if they can start the game or not
+	# CLIENT DEST PACKETS
+	SET_PLAYER_HOST = 128,		# Server tells player whether they are the host or not
+	SET_CAN_START = 129,		# Server tells player if they can start the game or not
+	CLIENT_RELAY_DATA = 130		# Server is relaying data to Client (Player/Host)
 }
 
 
@@ -211,3 +213,22 @@ func host_send_can_start(_can_start: bool):
 	_peer_buffer.put_u8(PacketID.SET_CAN_START)
 	_peer_buffer.put_bool(_can_start)
 	_network.host_send_relay_data(_peer_buffer.data_array)
+
+
+# Player sends a packet to the host
+# Should only be called on the player client!
+func player_send_data(bytes: PackedByteArray):
+	_peer_buffer.clear()
+	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_data(bytes)
+	_network.player_send_relay_data(_peer_buffer.data_array)
+
+
+# Host sends a packet to either all players or a specific player
+# Should only be called on the host client!
+# Leave dest_id = 0 if you want to broadcast to all players
+func host_send_data(bytes: PackedByteArray, dest_id: int = 0):
+	_peer_buffer.clear()
+	_peer_buffer.put_u8(PacketID.CLIENT_RELAY_DATA)
+	_peer_buffer.put_data(bytes)
+	_network.host_send_relay_data(_peer_buffer.data_array, dest_id)

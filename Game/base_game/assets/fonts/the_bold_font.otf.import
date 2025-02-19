@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dgblvpni8xs2b"
-path="res://.godot/imported/coolvetica_rg_cond.otf-b5dd6ff3dcdcb11b7b730cea373e223d.fontdata"
+uid="uid://c87jyoxq1wdca"
+path="res://.godot/imported/the_bold_font.otf-1930e19798470061cc62959744cc9544.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/coolvetica/coolvetica_rg_cond.otf"
-dest_files=["res://.godot/imported/coolvetica_rg_cond.otf-b5dd6ff3dcdcb11b7b730cea373e223d.fontdata"]
+source_file="res://base_game/assets/fonts/the_bold_font.otf"
+dest_files=["res://.godot/imported/the_bold_font.otf-1930e19798470061cc62959744cc9544.fontdata"]
 
 [params]
 
