@@ -43,7 +43,7 @@ func _on_player_disconnected(player_id: int):
 
 
 func _update_visuals():
-	_code_label.text = "[%s]   %s/%s (min: %s)" % [_room_manager.room_code, len(_room_manager.players), _room_manager.max_players, _room_manager.min_players]
+	_code_label.text = "[%s]   %s/%s >%s" % [_room_manager.room_code, len(_room_manager.players), _room_manager.max_players, _room_manager.min_players]
 	var text = ""
 	for player_id in _room_manager.players:
 		text += "[%s]: %s" % [player_id, _room_manager.players[player_id]]

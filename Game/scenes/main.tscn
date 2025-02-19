@@ -117,7 +117,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
-text = "COGS Box"
+text = "Jam Box"
 uppercase = true
 
 [node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
@@ -329,6 +329,7 @@ autowrap_mode = 3
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
+server_address = "wss://atlinx.net/jambox/server"
 auto_reconnect = true
 
 [node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_network")]
