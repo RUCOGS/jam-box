@@ -40,6 +40,20 @@ var can_start: bool = false :
 			if is_host:
 				# Notify clients changes to can_start
 				host_send_can_start(can_start)
+var game_info: Config.GameInfo :
+	set(v):
+		# Don't regenerate game_room_manager if nothing changes
+		if game_info == v or not is_inside_tree():
+			return
+		if game_info:
+			game_room_manager.queue_free()
+			game_room_manager = null
+		game_info = v
+		if game_info:
+			game_room_manager = game_info.packed_scene.instantiate() as GameRoomManager
+			game_room_manager.construct(self)
+			add_child(game_room_manager)
+var game_room_manager: GameRoomManager
 
 #endregion
 
@@ -65,6 +79,7 @@ var is_player_host: bool = false :
 
 #endregion
 
+@export var _config: Config
 @export var _network: Network
 @export var min_players: int = 2
 @export var max_players: int = 4
@@ -99,17 +114,23 @@ func join_room(_room_code: String, _username: String):
 	_network.send_join_room(_room_code, _username)
 
 
-func host_room():
+func host_room(_game_info_id: int):
 	room_code = ""
 	state = State.CONNECTING
 	is_host = true
 	is_player_host = false
 	can_start = false
-	players.clear()
+	game_info = _config.get_game_info(_game_info_id)
+	if game_info == null:
+		printerr("GameInfo is NULL!")
+	min_players = game_info.min_players
+	max_players = game_info.max_players
 	_network.send_host_room(max_players)
 
 
 func _on_disconnected():
+	game_info = null
+	players.clear()
 	state = State.IDLE
 	is_host = false
 	room_code = ""
@@ -149,8 +170,11 @@ func _on_received_packet(packet_id: Network.PacketID, buffer: ByteBuffer):
 
 
 func _on_received_room_packet(sender_id: int, room_packet_id: PacketID, buffer: ByteBuffer):
-	if room_packet_id == PacketID.SET_PLAYER_HOST:
+	if room_packet_id == PacketID.SET_GAME_INFO:
+		var game_info_id = buffer.get_u32()
+		game_info = _config.get_game_info(game_info_id)
 		is_player_host = buffer.get_bool()
+	
 	elif room_packet_id == PacketID.SET_CAN_START:
 		can_start = buffer.get_bool()
 	elif room_packet_id == PacketID.START_GAME and is_host and sender_id == player_host:
@@ -169,7 +193,7 @@ func _host_update_player_host():
 			player_host_changed.emit()
 			# Notify clients player if they are the new player host
 			for player_id in players:
-				host_send_set_player_host(player_id == player_host, player_id)
+				host_send_set_game_info(game_info.id, player_id == player_host, player_id)
 	can_start = len(players) >= min_players
 
 
@@ -179,12 +203,15 @@ enum PacketID {
 	# SERVER DEST PACKETS
 	TEST_INPUT = 1,				# Players tell the sever if they are pressing down the test button in the lobby screen
 	START_GAME = 2,
-	SERVER_RELAY_DATA = 3, 		# Client (Player/Host) is sending data.
 	
 	# CLIENT DEST PACKETS
-	SET_PLAYER_HOST = 128,		# Server tells player whether they are the host or not
+	SET_GAME_INFO = 128,		# Server tells player whether they are the host or not, and additional game info
 	SET_CAN_START = 129,		# Server tells player if they can start the game or not
-	CLIENT_RELAY_DATA = 130		# Server is relaying data to Client (Player/Host)
+	
+	# MISC
+	RELAY_DATA = 200			# Send data to the opposite side
+								# host -> sends to all clients, or a specific client
+								# client -> sends to host
 }
 
 
@@ -192,43 +219,35 @@ func player_send_test_input(pressed: bool):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.TEST_INPUT)
 	_peer_buffer.put_bool(pressed)
-	_network.player_send_relay_data(_peer_buffer.data_array)
+	_network.send_server_relay_data(_peer_buffer.data_array)
 
 
 func player_send_start_game():
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.START_GAME)
-	_network.player_send_relay_data(_peer_buffer.data_array)
+	_network.send_server_relay_data(_peer_buffer.data_array)
 
 
-func host_send_set_player_host(_is_host: bool, player_id: int):
+func host_send_set_game_info(_game_info_id: int, _is_host: bool, player_id: int):
 	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.SET_PLAYER_HOST)
+	_peer_buffer.put_u8(PacketID.SET_GAME_INFO)
+	_peer_buffer.put_u32(_game_info_id)
 	_peer_buffer.put_bool(_is_host)
-	_network.host_send_relay_data(_peer_buffer.data_array, player_id)
+	_network.send_server_relay_data(_peer_buffer.data_array, player_id)
 
 
 func host_send_can_start(_can_start: bool):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.SET_CAN_START)
 	_peer_buffer.put_bool(_can_start)
-	_network.host_send_relay_data(_peer_buffer.data_array)
+	_network.send_server_relay_data(_peer_buffer.data_array)
 
 
+# Relay data to the opposite side
 # Player sends a packet to the host
-# Should only be called on the player client!
-func player_send_data(bytes: PackedByteArray):
+# Host sends a packet to all players (if dest_id = 0), or a specific player of id = dest_id
+func send_relay_data(bytes: PackedByteArray, dest_id: int = 0):
 	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
+	_peer_buffer.put_u8(PacketID.RELAY_DATA)
 	_peer_buffer.put_data(bytes)
-	_network.player_send_relay_data(_peer_buffer.data_array)
-
-
-# Host sends a packet to either all players or a specific player
-# Should only be called on the host client!
-# Leave dest_id = 0 if you want to broadcast to all players
-func host_send_data(bytes: PackedByteArray, dest_id: int = 0):
-	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.CLIENT_RELAY_DATA)
-	_peer_buffer.put_data(bytes)
-	_network.host_send_relay_data(_peer_buffer.data_array, dest_id)
+	_network.send_server_relay_data(_peer_buffer.data_array, dest_id)

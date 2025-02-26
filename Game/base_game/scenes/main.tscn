@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=16 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://base_game/scripts/network.gd" id="1_51f1j"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="5_q1q6t"]
 [ext_resource type="Script" path="res://base_game/scripts/room_manager.gd" id="6_olaue"]
 [ext_resource type="Script" path="res://base_game/scripts/ui/error_panel.gd" id="7_rwkk3"]
+[ext_resource type="Script" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
+[ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
 
 [node name="Main" type="Node"]
 
@@ -87,7 +89,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1hdj3")
 
-[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button")]
+[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config")]
 visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -110,6 +112,8 @@ _code_line_edit = NodePath("VBoxContainer/CodeLineEdit")
 _name_line_edit = NodePath("VBoxContainer/UsernameLineEdit")
 _join_button = NodePath("VBoxContainer/JoinButton")
 _host_button = NodePath("VBoxContainer/HostButton")
+_game_option_button = NodePath("VBoxContainer/GameOptionButton")
+_config = NodePath("../../../../Config")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
 layout_mode = 2
@@ -144,12 +148,17 @@ text = "Join"
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
+[node name="GameOptionButton" type="OptionButton" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "TEST GAME"
+
 [node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 text = "Host"
 
 [node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
-visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -197,6 +206,7 @@ layout_mode = 2
 text = "Quit"
 
 [node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_username_label", "_test_button", "_quit_button", "_start_button")]
+visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -332,7 +342,12 @@ script = ExtResource("1_51f1j")
 server_address = "wss://atlinx.net/jambox/server"
 auto_reconnect = true
 
-[node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_network")]
+[node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_config", "_network")]
 script = ExtResource("6_olaue")
+_config = NodePath("../Config")
 _network = NodePath("../Network")
 max_players = 3
+
+[node name="Config" type="Node" parent="."]
+script = ExtResource("14_pn2eo")
+games = Array[PackedScene]([ExtResource("15_ftrbr")])

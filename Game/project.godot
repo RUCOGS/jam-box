@@ -24,7 +24,7 @@ window/stretch/aspect="expand"
 
 [editor]
 
-run/main_run_args="--resolution 1200x700"
+run/main_run_args="--resolution 800x500"
 
 [rendering]
 

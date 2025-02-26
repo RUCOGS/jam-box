@@ -156,21 +156,10 @@ func send_join_room(code: String, username: String):
 	send_packet(_peer_buffer.data_array)
 
 
-# Player sends a packet to the host
-# Should only be called on the player client!
-func player_send_relay_data(bytes: PackedByteArray):
+# Sends a packet to a client (player/host)
+func send_server_relay_data(bytes: PackedByteArray, dest_id: int = 0):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.SERVER_RELAY_DATA)
-	_peer_buffer.put_data(bytes)
-	send_packet(_peer_buffer.data_array)
-
-
-# Host sends a packet to either all players or a specific player
-# Should only be called on the host client!
-# Leave dest_id = 0 if you want to broadcast to all players
-func host_send_relay_data(bytes: PackedByteArray, dest_id: int = 0):
-	_peer_buffer.clear()
-	_peer_buffer.put_u8(PacketID.CLIENT_RELAY_DATA)
 	_peer_buffer.put_u16(dest_id)
 	_peer_buffer.put_data(bytes)
 	send_packet(_peer_buffer.data_array)

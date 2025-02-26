@@ -8,6 +8,8 @@ extends PanelContainer
 @export var _name_line_edit: LineEdit
 @export var _join_button: Button
 @export var _host_button: Button
+@export var _game_option_button: OptionButton
+@export var _config: Config
 
 
 func _ready() -> void:
@@ -15,6 +17,12 @@ func _ready() -> void:
 	_host_button.pressed.connect(_on_host_pressed)
 	_room_manager.state_changed.connect(_on_room_state_changed)
 	_network.state_changed.connect(_on_room_state_changed)
+	_game_option_button.clear()
+	for game_info in _config.game_infos:
+		_game_option_button.add_item(game_info.name)
+		_game_option_button.set_item_metadata(_game_option_button.item_count - 1, game_info.id)
+	if _game_option_button.item_count > 0:
+		_game_option_button.select(0)
 	_on_room_state_changed()
 
 
@@ -34,4 +42,5 @@ func _on_join_pressed():
 
 
 func _on_host_pressed():
-	_room_manager.host_room()
+	var selected_game_id = _game_option_button.get_selected_metadata() as int
+	_room_manager.host_room(selected_game_id)
