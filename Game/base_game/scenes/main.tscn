@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=17 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://base_game/scripts/network.gd" id="1_51f1j"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="5_q1q6t"]
 [ext_resource type="Script" path="res://base_game/scripts/room_manager.gd" id="6_olaue"]
 [ext_resource type="Script" path="res://base_game/scripts/ui/error_panel.gd" id="7_rwkk3"]
+[ext_resource type="Script" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
 [ext_resource type="Script" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
 
@@ -80,7 +81,7 @@ grow_vertical = 2
 texture = ExtResource("5_q1q6t")
 expand_mode = 1
 
-[node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu"]
+[node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_room_manager")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,6 +89,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1hdj3")
+_room_manager = NodePath("../../../RoomManager")
 
 [node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config")]
 visible = false
@@ -262,6 +264,23 @@ text = "Start"
 layout_mode = 2
 text = "Quit"
 
+[node name="InGamePanel" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_quit_button")]
+layout_mode = 1
+offset_right = 100.0
+offset_bottom = 63.0
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("10_h4wvk")
+_network = NodePath("../../../../Network")
+_quit_button = NodePath("QuitButton")
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/InGamePanel"]
+layout_mode = 2
+text = "Quit"
+
 [node name="RelayPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_network", "_config_relay_button", "_connect_relay_button", "_relay_address_line_edit", "_config_panel", "_config_label")]
 layout_mode = 1
 anchors_preset = 3
@@ -322,6 +341,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
@@ -339,7 +359,6 @@ autowrap_mode = 3
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
-server_address = "wss://atlinx.net/jambox/server"
 auto_reconnect = true
 
 [node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_config", "_network")]

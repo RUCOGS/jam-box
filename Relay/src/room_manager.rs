@@ -253,6 +253,9 @@ impl RoomManager {
                                 }
                             }
                         } else {
+                            // Read destination ID, although we ignore it for non-host players.
+                            // Non-host players automatically forward data to the host
+                            p_buffer.read_u16()?;
                             // We are a player, we can only forward data to the host
                             p_buffer
                                 .read_to_end(&mut p_data)

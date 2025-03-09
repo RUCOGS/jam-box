@@ -17,8 +17,13 @@ func _ready() -> void:
 	_test_button.button_down.connect(_on_test_press_changed.bind(true))
 	_test_button.button_up.connect(_on_test_press_changed.bind(false))
 	_quit_button.pressed.connect(_on_quit_pressed)
+	_start_button.pressed.connect(_on_start_pressed)
 	_on_player_host_changed()
 	_on_can_start_changed()
+
+
+func _on_start_pressed():
+	_room_manager.player_send_start_game()
 
 
 func _on_can_start_changed():
