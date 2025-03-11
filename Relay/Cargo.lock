@@ -150,22 +150,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "cogs-box-relay"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bytebuffer",
- "env_logger",
- "futures-util",
- "log",
- "num_enum",
- "rand",
- "thiserror 2.0.6",
- "tokio",
- "tokio-tungstenite",
-]
-
-[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -362,6 +346,22 @@ name = "itoa"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d75a2a4b1b190afb6f5425f10f6a8f959d2ea0b9c2b1d79553551850539e4674"
+
+[[package]]
+name = "jam-box-relay"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bytebuffer",
+ "env_logger",
+ "futures-util",
+ "log",
+ "num_enum",
+ "rand",
+ "thiserror 2.0.6",
+ "tokio",
+ "tokio-tungstenite",
+]
 
 [[package]]
 name = "libc"
