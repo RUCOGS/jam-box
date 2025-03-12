@@ -107,13 +107,13 @@ func _notification(what: int) -> void:
 
 
 func join_room(_room_code: String, _username: String):
-	room_code = _room_code
+	room_code = _room_code.to_upper()
 	username = _username
 	state = State.CONNECTING
 	is_host = false
 	is_player_host = false
 	can_start = false
-	_network.send_join_room(_room_code, _username)
+	_network.send_join_room(room_code, _username)
 
 
 func host_room(_game_info_id: int):
