@@ -15,6 +15,8 @@ enum PacketID {
 
 func _ready() -> void:
 	print("Quiplash initialized!")
+	if !_room_manager.is_host:
+		$HostManager.queue_free()
 
 
 func _game_started():

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=4 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
 
 [node name="QuiplashRoomManager" type="Node"]
 script = ExtResource("1_nxac8")
@@ -8,3 +10,19 @@ game_name = "Quiplash"
 game_description = "COGS quiplash!"
 min_players = 1
 max_players = 16
+
+[node name="HostManager" type="Node" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+script = ExtResource("2_n6iy2")
+_quiplash_room_manager = NodePath("..")
+
+[node name="HostUI" type="Control" parent="HostManager"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_s2o1g")
+_quiplash_host_manager = NodePath("..")
