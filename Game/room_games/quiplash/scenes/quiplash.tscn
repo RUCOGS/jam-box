@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=6 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" path="res://room_games/quiplash/question_response.gd" id="5_24io3"]
 
-[node name="QuiplashRoomManager" type="Node"]
+[node name="QuiplashRoomManager" type="Node" node_paths=PackedStringArray("_host_manager", "_player_manager")]
 script = ExtResource("1_nxac8")
+_host_manager = NodePath("HostManager")
+_player_manager = NodePath("PlayerManager")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
 min_players = 1
@@ -26,3 +30,18 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("3_s2o1g")
 _quiplash_host_manager = NodePath("..")
+
+[node name="PlayerManager" type="Node" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+script = ExtResource("4_emmnh")
+_quiplash_room_manager = NodePath("..")
+
+[node name="PlayerUI" type="Control" parent="PlayerManager"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuestionResponse" type="Control" parent="PlayerManager"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("5_24io3")

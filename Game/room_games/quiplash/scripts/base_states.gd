@@ -1,10 +1,11 @@
 class_name QuiplashBaseState
 extends Node
+#extends Control?
 
 var STATE_NUM
 var isActive: bool = false
 enum States {
-	PROMPTING_QUESTIONS = 1,
+	QUESTIONS = 1,
 	VOTING = 2,
 	SCORING = 3
 }

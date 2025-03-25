@@ -1,18 +1,10 @@
-class_name QuiplashHostManager
+class_name QuiplashPlayerManager
 extends Node
 
 @export var _quiplash_room_manager: QuiplashRoomManager
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
 
-# player id --> dict of player_data
-# 0: {
-#	"username": "bob",
-#	"score": 123,
-#	"responded": false
-#}
-
-var _player_data: Dictionary
 enum States {
 	QUESTIONS = 1,
 	VOTING = 2,
@@ -25,13 +17,6 @@ func _ready() -> void:
 	_quiplash_room_manager.received_packet.connect(_on_received_packet)
 	_room_manager.game_started.connect(_on_game_start)
 	_room_manager.game_ended.connect(_on_game_end)
-	
-	for key in _room_manager.players:
-		_player_data[key] = {
-			"username": _room_manager.players[key],
-			"score": 0,
-			"responded": false
-		}
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,7 +24,13 @@ func _process(delta: float) -> void:
 	if (_active_state != null):
 		_active_state.update(delta)
 
+
 func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
+	
+	#Host Change State
+	if (packet_id == _quiplash_room_manager.PacketID.HOST_CHANGE_STATE):
+		_go_to_state(buffer.get_u8())
+
 	if (_active_state != null):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
@@ -56,13 +47,9 @@ func _go_to_state(state: int):
 			_active_state = child
 			_active_state.enter()
 			break
-	
-	#tell players that the state is changing
-	_quiplash_room_manager._host_change_phase(state)
-
 
 func _on_game_start():
-	_go_to_state(States.QUESTIONS)
+	pass
 
 func _on_game_end():
 	pass
