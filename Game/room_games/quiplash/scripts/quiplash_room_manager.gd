@@ -15,6 +15,8 @@ enum PacketID {
 
 func _ready() -> void:
 	print("Quiplash initialized!")
+	if not _room_manager.is_host:
+		get_window().content_scale_factor = 2 
 
 
 func _game_started():

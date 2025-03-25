@@ -56,6 +56,7 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="PromptQuestions" type="Control" parent="PlayerManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -175,7 +176,6 @@ value = 50.0
 show_percentage = false
 
 [node name="HostManager" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
