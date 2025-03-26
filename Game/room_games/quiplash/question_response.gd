@@ -1,8 +1,8 @@
 extends QuiplashBaseState
 
-@export var _quiplash_host_manager: QuiplashHostManager
+@export var _quiplash_host_manager: QuiplashPlayerManager
 
-var thingamabob = "aoiwejfoi ajdflaiw eojfioawj eflkja oidfjwae"
+var thingamabob = "Player State Started"
 
 
 # Called when the node enters the scene tree for the first time.

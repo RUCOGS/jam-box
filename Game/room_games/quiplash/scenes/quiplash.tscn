@@ -25,11 +25,12 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager")]
+[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("3_s2o1g")
 _quiplash_host_manager = NodePath("..")
+_quiplash_room_manager = NodePath("../..")
 
 [node name="PlayerManager" type="Node" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
 script = ExtResource("4_emmnh")
@@ -41,7 +42,8 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="QuestionResponse" type="Control" parent="PlayerManager"]
+[node name="QuestionResponse" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_host_manager")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("5_24io3")
+_quiplash_host_manager = NodePath("..")

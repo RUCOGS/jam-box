@@ -21,7 +21,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if (_active_state != null):
+	if (not (_active_state == null)):
 		_active_state.update(delta)
 
 
@@ -31,7 +31,7 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_CHANGE_STATE):
 		_go_to_state(buffer.get_u8())
 
-	if (_active_state != null):
+	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
@@ -39,10 +39,10 @@ func _go_to_state(state: int):
 	#get STATE_NUM from child, see if it matches state
 	#if it does, activate it.
 	for child: Node in get_children():
-		if "STATE_NUM" in child && child.STATE_NUM == state:
-			print("Yee haw" + child.thingamabob)
+		if "STATE_NUM" in child and child.STATE_NUM == state:
+			print("Player changing state... " + child.thingamabob)
 			#exit previous state, set state to active state, enter state, break
-			if (_active_state != null):
+			if (not (_active_state == null)):
 				_active_state.exit()
 			_active_state = child
 			_active_state.enter()
