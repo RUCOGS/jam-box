@@ -1,205 +1,47 @@
-[gd_scene load_steps=5 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=6 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
-[ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="2_nj5ht"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" path="res://room_games/quiplash/question_response.gd" id="5_24io3"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lq8nl"]
-bg_color = Color(0.266724, 0.528293, 0.898438, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75tqh"]
-bg_color = Color(0.835938, 0.195923, 0.195923, 1)
-
-[node name="QuiplashRoomManager" type="Node"]
+[node name="QuiplashRoomManager" type="Node" node_paths=PackedStringArray("_host_manager", "_player_manager")]
 script = ExtResource("1_nxac8")
+_host_manager = NodePath("HostManager")
+_player_manager = NodePath("PlayerManager")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
 min_players = 1
 max_players = 16
 
-[node name="PlayerManager" type="Node" parent="."]
+[node name="HostManager" type="Node" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+script = ExtResource("2_n6iy2")
+_quiplash_room_manager = NodePath("..")
+
+[node name="HostUI" type="Control" parent="HostManager"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_s2o1g")
+_quiplash_host_manager = NodePath("..")
+
+[node name="PlayerManager" type="Node" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+script = ExtResource("4_emmnh")
+_quiplash_room_manager = NodePath("..")
 
 [node name="PlayerUI" type="Control" parent="PlayerManager"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="HostManager" type="Node" parent="."]
-
-[node name="UI" type="Control" parent="HostManager"]
+[node name="QuestionResponse" type="Control" parent="PlayerManager"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_nj5ht")
-
-[node name="Timer" type="MarginContainer" parent="HostManager/UI"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -51.0
-offset_right = 51.0
-offset_bottom = 96.0
-grow_horizontal = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="Panel2" type="PanelContainer" parent="HostManager/UI/Timer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HostManager/UI/Timer/Panel2"]
-layout_mode = 2
-theme_type_variation = &"HeaderLarge"
-text = "96"
-
-[node name="PromptQuestions" type="Control" parent="HostManager"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="UI" type="MarginContainer" parent="HostManager/PromptQuestions"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_nj5ht")
-
-[node name="Panel" type="PanelContainer" parent="HostManager/PromptQuestions/UI"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="MarginContainer" type="MarginContainer" parent="HostManager/PromptQuestions/UI/Panel"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/PromptQuestions/UI/Panel"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="HostManager/PromptQuestions/UI/Panel/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderLarge"
-text = "QUESTION TIME!"
-
-[node name="Label" type="Label" parent="HostManager/PromptQuestions/UI/Panel/VBoxContainer"]
-layout_mode = 2
-text = "Players Ready (3/4)
-
-* sdfsdf (DONE)
-* df ...
-* d ...
-* sdf (DONE)
-* sdf (DONE)"
-
-[node name="Voting" type="Node" parent="HostManager"]
-
-[node name="UI" type="MarginContainer" parent="HostManager/Voting"]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_nj5ht")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderLarge"
-text = "VOTE"
-
-[node name="Question" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "What should we do?"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
-layout_mode = 2
-
-[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-text = "Response 1 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-autowrap_mode = 2
-
-[node name="PanelContainer3" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-text = "Response 2 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-autowrap_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="HostManager/Voting/UI/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_lq8nl")
-theme_override_styles/fill = SubResource("StyleBoxFlat_75tqh")
-value = 50.0
-show_percentage = false
-
-[node name="Scores" type="Node" parent="HostManager"]
-
-[node name="UI" type="MarginContainer" parent="HostManager/Scores"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_nj5ht")
-
-[node name="Panel" type="PanelContainer" parent="HostManager/Scores/UI"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Scores/UI/Panel"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderLarge"
-text = "SCORES"
-
-[node name="Label" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
-layout_mode = 2
-text = "* joe: 10
-* bob: 50
-* shmoe: 30
-* roe: 40"
+anchors_preset = 0
+script = ExtResource("5_24io3")
