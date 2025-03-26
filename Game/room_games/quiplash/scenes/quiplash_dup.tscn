@@ -96,16 +96,14 @@ text = "QUESTION TIME!"
 
 [node name="Label" type="Label" parent="PlayerManager/PromptQuestions/UI/Panel/VBoxContainer"]
 layout_mode = 2
-text = "Players Ready (3/4)
+text = "What color is the sky?"
 
-* sdfsdf (DONE)
-* df ...
-* d ...
-* sdf (DONE)
-* sdf (DONE)"
+[node name="TextEdit" type="TextEdit" parent="PlayerManager/PromptQuestions/UI/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "Blue!"
 
 [node name="Voting" type="Control" parent="PlayerManager"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -177,6 +175,7 @@ value = 50.0
 show_percentage = false
 
 [node name="HostManager" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
