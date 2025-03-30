@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://ca00t3kplrvkl"]
+
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_21x37"]
+[ext_resource type="PackedScene" uid="uid://ck0ymjq7e3a7s" path="res://room_games/quiplash/scenes/quiplash_dup.tscn" id="2_xeudv"]
+[ext_resource type="Script" path="res://base_game/scripts/ui_scaler.gd" id="3_hqyh8"]
+[ext_resource type="Texture2D" uid="uid://cs7pm0utdn8i5" path="res://base_game/assets/art/cogs-bg.PNG" id="4_uoukq"]
+[ext_resource type="Texture2D" uid="uid://qxuxsf10ddot" path="res://base_game/assets/art/jambox-full.PNG" id="5_4pi7f"]
+[ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="6_py8rm"]
+
+[node name="QuiplashUITest" type="Node"]
+script = ExtResource("1_21x37")
+game_name = "Quiplash"
+game_description = "COGS quiplash!"
+min_players = 1
+max_players = 16
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_uoukq")
+expand_mode = 2
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4, 0, 0.101961, 0.403922)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TextureRect"]
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -250.0
+offset_bottom = 250.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_4pi7f")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/TextureRect"]
+self_modulate = Color(0, 0, 0, 0.470588)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_py8rm")
+expand_mode = 1
+
+[node name="QuiplashRoomManager" parent="." instance=ExtResource("2_xeudv")]
+
+[node name="UIScaler" type="Node" parent="."]
+script = ExtResource("3_hqyh8")

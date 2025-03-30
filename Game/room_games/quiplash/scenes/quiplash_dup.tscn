@@ -25,8 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_gign5")
 
-[node name="PlayerUI" type="Control" parent="PlayerManager"]
-visible = false
+[node name="UI" type="Control" parent="PlayerManager"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +33,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Timer" type="MarginContainer" parent="PlayerManager/PlayerUI"]
+[node name="Timer" type="MarginContainer" parent="PlayerManager/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -48,10 +47,10 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="PlayerManager/PlayerUI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="PlayerManager/UI/Timer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerManager/PlayerUI/Timer/Panel2"]
+[node name="Label" type="Label" parent="PlayerManager/UI/Timer/Panel2"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
@@ -74,12 +73,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="PlayerManager/PromptQuestions/UI"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="PlayerManager/PromptQuestions/UI/Panel"]
-custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
@@ -95,13 +94,22 @@ theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
 [node name="Label" type="Label" parent="PlayerManager/PromptQuestions/UI/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
-text = "What color is the sky?"
+text = "What color is the sky? What color is the sky? What color is the sky? What color is the sky? "
+autowrap_mode = 3
+
+[node name="Padding" type="Control" parent="PlayerManager/PromptQuestions/UI/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 
 [node name="TextEdit" type="TextEdit" parent="PlayerManager/PromptQuestions/UI/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
-text = "Blue!"
+text = "Blue!
+Blue!
+Blue!
+"
 
 [node name="Voting" type="Control" parent="PlayerManager"]
 layout_mode = 1
@@ -119,60 +127,77 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI"]
+[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Voting/UI/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="PlayerManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "VOTE"
 
-[node name="Question" type="Label" parent="PlayerManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "What should we do?"
+text = "QUESTION HERE!"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PlayerManager/Voting/UI/VBoxContainer"]
-layout_mode = 2
-
-[node name="PanelContainer2" type="PanelContainer" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-text = "Response 1 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-autowrap_mode = 2
+text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
+autowrap_mode = 3
 
-[node name="PanelContainer3" type="PanelContainer" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer"]
+[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
+autowrap_mode = 3
+
+[node name="Waiting" type="Control" parent="PlayerManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI" type="MarginContainer" parent="PlayerManager/Waiting"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Waiting/UI"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Waiting/UI/PanelContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3"]
+[node name="Title" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "SIT TIGHT..."
 
-[node name="Label" type="Label" parent="PlayerManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+[node name="Question" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "Response 2 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-autowrap_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="PlayerManager/Voting/UI/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_lq8nl")
-theme_override_styles/fill = SubResource("StyleBoxFlat_75tqh")
-value = 50.0
-show_percentage = false
+text = "We're moving onto the next section!"
 
 [node name="HostManager" type="Control" parent="."]
 visible = false

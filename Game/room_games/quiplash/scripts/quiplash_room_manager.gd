@@ -17,6 +17,9 @@ enum PacketID {
 
 
 func _ready() -> void:
+	if not _room_manager:
+		return
+	
 	print("Quiplash initialized!")
 	#might this cause problems?
 	if !_room_manager.is_host:

@@ -21,6 +21,7 @@
 [node name="Main" type="Node"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -10
 
 [node name="MainMenu" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("_network", "_menu_manager")]
 layout_mode = 3
@@ -33,6 +34,7 @@ theme = ExtResource("1_p0d0r")
 script = ExtResource("1_uc6kl")
 _network = NodePath("../../Network")
 _menu_manager = NodePath("MenuManager")
+metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu"]
 layout_mode = 1
@@ -44,6 +46,7 @@ grow_vertical = 2
 texture = ExtResource("3_iobb2")
 expand_mode = 2
 stretch_mode = 6
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/TextureRect"]
 layout_mode = 1
