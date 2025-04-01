@@ -64,34 +64,36 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
-layout_mode = 3
-anchors_preset = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("3_s2o1g")
 _quiplash_host_manager = NodePath("")
 _quiplash_room_manager = NodePath("../..")
 
-[node name="PromptQuestions" type="Control" parent="HostManager"]
+[node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.5
+offset_top = -123.5
+offset_right = 131.5
+offset_bottom = 123.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI" type="MarginContainer" parent="HostManager/PromptQuestions"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="PanelContainer" parent="HostManager/PromptQuestions/UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="HostManager/PromptQuestions/UI/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -99,15 +101,15 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/PromptQuestions/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/PromptQuestions/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="Label" type="Label" parent="HostManager/PromptQuestions/UI/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Players Ready (3/4)
 
