@@ -18,10 +18,12 @@
 [ext_resource type="Script" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
 [ext_resource type="Script" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
+[ext_resource type="Script" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
 
 [node name="Main" type="Node"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -10
 
 [node name="MainMenu" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("_network", "_menu_manager")]
 layout_mode = 3
@@ -34,6 +36,7 @@ theme = ExtResource("1_p0d0r")
 script = ExtResource("1_uc6kl")
 _network = NodePath("../../Network")
 _menu_manager = NodePath("MenuManager")
+metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu"]
 layout_mode = 1
@@ -45,6 +48,7 @@ grow_vertical = 2
 texture = ExtResource("3_iobb2")
 expand_mode = 2
 stretch_mode = 6
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/TextureRect"]
 layout_mode = 1
@@ -151,8 +155,7 @@ grow_vertical = 2
 script = ExtResource("1_1hdj3")
 _room_manager = NodePath("../../../RoomManager")
 
-[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config")]
-visible = false
+[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config", "_ui_scaler", "_can_host_question", "_host_buttons")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -173,9 +176,12 @@ _menu_manager = NodePath("..")
 _code_line_edit = NodePath("VBoxContainer/CodeLineEdit")
 _name_line_edit = NodePath("VBoxContainer/UsernameLineEdit")
 _join_button = NodePath("VBoxContainer/JoinButton")
-_host_button = NodePath("VBoxContainer/HostButton")
-_game_option_button = NodePath("VBoxContainer/GameOptionButton")
+_host_button = NodePath("VBoxContainer/HostButton/HostButton")
+_game_option_button = NodePath("VBoxContainer/HostButton/GameOptionButton")
 _config = NodePath("../../../../Config")
+_ui_scaler = NodePath("../../../../UIScaler")
+_can_host_question = NodePath("VBoxContainer/CanHostQuestion")
+_host_buttons = NodePath("VBoxContainer/HostButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
 layout_mode = 2
@@ -210,17 +216,29 @@ text = "Join"
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="GameOptionButton" type="OptionButton" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="HostButton" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameOptionButton" type="OptionButton" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton"]
 layout_mode = 2
 selected = 0
 item_count = 1
 popup/item_0/text = "TEST GAME"
 
-[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton"]
 layout_mode = 2
 text = "Host"
 
+[node name="CanHostQuestion" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0.392157)
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+text = "Want to host a game? Get on your computer or tablet!"
+autowrap_mode = 2
+
 [node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
+visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -431,3 +449,6 @@ max_players = 3
 [node name="Config" type="Node" parent="."]
 script = ExtResource("14_pn2eo")
 games = Array[PackedScene]([ExtResource("15_ftrbr")])
+
+[node name="UIScaler" type="Node" parent="."]
+script = ExtResource("17_diokc")

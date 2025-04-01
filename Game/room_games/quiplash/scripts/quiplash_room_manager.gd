@@ -37,6 +37,7 @@ func _game_started():
 
 func _game_ended():
 	print("Quiplash game ended!")
+	_room_manager.players
 
 
 func _on_received_game_packet(sender_id: int, buffer: ByteBuffer):
