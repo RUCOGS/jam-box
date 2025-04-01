@@ -1,5 +1,5 @@
 [package]
-name = "cogs-box-relay"
+name = "jam-box-relay"
 version = "0.1.0"
 edition = "2021"
 
@@ -17,5 +17,5 @@ futures-util = "0.3"
 rand = "0.8.5"
 
 [[bin]]
-name = "cogs-box-relay"
+name = "jam-box-relay"
 path = "src/bin.rs"
