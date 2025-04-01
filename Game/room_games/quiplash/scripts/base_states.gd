@@ -1,6 +1,5 @@
 class_name QuiplashBaseState
-extends Node
-#extends Control?
+extends Control
 
 
 #NOTE: This script is used for both player and host states. Hopefully that doesn't cause problems
