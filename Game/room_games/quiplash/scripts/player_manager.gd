@@ -1,5 +1,5 @@
 class_name QuiplashPlayerManager
-extends Node
+extends Control
 
 @export var _quiplash_room_manager: QuiplashRoomManager
 var _room_manager: RoomManager
