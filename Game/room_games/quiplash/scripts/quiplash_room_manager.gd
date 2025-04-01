@@ -10,7 +10,8 @@ enum PacketID {
 	# HOST PACKETS
 	HOST_SEND_HI = 0,
 	HOST_CHANGE_STATE = 1,
-	HOST_SEND_QUESTION = 2
+	HOST_SEND_QUESTION = 2,
+	HOST_START_ROUND = 3,
 	
 	# PLAYER PACKETS
 	
@@ -52,15 +53,20 @@ func _host_send_hi():
 	print("SENDING HI!")
 	send_to_all_players(_packet_buffer.data_array)
 
-func _host_change_phase(state_id: int):
+func host_change_state(state_id: int):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.HOST_CHANGE_STATE)
 	_packet_buffer.put_u8(state_id)
 	send_to_all_players(_packet_buffer.data_array)
 
-func _send_question_to_player(player_id: int, question_id: int, question: String):
+func send_question_to_player(player_id: int, question_id: int, question: String):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.HOST_SEND_QUESTION)
 	_packet_buffer.put_u8(question_id)
 	_packet_buffer.put_string(question)
-	send_to_player(_packet_buffer, player_id)
+	send_to_player(_packet_buffer.data_array, player_id)
+
+func host_start_new_round():
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_START_ROUND)
+	send_to_all_players(_packet_buffer.data_array)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=20 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://base_game/scripts/network.gd" id="1_51f1j"]
