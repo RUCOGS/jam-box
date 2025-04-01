@@ -3,7 +3,7 @@ extends QuiplashBaseState
 @export var _quiplash_host_manager: QuiplashHostManager
 @export var _quiplash_room_manager: QuiplashRoomManager
 
-var thingamabob = "Host State Started"
+var thingamabob = "Host State Questions Started"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

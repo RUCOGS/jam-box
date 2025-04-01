@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=19 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" path="res://base_game/scripts/network.gd" id="1_51f1j"]
@@ -11,8 +11,10 @@
 [ext_resource type="Script" path="res://base_game/scripts/ui/host_lobby_panel.gd" id="4_86h1h"]
 [ext_resource type="Script" path="res://base_game/scripts/ui/player_lobby_panel.gd" id="5_o4tag"]
 [ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="5_q1q6t"]
+[ext_resource type="Texture2D" uid="uid://d20skyj5x4gum" path="res://base_game/assets/art/POGS.png" id="6_nkhmq"]
 [ext_resource type="Script" path="res://base_game/scripts/room_manager.gd" id="6_olaue"]
 [ext_resource type="Script" path="res://base_game/scripts/ui/error_panel.gd" id="7_rwkk3"]
+[ext_resource type="Texture2D" uid="uid://cfkju7wiwvilr" path="res://base_game/assets/art/pogs_box.png" id="7_t64cq"]
 [ext_resource type="Script" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
 [ext_resource type="Script" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
@@ -81,6 +83,64 @@ grow_vertical = 2
 texture = ExtResource("5_q1q6t")
 expand_mode = 1
 
+[node name="POGS" type="TextureRect" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_nkhmq")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/POGS"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.347019, 0.00094163, 0.523593, 0.403922)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/POGS"]
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1203.0
+offset_top = -826.0
+offset_right = 223.0
+offset_bottom = 830.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("7_t64cq")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/POGS"]
+self_modulate = Color(0, 0, 0, 0.470588)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_q1q6t")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/POGS"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 400.0
+offset_right = 407.0
+offset_bottom = 445.0
+theme_override_font_sizes/font_size = 37
+text = "made in google drawings"
+
 [node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_room_manager")]
 layout_mode = 1
 anchors_preset = 15
@@ -123,7 +183,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
-text = "Jam Box"
+text = "POG Box"
 uppercase = true
 
 [node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
