@@ -1,15 +1,16 @@
 extends QuiplashBaseState
 
-@export var _quiplash_host_manager: QuiplashPlayerManager
+@export var _quiplash_player_manager: QuiplashPlayerManager
 @export var _quiplash_room_manager: QuiplashRoomManager
 
-var thingamabob = "Player State Questions Started"
+@export var _question_label: Label
+@export var _question_text_edit: Label
 
 #list of questions to be answered this round, holds dictionaries
-#question_dict = {
+# [{
 #	"id": 3,
 #	"text": "what color is the sky"
-#}
+#}]
 var _questions_to_answer: Array
 
 # Called when the node enters the scene tree for the first time.
@@ -28,7 +29,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 			"id": question_id,
 			"text": question_text
 		}
-		
+		_questions_to_answer.append(_questions_to_answer)
 		
 		#Important! Need a way to get the id somehow...? This isn't working.
 		print(str(_quiplash_room_manager.id) + " " + question_text)

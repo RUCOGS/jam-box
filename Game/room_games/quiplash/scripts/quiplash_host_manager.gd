@@ -10,8 +10,7 @@ var _active_state: QuiplashBaseState
 #	"username": "bob",
 #	"score": 123,
 #	"responded": false
-#}
-
+# }
 var _player_data: Dictionary
 enum States {
 	QUESTIONS = 1,
@@ -19,15 +18,20 @@ enum States {
 	SCORING = 3
 }
 
-#array of all questions
-var _all_questions: Array
+# Queue of all questions, shuffled
+# We can pop from queue to get a new random question
+var all_question_queue: Array
 #number of questions needed
 @export var questions_needed: int
 
-# dict of question data:
-# "question": "string", 
-# "responses": [{"respondent_id": 12, "response": "String"}, ...],
-# 
+# Array of active question data:
+# [{
+# 	"question": "string", 
+#   "responses": [{"respondent_id": 12, "response": "String"}, ...],
+# }, {
+# 	"question": "string", 
+#   "responses": [{"respondent_id": 12, "response": "String"}, ...],
+# }]
 # 
 var chosen_questions: Array
 
@@ -59,43 +63,39 @@ func _go_to_state(state: int):
 	#get STATE_NUM from child, see if it matches state
 	#if it does, activate it.
 	for child: Node in get_children():
-		if "STATE_NUM" in child and child.STATE_NUM == state:
-			print("Host changing state... " + child.thingamabob)
-			#exit previous state, set state to active state, enter state, break
-			if (not (_active_state == null)):
-				_active_state.exit()
-			_active_state = child
-			_active_state.enter()
-			break
-
-
+		if "STATE_NUM" in child:
+			var is_active = child.STATE_NUM == state
+			if is_active:
+				#exit previous state, set state to active state, enter state
+				if (not (_active_state == null)):
+					_active_state.exit()
+				_active_state = child
+				_active_state.enter()
+			_active_state.visible = is_active
 
 #reads all questions from the questions_list file and adds them to an array
 func _read_questions():
 	var questions_file = FileAccess.open("res://room_games/quiplash/assets/questions_list.txt", FileAccess.READ)
 	while (questions_file.get_position() < questions_file.get_length()):
-		_all_questions.push_back(questions_file.get_line())
+		all_question_queue.push_back(questions_file.get_line())
 	questions_file.close()
+	all_question_queue.shuffle()
 
+# Pops a new question from the all_questions queue
+# Adds the new question to the chosen_questions list,
+# and returns the chosen question string.
+func get_new_question() -> Dictionary:
+	if len(all_question_queue) == 0:
+		printerr("all_question_queue is empty! Not enough questions")
+		return {}
+	var question_data = {
+		"question": all_question_queue.pop_back(),
+		"index": len(chosen_questions),
+		"responses": []
+	}
+	chosen_questions.push_back(question_data)
+	return question_data
 
-#randomizes and chooses the needed amount of questions
-func _choose_questions(num_questions):
-	_all_questions.shuffle()
-	for i in num_questions:
-		#in case there's not enough questions...
-		var _current_question = "uh oh"
-		
-		#otherwise, pick a question from a shuffled list
-		if (i < _all_questions.size()):
-			_current_question = _all_questions[i]
-		var question_dict = {
-			"question": _current_question,
-			"responses": []
-		}
-		
-		#add them to an already made chosen_questions array
-		chosen_questions.push_back(question_dict)
-	
 func _on_game_start():
 	#get all players, add them to a dictionary with some information about them
 	#refer to sample somewhere above
@@ -109,9 +109,8 @@ func _on_game_start():
 	#every player will answer two questions, but every question gets sent to two players
 	questions_needed = _player_data.size()
 	
-	#get the questions, choose 'em, and start the game
+	#load questions
 	_read_questions()
-	_choose_questions(questions_needed)
 	_go_to_state(States.QUESTIONS)
 
 func _on_game_end():

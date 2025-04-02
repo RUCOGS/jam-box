@@ -40,7 +40,6 @@ func _go_to_state(state: int):
 	#if it does, activate it.
 	for child: Node in get_children():
 		if "STATE_NUM" in child and child.STATE_NUM == state:
-			print("Player changing state... " + child.thingamabob)
 			#exit previous state, set state to active state, enter state, break
 			if (not (_active_state == null)):
 				_active_state.exit()

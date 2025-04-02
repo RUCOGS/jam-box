@@ -13,10 +13,8 @@ bg_color = Color(0.266724, 0.528293, 0.898438, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwj0q"]
 bg_color = Color(0.835938, 0.195923, 0.195923, 1)
 
-[node name="QuiplashRoomManager" type="Node" node_paths=PackedStringArray("_host_manager", "_player_manager")]
+[node name="QuiplashRoomManager" type="Node"]
 script = ExtResource("1_nxac8")
-_host_manager = NodePath("")
-_player_manager = NodePath("")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
 min_players = 1
@@ -63,7 +61,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 
-[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
+[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,8 +69,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_s2o1g")
-_quiplash_host_manager = NodePath("")
+_quiplash_host_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
+_players_label = NodePath("UI/Panel/VBoxContainer/PlayersLabel")
 
 [node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting"]
 layout_mode = 1
@@ -109,7 +108,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="Label" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="PlayersLabel" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Players Ready (3/4)
 
@@ -269,8 +268,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 
-[node name="QuestionResponse" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
-visible = false
+[node name="QuestionResponse" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -278,7 +276,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_24io3")
-_quiplash_host_manager = NodePath("")
+_quiplash_player_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponse"]
@@ -316,7 +314,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="Label" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="QuestionLabel" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 text = "What color is the sky? What color is the sky? What color is the sky? What color is the sky? "
@@ -326,7 +324,7 @@ autowrap_mode = 3
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="QuestionTextEdit" type="TextEdit" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "Blue!
