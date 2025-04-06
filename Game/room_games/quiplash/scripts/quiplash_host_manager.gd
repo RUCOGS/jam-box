@@ -42,6 +42,7 @@ func _ready() -> void:
 	_quiplash_room_manager.received_packet.connect(_on_received_packet)
 	_room_manager.game_started.connect(_on_game_start)
 	_room_manager.game_ended.connect(_on_game_end)
+	visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -112,6 +113,7 @@ func _on_game_start():
 	#load questions
 	_read_questions()
 	_go_to_state(States.QUESTIONS)
+	visible = true
 
 func _on_game_end():
 	pass

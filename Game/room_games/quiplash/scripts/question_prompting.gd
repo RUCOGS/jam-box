@@ -26,7 +26,7 @@ func enter():
 	# Distribute questions -- first question goes to first two players, second goes to next to...
 	# ... and so on
 	
-	# Shuffle players to ensure first 2-players don't always get paired together
+	# Shuffle player ids to ensure first 2-players don't always get paired together
 	# Questions are already shuffled
 	var shuffled_players = _quiplash_host_manager._player_data.keys()
 	# As a player, how many questions are you expected to 
@@ -34,19 +34,39 @@ func enter():
 	# NOTE: Each question is given to exactly 2 players
 	var questions_per_player = 2
 	
+	# Map player_id -> Array of questions
+	# Ex. 1: [{ id: 1, text: "What's 10 + 11?"}]
+	var player_questions: Dictionary = {}
+	for player_id in _quiplash_host_manager._player_data:
+		player_questions[player_id] = []
 	for i in range(questions_per_player):
 		shuffled_players.shuffle()
-		for player_index in range(len(shuffled_players)):
+		for player_index in range(0, len(shuffled_players), 2):
 			var new_question = _quiplash_host_manager.get_new_question()
 			if player_index + 1 < len(shuffled_players):
 				# Pair up this player and the next player
-				_quiplash_room_manager.send_question_to_player(shuffled_players[player_index], new_question["index"], new_question["question"])
-				_quiplash_room_manager.send_question_to_player(shuffled_players[player_index + 1], new_question["index"], new_question["question"])
+				player_questions[shuffled_players[player_index]].append({
+					"id": new_question["index"], 
+					"text": new_question["question"]
+				})
+				player_questions[shuffled_players[player_index + 1]].append({
+					"id": new_question["index"], 
+					"text": new_question["question"]
+				})
 			else:
 				# We are the last-odd player out, pick 
 				# the first player
-				_quiplash_room_manager.send_question_to_player(shuffled_players[player_index], new_question["index"], new_question["question"])
-				_quiplash_room_manager.send_question_to_player(shuffled_players[0], new_question["index"], new_question["question"])
+				assert(player_index != 0, "Expected >= 2 players to give out question to 2 unique players!")
+				player_questions[shuffled_players[player_index]].append({
+					"id": new_question["index"], 
+					"text": new_question["question"]
+				})
+				player_questions[shuffled_players[0]].append({
+					"id": new_question["index"], 
+					"text": new_question["question"]
+				})
+	for player_id in player_questions:
+		_quiplash_room_manager.host_send_questions_to_player(player_id, player_questions[player_id])
 	_update_players_label()
 
 func _update_players_label():
