@@ -15,6 +15,8 @@ bg_color = Color(0.835938, 0.195923, 0.195923, 1)
 
 [node name="QuiplashRoomManager" type="Node"]
 script = ExtResource("1_nxac8")
+_host_manager = NodePath("HostManager")
+_player_manager = NodePath("PlayerManager")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
 min_players = 1
@@ -31,7 +33,8 @@ theme = ExtResource("3_mvu8m")
 script = ExtResource("2_n6iy2")
 _quiplash_room_manager = NodePath("..")
 
-[node name="_UI" type="Control" parent="HostManager"]
+[node name="UI" type="Control" parent="HostManager/HostUI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +42,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Timer" type="MarginContainer" parent="HostManager/_UI"]
+[node name="Timer" type="MarginContainer" parent="HostManager/HostUI/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -53,27 +56,24 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="HostManager/_UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="HostManager/HostUI/UI/Timer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/_UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="HostManager/HostUI/UI/Timer/Panel2"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 
-[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
+[node name="PromptQuestions" type="Control" parent="HostManager/HostUI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_s2o1g")
-_quiplash_host_manager = NodePath("..")
-_quiplash_room_manager = NodePath("../..")
-_players_label = NodePath("UI/Panel/VBoxContainer/PlayersLabel")
 
-[node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting"]
+[node name="UI" type="MarginContainer" parent="HostManager/HostUI/PromptQuestions"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -87,12 +87,12 @@ offset_bottom = 123.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/HostUI/PromptQuestions/UI"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="HostManager/HostUI/PromptQuestions/UI/Panel"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -100,15 +100,15 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/HostUI/PromptQuestions/UI/Panel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/HostUI/PromptQuestions/UI/Panel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="PlayersLabel" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="HostManager/HostUI/PromptQuestions/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Players Ready (3/4)
 
@@ -238,7 +238,8 @@ theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
 
-[node name="_UI" type="Control" parent="PlayerManager"]
+[node name="UI" type="Control" parent="PlayerManager/PlayerUI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -246,7 +247,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Timer" type="MarginContainer" parent="PlayerManager/_UI"]
+[node name="Timer" type="MarginContainer" parent="PlayerManager/PlayerUI/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -260,26 +261,24 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="PlayerManager/_UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="PlayerManager/PlayerUI/UI/Timer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerManager/_UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="PlayerManager/PlayerUI/UI/Timer/Panel2"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 
-[node name="QuestionResponse" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager")]
+[node name="PromptQuestions" type="Control" parent="PlayerManager/PlayerUI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("5_24io3")
-_quiplash_player_manager = NodePath("..")
-_quiplash_room_manager = NodePath("../..")
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponse"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/PlayerUI/PromptQuestions"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -293,38 +292,38 @@ offset_bottom = 233.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="PlayerManager/QuestionResponse/UI"]
+[node name="Panel" type="PanelContainer" parent="PlayerManager/PlayerUI/PromptQuestions/UI"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/QuestionResponse/UI/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponse/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="QuestionLabel" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 text = "What color is the sky? What color is the sky? What color is the sky? What color is the sky? "
 autowrap_mode = 3
 
-[node name="Padding" type="Control" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="Padding" type="Control" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="QuestionTextEdit" type="TextEdit" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="PlayerManager/PlayerUI/PromptQuestions/UI/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "Blue!
