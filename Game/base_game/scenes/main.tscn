@@ -1,24 +1,24 @@
 [gd_scene load_steps=20 format=3 uid="uid://buhi6arioj2je"]
 
-[ext_resource type="Script" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
-[ext_resource type="Script" path="res://base_game/scripts/network.gd" id="1_51f1j"]
+[ext_resource type="Script" uid="uid://6u14ul0vqh3c" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
+[ext_resource type="Script" uid="uid://lsuv82fyxgev" path="res://base_game/scripts/network.gd" id="1_51f1j"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="1_p0d0r"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/main_menu.gd" id="1_uc6kl"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/relay_panel.gd" id="2_8edrq"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/join_host_panel.gd" id="3_ah6gk"]
+[ext_resource type="Script" uid="uid://uh3bfuux3q1c" path="res://base_game/scripts/ui/main_menu.gd" id="1_uc6kl"]
+[ext_resource type="Script" uid="uid://cdeqt3isknq1l" path="res://base_game/scripts/ui/relay_panel.gd" id="2_8edrq"]
+[ext_resource type="Script" uid="uid://c5wwwta4d8o2j" path="res://base_game/scripts/ui/join_host_panel.gd" id="3_ah6gk"]
 [ext_resource type="Texture2D" uid="uid://cs7pm0utdn8i5" path="res://base_game/assets/art/cogs-bg.PNG" id="3_iobb2"]
 [ext_resource type="Texture2D" uid="uid://qxuxsf10ddot" path="res://base_game/assets/art/jambox-full.PNG" id="4_3u43p"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/host_lobby_panel.gd" id="4_86h1h"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/player_lobby_panel.gd" id="5_o4tag"]
+[ext_resource type="Script" uid="uid://caijiafoadm34" path="res://base_game/scripts/ui/host_lobby_panel.gd" id="4_86h1h"]
+[ext_resource type="Script" uid="uid://b5sv8cug453k6" path="res://base_game/scripts/ui/player_lobby_panel.gd" id="5_o4tag"]
 [ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="5_q1q6t"]
 [ext_resource type="Texture2D" uid="uid://d20skyj5x4gum" path="res://base_game/assets/art/POGS.png" id="6_nkhmq"]
-[ext_resource type="Script" path="res://base_game/scripts/room_manager.gd" id="6_olaue"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/error_panel.gd" id="7_rwkk3"]
+[ext_resource type="Script" uid="uid://s3ginrtx42cm" path="res://base_game/scripts/room_manager.gd" id="6_olaue"]
+[ext_resource type="Script" uid="uid://daknn4d4y0l40" path="res://base_game/scripts/ui/error_panel.gd" id="7_rwkk3"]
 [ext_resource type="Texture2D" uid="uid://cfkju7wiwvilr" path="res://base_game/assets/art/pogs_box.png" id="7_t64cq"]
-[ext_resource type="Script" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
-[ext_resource type="Script" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
+[ext_resource type="Script" uid="uid://piqhgiwrbcd8" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
+[ext_resource type="Script" uid="uid://b2dgqh0qw02dw" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
-[ext_resource type="Script" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
+[ext_resource type="Script" uid="uid://dyag6nyqsfa1k" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
 
 [node name="Main" type="Node"]
 
@@ -32,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("1_p0d0r")
 script = ExtResource("1_uc6kl")
 _network = NodePath("../../Network")
@@ -225,6 +226,7 @@ layout_mode = 2
 selected = 0
 item_count = 1
 popup/item_0/text = "TEST GAME"
+popup/item_0/id = 0
 
 [node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton"]
 layout_mode = 2

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://ck0ymjq7e3a7s"]
 
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_xb3g3"]
+[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_xb3g3"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="2_gign5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lq8nl"]

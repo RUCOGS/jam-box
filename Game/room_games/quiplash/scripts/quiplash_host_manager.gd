@@ -9,7 +9,8 @@ var _active_state: QuiplashBaseState
 # 0: {
 #	"username": "bob",
 #	"score": 123,
-#	"responded": false
+#	"answered_questions": 0
+#	"question_ids": [2, 3, 1]
 # }
 var _player_data: Dictionary
 enum States {
@@ -104,7 +105,8 @@ func _on_game_start():
 		_player_data[key] = {
 			"username": _room_manager.players[key],
 			"score": 0,
-			"responded": false
+			"answered_questions": 0,
+			"question_ids": [],
 		}
 	
 	#every player will answer two questions, but every question gets sent to two players

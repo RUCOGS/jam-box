@@ -12,7 +12,7 @@ config_version=5
 
 config/name="COGS Box Game"
 run/main_scene="res://base_game/scenes/main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
@@ -22,9 +22,13 @@ window/size/viewport_height=700
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[dotnet]
+
+project/assembly_name="COGS Box Game"
+
 [editor]
 
-run/main_run_args="--resolution 800x500"
+run/main_run_args="--resolution 1200x700"
 
 [rendering]
 

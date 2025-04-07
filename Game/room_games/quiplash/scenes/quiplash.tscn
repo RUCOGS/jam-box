@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://lcfau7tnyuti"]
 
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
+[ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
+[ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
 bg_color = Color(0.266724, 0.528293, 0.898438, 1)
@@ -231,6 +231,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
@@ -242,6 +243,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Timer" type="MarginContainer" parent="PlayerManager/UI"]
 layout_mode = 1
@@ -252,6 +254,7 @@ offset_left = -51.0
 offset_right = 51.0
 offset_bottom = 96.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
@@ -272,6 +275,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("5_24io3")
 _quiplash_player_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
@@ -288,6 +292,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="QuestionPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI"]
 visible = false
@@ -359,6 +364,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1
@@ -367,6 +373,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Voting/UI"]
 custom_minimum_size = Vector2(300, 0)
@@ -413,6 +420,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Waiting"]
 layout_mode = 1

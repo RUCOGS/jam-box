@@ -37,13 +37,13 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		for i in range(question_count):
 			var question_id = buffer.get_u8()
 			var question_text = buffer.get_string()
-			var question_dict = {
+			_questions_to_answer.append({
 				"id": question_id,
 				"text": question_text
-			}
-			_questions_to_answer.append(_questions_to_answer)
+			})
 		_current_question_id = 0
 		_update_question()
+		_question_panel.visible = true
 
 
 func _update_question():

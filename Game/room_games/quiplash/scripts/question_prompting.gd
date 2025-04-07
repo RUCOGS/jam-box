@@ -5,14 +5,28 @@ extends QuiplashBaseState
 
 @export var _players_label: Label
 
-var _responded_players: int = 0
+var _responses: int = 0
+var _expected_responses: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	STATE_NUM = States.QUESTIONS
 
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
-	pass
+	if packet_id == QuiplashRoomManager.PacketID.PLAYER_SEND_RESPONSE:
+		var question_id = buffer.get_u8()
+		var response = buffer.get_string()
+		print("Received player response from: %s: question: %s: %s" % [sender_id, question_id, response])
+		_quiplash_host_manager.chosen_questions[question_id]["responses"].append({
+			"respondent_id": sender_id, 
+			"response": response,
+		})
+		_quiplash_host_manager._player_data[sender_id]["answered_questions"] += 1
+		_update_players_label()
+		_responses += 1
+		if _responses == _expected_responses:
+			# We got everyone's responses
+			print("TODO: Move to next state")
 
 #overwrite base update
 func update(_delta: float):
@@ -21,7 +35,8 @@ func update(_delta: float):
 #overwrite base enter
 func enter():
 	# Reset
-	_responded_players = 0
+	_responses = 0
+	_expected_responses = 0
 	
 	# Distribute questions -- first question goes to first two players, second goes to next to...
 	# ... and so on
@@ -65,12 +80,25 @@ func enter():
 					"id": new_question["index"], 
 					"text": new_question["question"]
 				})
+			_expected_responses += 2
 	for player_id in player_questions:
+		var player = _quiplash_host_manager._player_data[player_id]
+		player["answered_questions"] = 0
+		player["question_ids"] = player_questions[player_id].map(func(x): x["id"])
 		_quiplash_room_manager.host_send_questions_to_player(player_id, player_questions[player_id])
+	
 	_update_players_label()
 
-func _update_players_label():
-	var text = "Players Ready (%s/%s)\n" % [_responded_players, len(_quiplash_host_manager._player_data)]
+func _get_readied_players() -> int:
+	var count = 0
 	for player in _quiplash_host_manager._player_data.values():
-		text += "\n* %s %s" % [player["username"], player["responded"] if "(DONE)" else ""]
+		if player["answered_questions"] == len(player["question_ids"]):
+			count += 1
+	return count
+
+func _update_players_label():
+	var text = "Players Ready (%s/%s)\n" % [_get_readied_players(), len(_quiplash_host_manager._player_data)]
+	for player in _quiplash_host_manager._player_data.values():
+		var status_text = "(%s/%s)" % [player["answered_questions"], len(player["question_ids"])]
+		text += "\n* %s %s" % [player["username"], status_text]
 	_players_label.text = text
