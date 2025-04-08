@@ -24,7 +24,9 @@ var _current_question_id: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	STATE_NUM = States.QUESTIONS
+	STATE_DURATION = Duration.QUESTIONS
 	_submit_button.pressed.connect(_on_submit_pressed)
+	_question_text_edit.text_changed.connect(_update_button)
 
 
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
@@ -50,6 +52,7 @@ func _update_question():
 	_question_label.text = _questions_to_answer[_current_question_id]["text"]
 	_question_text_edit.text = ""
 	_submit_button.text = "Submit (%s/%s)" % [_current_question_id + 1, len(_questions_to_answer)]
+	_update_button()
 
 
 func _on_submit_pressed():
@@ -70,6 +73,7 @@ func _on_submit_pressed():
 		# transition to waiting
 		_waiting_panel.visible = true
 		_question_panel.visible = false
+		_quiplash_player_manager.hide_timer()
 		return
 
 
@@ -82,3 +86,9 @@ func update(_delta: float):
 func enter():
 	_waiting_panel.visible = false
 	_question_panel.visible = false
+
+func exit():
+	pass
+
+func _update_button():
+	_submit_button.disabled = len(_question_text_edit.get_text()) <= 0

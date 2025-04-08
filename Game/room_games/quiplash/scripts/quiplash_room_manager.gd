@@ -11,6 +11,7 @@ enum PacketID {
 	HOST_CHANGE_STATE = 1,
 	HOST_SEND_QUESTIONS = 2,
 	HOST_START_ROUND = 3,
+	HOST_START_TIMER = 4,
 	
 	# PLAYER PACKETS
 	PLAYER_SEND_RESPONSE = 128
@@ -69,6 +70,11 @@ func host_start_new_round():
 	_packet_buffer.put_u8(PacketID.HOST_START_ROUND)
 	send_to_all_players(_packet_buffer.data_array)
 
+func host_start_timer(duration: int):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_START_TIMER)
+	_packet_buffer.put_u8(duration)
+	send_to_all_players(_packet_buffer.data_array)
 
 func player_send_response(question_id: int, response: String):
 	_packet_buffer.clear()

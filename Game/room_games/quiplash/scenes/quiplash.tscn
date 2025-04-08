@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=11 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
 [ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
 [ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
 bg_color = Color(0.266724, 0.528293, 0.898438, 1)
@@ -22,7 +24,7 @@ game_description = "COGS quiplash!"
 min_players = 1
 max_players = 16
 
-[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_quiplash_room_manager")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -30,17 +32,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("2_n6iy2")
+_host_timer = NodePath("UI")
 _quiplash_room_manager = NodePath("..")
 
-[node name="UI" type="Control" parent="HostManager"]
+[node name="UI" type="Control" parent="HostManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_ivliu")
+_parent_manager = NodePath("..")
+_timer_text = NodePath("Timer/Panel2/Label")
 
 [node name="Timer" type="MarginContainer" parent="HostManager/UI"]
 layout_mode = 1
@@ -65,12 +73,14 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("3_s2o1g")
 _quiplash_host_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
@@ -83,6 +93,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI"]
 layout_mode = 2
@@ -123,6 +134,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="UI" type="MarginContainer" parent="HostManager/Voting"]
 layout_mode = 1
@@ -195,6 +207,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="UI" type="MarginContainer" parent="HostManager/Scores"]
 layout_mode = 1
@@ -224,7 +237,7 @@ text = "* joe: 10
 * shmoe: 30
 * roe: 40"
 
-[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager", "_player_timer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -235,8 +248,9 @@ mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
+_player_timer = NodePath("UI")
 
-[node name="UI" type="Control" parent="PlayerManager"]
+[node name="UI" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -244,6 +258,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("4_ivliu")
+_parent_manager = NodePath("..")
+_timer_text = NodePath("Timer/Panel2/Label")
 
 [node name="Timer" type="MarginContainer" parent="PlayerManager/UI"]
 layout_mode = 1
@@ -269,6 +286,7 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="QuestionResponses" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -333,6 +351,7 @@ text = "Blue!
 Blue!
 Blue!
 "
+placeholder_text = "Type your response here!"
 
 [node name="SubmitButton" type="Button" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
 layout_mode = 2
@@ -365,6 +384,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("8_wm86t")
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1

@@ -11,6 +11,7 @@ var _expected_responses: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	STATE_NUM = States.QUESTIONS
+	STATE_DURATION = Duration.QUESTIONS
 
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if packet_id == QuiplashRoomManager.PacketID.PLAYER_SEND_RESPONSE:
@@ -26,6 +27,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_responses += 1
 		if _responses == _expected_responses:
 			# We got everyone's responses
+			_quiplash_host_manager.hide_timer()
 			print("TODO: Move to next state")
 
 #overwrite base update
@@ -88,6 +90,11 @@ func enter():
 		_quiplash_room_manager.host_send_questions_to_player(player_id, player_questions[player_id])
 	
 	_update_players_label()
+
+func exit():
+	pass
+	#lock responses (so that no answers are sent in while this is running)
+	#fill in any unanswered questions
 
 func _get_readied_players() -> int:
 	var count = 0

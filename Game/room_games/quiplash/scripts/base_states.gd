@@ -3,12 +3,18 @@ extends Control
 
 
 #NOTE: This script is used for both player and host states. Hopefully that doesn't cause problems
-var STATE_NUM
+var STATE_NUM: int
+var STATE_DURATION
 var isActive: bool = false
 enum States {
 	QUESTIONS = 1,
 	VOTING = 2,
 	SCORING = 3
+}
+
+#Duration of each phase, in seconds
+enum Duration {
+	QUESTIONS = 90,
 }
 
 # Called when the node enters the scene tree for the first time.
