@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=12 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
 [ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
 [ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
@@ -25,7 +26,6 @@ min_players = 1
 max_players = 16
 
 [node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_quiplash_room_manager")]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -135,6 +135,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("6_75c40")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Voting"]
 layout_mode = 1

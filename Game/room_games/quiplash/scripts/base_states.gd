@@ -14,7 +14,7 @@ enum States {
 
 #Duration of each phase, in seconds
 enum Duration {
-	QUESTIONS = 90,
+	QUESTIONS = 10,
 }
 
 # Called when the node enters the scene tree for the first time.

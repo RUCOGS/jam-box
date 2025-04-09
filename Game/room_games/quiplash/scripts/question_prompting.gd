@@ -28,6 +28,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		if _responses == _expected_responses:
 			# We got everyone's responses
 			_quiplash_host_manager.hide_timer()
+			_quiplash_host_manager.prompting_finished()
 			print("TODO: Move to next state")
 
 #overwrite base update

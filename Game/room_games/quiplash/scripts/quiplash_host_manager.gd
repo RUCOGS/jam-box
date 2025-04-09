@@ -83,7 +83,6 @@ func _go_to_state(state: int):
 				#start host timer and start all player timers
 				_host_timer.start_timer(_active_state.STATE_DURATION)
 				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
-
 			child.visible = is_active
 
 #reads all questions from the questions_list file and adds them to an array
@@ -133,7 +132,25 @@ func hide_timer():
 
 func _timer_up():
 	#what happens when we run out of time?
-	pass
+	
+	#handle any timer ups outside of states here?
+	
+	if (_active_state == null):
+		return
+
+	if _active_state.STATE_NUM == States.QUESTIONS:
+		prompting_finished()
+
+func prompting_finished():
+	#step one - remove questions with no responses
+	var index = 0
+	while (index < len(chosen_questions)):
+		if len(chosen_questions[index]["responses"]) == 0:
+			chosen_questions.remove_at(index)
+		else:
+			index += 1
+	
+	
 
 func _on_game_end():
 	pass
