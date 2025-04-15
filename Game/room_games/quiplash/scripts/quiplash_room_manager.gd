@@ -12,6 +12,7 @@ enum PacketID {
 	HOST_SEND_QUESTIONS = 2,
 	HOST_START_ROUND = 3,
 	HOST_START_TIMER = 4,
+	HOST_SEND_VOTE_QUESTION = 5,
 	
 	# PLAYER PACKETS
 	PLAYER_SEND_RESPONSE = 128
@@ -82,3 +83,13 @@ func player_send_response(question_id: int, response: String):
 	_packet_buffer.put_u8(question_id)
 	_packet_buffer.put_string(response)
 	send_to_host(_packet_buffer.data_array)
+
+func host_send_vote_question(question: Dictionary):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_SEND_VOTE_QUESTION)
+	_packet_buffer.put_string(question["question"])
+	_packet_buffer.put_u8(len(question["responses"]))
+	for player_response in question["responses"]:
+		_packet_buffer.put_u8(player_response["respondent_id"])
+		_packet_buffer.put_string(player_response["response"])
+	send_to_all_players(_packet_buffer.data_array)

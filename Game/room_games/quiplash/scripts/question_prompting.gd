@@ -18,10 +18,18 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		var question_id = buffer.get_u8()
 		var response = buffer.get_string()
 		print("Received player response from: %s: question: %s: %s" % [sender_id, question_id, response])
-		_quiplash_host_manager.chosen_questions[question_id]["responses"].append({
-			"respondent_id": sender_id, 
-			"response": response,
-		})
+		
+		for _player_response in _quiplash_host_manager.chosen_questions[question_id]["responses"]:
+			if (_player_response["respondent_id"] == sender_id):
+				_player_response["response"] = response
+				break
+		
+		#Old code (in case this spontaneously combusts)
+		#_quiplash_host_manager.chosen_questions[question_id]["responses"].append({
+			#"respondent_id": sender_id, 
+			#"response": response,
+		#})
+
 		_quiplash_host_manager._player_data[sender_id]["answered_questions"] += 1
 		_update_players_label()
 		_responses += 1
@@ -67,9 +75,20 @@ func enter():
 					"id": new_question["index"], 
 					"text": new_question["question"]
 				})
+				# Add a placeholder response so we know who's responding to what
+				# Used later when filling in empty responses
+				_quiplash_host_manager.chosen_questions[new_question["index"]]["responses"].append({
+					"respondent_id": shuffled_players[player_index], 
+					"response": "",
+				})
+				
 				player_questions[shuffled_players[player_index + 1]].append({
 					"id": new_question["index"], 
 					"text": new_question["question"]
+				})
+				_quiplash_host_manager.chosen_questions[new_question["index"]]["responses"].append({
+					"respondent_id": shuffled_players[player_index + 1], 
+					"response": "",
 				})
 			else:
 				# We are the last-odd player out, pick 
@@ -79,9 +98,17 @@ func enter():
 					"id": new_question["index"], 
 					"text": new_question["question"]
 				})
+				_quiplash_host_manager.chosen_questions[new_question["index"]]["responses"].append({
+					"respondent_id": shuffled_players[player_index], 
+					"response": "",
+				})
 				player_questions[shuffled_players[0]].append({
 					"id": new_question["index"], 
 					"text": new_question["question"]
+				})
+				_quiplash_host_manager.chosen_questions[new_question["index"]]["responses"].append({
+					"respondent_id": shuffled_players[0], 
+					"response": "",
 				})
 			_expected_responses += 2
 	for player_id in player_questions:

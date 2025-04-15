@@ -11,7 +11,8 @@ var _active_state: QuiplashBaseState
 # 0: {
 #	"username": "bob",
 #	"score": 123,
-#	"answered_questions": 0
+#	"answered_questions": 0,
+#	"voted": false
 #	"question_ids": [2, 3, 1]
 # }
 var _player_data: Dictionary
@@ -116,6 +117,7 @@ func _on_game_start():
 			"username": _room_manager.players[key],
 			"score": 0,
 			"answered_questions": 0,
+			"voted": false,
 			"question_ids": [],
 		}
 	
@@ -142,15 +144,26 @@ func _timer_up():
 		prompting_finished()
 
 func prompting_finished():
-	#step one - remove questions with no responses
+	#step one - remove questions with empty responses
 	var index = 0
 	while (index < len(chosen_questions)):
-		if len(chosen_questions[index]["responses"]) == 0:
+		var allEmpty = true
+		for player_response in chosen_questions[index]["responses"]:
+			if len(player_response["response"]) > 0:
+				allEmpty = false
+				break
+		if allEmpty:
 			chosen_questions.remove_at(index)
 		else:
 			index += 1
 	
-	
+	_go_to_state(States.VOTING)
+
+func print_questions():
+	for question in chosen_questions:
+		print(question["question"])
+		for question_response in question["responses"]:
+			print(question_response)	
 
 func _on_game_end():
 	pass

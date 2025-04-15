@@ -126,8 +126,7 @@ text = "Players Ready (3/4)
 * sdf (DONE)
 * sdf (DONE)"
 
-[node name="Voting" type="Control" parent="HostManager"]
-visible = false
+[node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,6 +135,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_75c40")
+_quiplash_host_manager = NodePath("..")
+_quiplash_room_manager = NodePath("../..")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Voting"]
 layout_mode = 1
@@ -376,7 +377,7 @@ text = "SIT TIGHT..."
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Voting" type="Control" parent="PlayerManager"]
+[node name="Voting" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -386,6 +387,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("8_wm86t")
+_quiplash_host_manager = NodePath("../../HostManager")
+_quiplash_room_manager = NodePath("../..")
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1

@@ -15,12 +15,12 @@ enum States {
 #Duration of each phase, in seconds
 enum Duration {
 	QUESTIONS = 10,
+	VOTING = 10
 }
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
-	#this probably isn't needed, considering each state stays dormant until the manager calls things from it
 
 #when the state is first entered.
 func enter():
