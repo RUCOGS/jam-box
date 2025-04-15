@@ -4,6 +4,7 @@ extends Control
 @export var _quiplash_room_manager: QuiplashRoomManager
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
+var _is_goto_state: bool = false
 
 enum States {
 	QUESTIONS = 1,
@@ -36,17 +37,25 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
+	if _is_goto_state:
+		printerr("Already transitioning to state")
+		return
+	_is_goto_state = true
+	
 	#search through children
 	#get STATE_NUM from child, see if it matches state
 	#if it does, activate it.
 	for child: Node in get_children():
 		if "STATE_NUM" in child and child.STATE_NUM == state:
-			#exit previous state, set state to active state, enter state, break
-			if (not (_active_state == null)):
-				_active_state.exit()
-			_active_state = child
-			_active_state.enter()
-			break
+			var is_active = child.STATE_NUM == state
+			if is_active:
+				#exit previous state, set state to active state, enter state, break
+				if (not (_active_state == null)):
+					_active_state.exit()
+				_active_state = child
+				_active_state.enter()
+			child.visible = is_active
+	_is_goto_state = false
 
 func _on_game_start():
 	visible = true

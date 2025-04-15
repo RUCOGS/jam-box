@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=11 format=3 uid="uid://lcfau7tnyuti"]
 
-[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
-[ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
-[ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
-[ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
-[ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/host_scores.gd" id="5_151ga"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_scores.gd" id="8_j67r5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
 bg_color = Color(0.266724, 0.528293, 0.898438, 1)
@@ -23,7 +25,6 @@ min_players = 1
 max_players = 16
 
 [node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,6 +36,7 @@ script = ExtResource("2_n6iy2")
 _quiplash_room_manager = NodePath("..")
 
 [node name="UI" type="Control" parent="HostManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,6 +67,7 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -187,14 +190,16 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hwj0q")
 value = 50.0
 show_percentage = false
 
-[node name="Scores" type="Control" parent="HostManager"]
-visible = false
+[node name="Scores" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("5_151ga")
+_host_manager = NodePath("..")
+_scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Scores"]
 layout_mode = 1
@@ -205,6 +210,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="HostManager/Scores/UI"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -217,7 +223,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SCORES"
 
-[node name="Label" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
+[node name="ScoresLabel" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "* joe: 10
 * bob: 50
@@ -237,6 +243,7 @@ script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
 
 [node name="UI" type="Control" parent="PlayerManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -269,6 +276,7 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="QuestionResponses" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -412,8 +420,17 @@ layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="Waiting" type="Control" parent="PlayerManager"]
+[node name="Scores" type="Control" parent="PlayerManager"]
 visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_j67r5")
+
+[node name="Waiting" type="Control" parent="PlayerManager/Scores"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -422,7 +439,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/Waiting"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/Scores/Waiting"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -430,20 +447,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Waiting/UI"]
+[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Scores/Waiting/UI"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Waiting/UI/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Scores/Waiting/UI/PanelContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SIT TIGHT..."
 
-[node name="Question" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "We're moving onto the next section!"

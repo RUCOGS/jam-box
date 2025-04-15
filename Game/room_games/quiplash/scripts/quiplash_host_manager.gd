@@ -35,6 +35,7 @@ var all_question_queue: Array
 # }]
 # 
 var chosen_questions: Array
+var _is_goto_state: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -58,6 +59,10 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
+	if _is_goto_state:
+		printerr("Already transitioning to state")
+		return
+	_is_goto_state = true
 	#tell players that the state is changing
 	_quiplash_room_manager.host_change_state(state)
 	
@@ -73,7 +78,8 @@ func _go_to_state(state: int):
 					_active_state.exit()
 				_active_state = child
 				_active_state.enter()
-			_active_state.visible = is_active
+			child.visible = is_active
+	_is_goto_state = false
 
 #reads all questions from the questions_list file and adds them to an array
 func _read_questions():
