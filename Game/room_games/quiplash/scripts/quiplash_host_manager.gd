@@ -169,12 +169,11 @@ func prompting_finished():
 
 func voting_finished():
 	_active_state.update_and_score()
-	
-	#
-	
-	
+
 	if (len(chosen_questions) > 0):
 		_go_to_state(States.VOTING)
+	else:
+		_go_to_state(States.SCORING)
 	for i in _player_data:
 		print(_player_data[i]["username"])
 		print(_player_data[i]["score"])

@@ -1,14 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=14 format=3 uid="uid://lcfau7tnyuti"]
 
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
+[ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
 [ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
 [ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
 [ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
 [ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
+[ext_resource type="Script" uid="uid://cn30abn5v0gqp" path="res://room_games/quiplash/scripts/host_scores.gd" id="7_sbl8u"]
 [ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
+[ext_resource type="Script" uid="uid://bp06xm1q1fl1g" path="res://room_games/quiplash/scripts/player_scores.gd" id="11_i12cv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
 bg_color = Color(0.266724, 0.528293, 0.898438, 1)
@@ -206,6 +208,7 @@ value = 50.0
 show_percentage = false
 
 [node name="Scores" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,6 +216,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("7_sbl8u")
+_host_manager = NodePath("..")
+_scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Scores"]
 layout_mode = 1
@@ -223,7 +229,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="HostManager/Scores/UI"]
-custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -398,6 +403,7 @@ _waiting_panel = NodePath("UI/WaitingPanel")
 _question_label = NodePath("UI/VotingPanel/VBoxContainer/Question")
 _answer_button_1 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton")
 _answer_button_2 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton2")
+STATE_DURATION = null
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1
@@ -464,17 +470,17 @@ text = "SIT TIGHT..."
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Waiting" type="Control" parent="PlayerManager"]
-visible = false
+[node name="Scores" type="Control" parent="PlayerManager"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("8_j67r5")
+script = ExtResource("11_i12cv")
 
 [node name="Waiting" type="Control" parent="PlayerManager/Scores"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

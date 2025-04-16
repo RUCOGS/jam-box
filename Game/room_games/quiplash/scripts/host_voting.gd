@@ -16,7 +16,6 @@ var _response_2_votes: int
 
 func _ready() -> void:
 	STATE_NUM = States.VOTING
-	STATE_DURATION = Duration.VOTING
 
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if packet_id == _quiplash_room_manager.PacketID.PlAYER_SEND_VOTE:
