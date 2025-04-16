@@ -126,7 +126,7 @@ text = "Players Ready (3/4)
 * sdf (DONE)
 * sdf (DONE)"
 
-[node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
+[node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,6 +137,10 @@ mouse_filter = 2
 script = ExtResource("6_75c40")
 _quiplash_host_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
+_voting_question_label = NodePath("UI/VBoxContainer/PanelContainer/VBoxContainer/Question")
+_voting_option_1 = NodePath("UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Response1")
+_voting_option_2 = NodePath("UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer/Response2")
+_vote_bar = NodePath("UI/VBoxContainer/ProgressBar")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Voting"]
 layout_mode = 1
@@ -175,7 +179,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Response1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Response 1 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
@@ -187,7 +191,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
+[node name="Response2" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Response 2 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
@@ -377,7 +381,7 @@ text = "SIT TIGHT..."
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Voting" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
+[node name="Voting" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_voting_panel", "_waiting_panel", "_question_label", "_answer_button_1", "_answer_button_2")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -387,8 +391,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("8_wm86t")
-_quiplash_host_manager = NodePath("../../HostManager")
+_quiplash_player_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
+_voting_panel = NodePath("UI/VotingPanel")
+_waiting_panel = NodePath("UI/WaitingPanel")
+_question_label = NodePath("UI/VotingPanel/VBoxContainer/Question")
+_answer_button_1 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton")
+_answer_button_2 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton2")
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1
@@ -399,42 +408,61 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+[node name="VotingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "VOTE"
 
-[node name="Question" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 text = "QUESTION HERE!"
 
-[node name="Control" type="Control" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
+
+[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+visible = false
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/WaitingPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "SIT TIGHT..."
+
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
+layout_mode = 2
+text = "We're moving onto the next section!"
 
 [node name="Waiting" type="Control" parent="PlayerManager"]
 visible = false

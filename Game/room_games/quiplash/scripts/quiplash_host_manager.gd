@@ -142,6 +142,9 @@ func _timer_up():
 
 	if _active_state.STATE_NUM == States.QUESTIONS:
 		prompting_finished()
+	
+	if _active_state.STATE_NUM == States.VOTING:
+		voting_finished()
 
 func prompting_finished():
 	#step one - remove questions with empty responses
@@ -159,11 +162,23 @@ func prompting_finished():
 	
 	_go_to_state(States.VOTING)
 
+func voting_finished():
+	_active_state.update_and_score()
+	
+	#
+	
+	
+	if (len(chosen_questions) > 0):
+		_go_to_state(States.VOTING)
+	for i in _player_data:
+		print(_player_data[i]["username"])
+		print(_player_data[i]["score"])
+
 func print_questions():
 	for question in chosen_questions:
 		print(question["question"])
 		for question_response in question["responses"]:
-			print(question_response)	
+			print(question_response)
 
 func _on_game_end():
 	pass
