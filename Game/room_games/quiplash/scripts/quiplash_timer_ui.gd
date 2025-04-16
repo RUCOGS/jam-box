@@ -21,8 +21,7 @@ func _process(delta: float) -> void:
 		# this script is re-used, things will be handled in the _parent_manager ideally
 		# also the _timer_up() function shouldn't do much in the player_manager as \
 		# the host_manager should handle the timing of phase changes
-		#
-		# this way everyone's 
+		
 		_parent_manager._timer_up()
 
 func start_timer(duration: int) -> void:
