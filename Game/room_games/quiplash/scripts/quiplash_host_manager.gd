@@ -1,15 +1,18 @@
 class_name QuiplashHostManager
 extends Control
 
+@export var _host_timer: Control
 @export var _quiplash_room_manager: QuiplashRoomManager
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
+
 
 # player id --> dict of player_data
 # 0: {
 #	"username": "bob",
 #	"score": 123,
-#	"answered_questions": 0
+#	"answered_questions": 0,
+#	"voted": false
 #	"question_ids": [2, 3, 1]
 # }
 var _player_data: Dictionary
@@ -37,6 +40,10 @@ var all_question_queue: Array
 var chosen_questions: Array
 var _is_goto_state: bool = false
 
+# used to track whether the timer has run out or not. If it has, need to stop taking responses
+# and move to next stage
+var _time_up: bool
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#all sorts of connections
@@ -54,7 +61,7 @@ func _process(delta: float) -> void:
 		_active_state.update(delta)
 
 func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
-	#forwards all packets to the active state, lets it process the pcaket in its own way
+	#forwards all packets to the active state, lets it process the packet in its own way
 	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
@@ -78,6 +85,9 @@ func _go_to_state(state: int):
 					_active_state.exit()
 				_active_state = child
 				_active_state.enter()
+				#start host timer and start all player timers
+				_host_timer.start_timer(_active_state.STATE_DURATION)
+				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
 			child.visible = is_active
 	_is_goto_state = false
 
@@ -112,6 +122,7 @@ func _on_game_start():
 			"username": _room_manager.players[key],
 			"score": 0,
 			"answered_questions": 0,
+			"voted": false,
 			"question_ids": [],
 		}
 	
@@ -122,6 +133,57 @@ func _on_game_start():
 	_read_questions()
 	_go_to_state(States.QUESTIONS)
 	visible = true
+
+func hide_timer():
+	_host_timer.visible = false
+
+func _timer_up():
+	#what happens when we run out of time?
+	
+	#handle any timer ups outside of states here?
+	
+	if (_active_state == null):
+		return
+
+	if _active_state.STATE_NUM == States.QUESTIONS:
+		prompting_finished()
+	
+	if _active_state.STATE_NUM == States.VOTING:
+		voting_finished()
+
+func prompting_finished():
+	#step one - remove questions with empty responses
+	var index = 0
+	while (index < len(chosen_questions)):
+		var allEmpty = true
+		for player_response in chosen_questions[index]["responses"]:
+			if len(player_response["response"]) > 0:
+				allEmpty = false
+				break
+		if allEmpty:
+			chosen_questions.remove_at(index)
+		else:
+			index += 1
+	
+	_go_to_state(States.VOTING)
+
+func voting_finished():
+	_active_state.update_and_score()
+	
+	#
+	
+	
+	if (len(chosen_questions) > 0):
+		_go_to_state(States.VOTING)
+	for i in _player_data:
+		print(_player_data[i]["username"])
+		print(_player_data[i]["score"])
+
+func print_questions():
+	for question in chosen_questions:
+		print(question["question"])
+		for question_response in question["responses"]:
+			print(question_response)
 
 func _on_game_end():
 	pass

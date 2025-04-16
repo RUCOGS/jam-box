@@ -11,9 +11,12 @@ enum PacketID {
 	HOST_CHANGE_STATE = 1,
 	HOST_SEND_QUESTIONS = 2,
 	HOST_START_ROUND = 3,
+	HOST_START_TIMER = 4,
+	HOST_SEND_VOTE_QUESTION = 5,
 	
 	# PLAYER PACKETS
-	PLAYER_SEND_RESPONSE = 128
+	PLAYER_SEND_RESPONSE = 128,
+	PlAYER_SEND_VOTE = 129
 }
 
 
@@ -69,10 +72,31 @@ func host_start_new_round():
 	_packet_buffer.put_u8(PacketID.HOST_START_ROUND)
 	send_to_all_players(_packet_buffer.data_array)
 
+func host_start_timer(duration: int):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_START_TIMER)
+	_packet_buffer.put_u8(duration)
+	send_to_all_players(_packet_buffer.data_array)
 
 func player_send_response(question_id: int, response: String):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.PLAYER_SEND_RESPONSE)
 	_packet_buffer.put_u8(question_id)
 	_packet_buffer.put_string(response)
+	send_to_host(_packet_buffer.data_array)
+
+func host_send_vote_question(question: Dictionary):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_SEND_VOTE_QUESTION)
+	_packet_buffer.put_string(question["question"])
+	_packet_buffer.put_u8(len(question["responses"]))
+	for player_response in question["responses"]:
+		_packet_buffer.put_u32(player_response["respondent_id"])
+		_packet_buffer.put_string(player_response["response"])
+	send_to_all_players(_packet_buffer.data_array)
+
+func player_send_vote(chosen_id: int):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.PlAYER_SEND_VOTE)
+	_packet_buffer.put_u32(chosen_id)
 	send_to_host(_packet_buffer.data_array)

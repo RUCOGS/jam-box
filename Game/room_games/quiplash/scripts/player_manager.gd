@@ -2,6 +2,7 @@ class_name QuiplashPlayerManager
 extends Control
 
 @export var _quiplash_room_manager: QuiplashRoomManager
+@export var _player_timer: Control
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
 var _is_goto_state: bool = false
@@ -32,6 +33,9 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	#Host Change State
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_CHANGE_STATE):
 		_go_to_state(buffer.get_u8())
+	
+	if (packet_id == _quiplash_room_manager.PacketID.HOST_START_TIMER):
+		_player_timer.start_timer(buffer.get_u8())
 
 	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)
@@ -46,7 +50,7 @@ func _go_to_state(state: int):
 	#get STATE_NUM from child, see if it matches state
 	#if it does, activate it.
 	for child: Node in get_children():
-		if "STATE_NUM" in child and child.STATE_NUM == state:
+		if "STATE_NUM" in child:
 			var is_active = child.STATE_NUM == state
 			if is_active:
 				#exit previous state, set state to active state, enter state, break
@@ -56,6 +60,13 @@ func _go_to_state(state: int):
 				_active_state.enter()
 			child.visible = is_active
 	_is_goto_state = false
+
+func hide_timer():
+	_player_timer.visible = false
+
+func _timer_up():
+	#could be left blank?
+	pass
 
 func _on_game_start():
 	visible = true
