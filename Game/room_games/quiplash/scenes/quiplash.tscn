@@ -403,7 +403,6 @@ _waiting_panel = NodePath("UI/WaitingPanel")
 _question_label = NodePath("UI/VotingPanel/VBoxContainer/Question")
 _answer_button_1 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton")
 _answer_button_2 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton2")
-STATE_DURATION = null
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1

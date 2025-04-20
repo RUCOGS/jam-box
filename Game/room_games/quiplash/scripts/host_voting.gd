@@ -31,6 +31,10 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 
 #when the state is first entered.
 func enter():
+	if len(_quiplash_host_manager.chosen_questions) == 0:
+		await get_tree().create_timer(1).timeout
+		_quiplash_host_manager.voting_finished()
+		return
 	_current_question = _quiplash_host_manager.chosen_questions.pop_front()
 	_quiplash_room_manager.host_send_vote_question(_current_question)
 	_vote_bar.value = 50

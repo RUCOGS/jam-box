@@ -36,6 +36,8 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_START_TIMER):
 		_player_timer.start_timer(buffer.get_u8())
+		if (_active_state.STATE_NUM == States.SCORING):
+			_player_timer.visible = false
 
 	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)

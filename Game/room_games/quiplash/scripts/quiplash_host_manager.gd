@@ -87,6 +87,8 @@ func _go_to_state(state: int):
 				_active_state.enter()
 				#start host timer and start all player timers
 				_host_timer.start_timer(_active_state.STATE_DURATION)
+				if (state == States.SCORING):
+					_host_timer.visible = false
 				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
 			child.visible = is_active
 	_is_goto_state = false
@@ -152,6 +154,10 @@ func _timer_up():
 	if _active_state.STATE_NUM == States.VOTING:
 		voting_finished()
 		return
+	
+	if _active_state.STATE_NUM == States.SCORING:
+		scoring_finished()
+		return
 
 func prompting_finished():
 	#step one - remove questions with empty responses
@@ -180,6 +186,9 @@ func voting_finished():
 		print(_player_data[i]["username"])
 		print(_player_data[i]["score"])
 
+func scoring_finished():
+	_go_to_state(States.QUESTIONS)
+	
 func print_questions():
 	for question in chosen_questions:
 		print(question["question"])

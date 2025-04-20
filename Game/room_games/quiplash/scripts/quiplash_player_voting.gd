@@ -13,7 +13,6 @@ var _current_question: Dictionary
 
 func _ready() -> void:
 	STATE_NUM = States.VOTING
-	STATE_DURATION = Duration.VOTING
 	_answer_button_1.pressed.connect(_button1_pressed)
 	_answer_button_2.pressed.connect(_button2_pressed)
 	

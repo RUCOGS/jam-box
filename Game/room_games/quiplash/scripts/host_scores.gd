@@ -26,5 +26,3 @@ func enter():
 		if i < len(players) - 1:
 			text += "\n"
 	_scores_label.text = text
-	await get_tree().create_timer(5).timeout
-	_host_manager._go_to_state(States.QUESTIONS)
