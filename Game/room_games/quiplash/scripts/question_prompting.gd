@@ -11,7 +11,6 @@ var _expected_responses: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	STATE_NUM = States.QUESTIONS
-	STATE_DURATION = Duration.QUESTIONS
 
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if packet_id == QuiplashRoomManager.PacketID.PLAYER_SEND_RESPONSE:

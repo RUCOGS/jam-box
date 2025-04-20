@@ -38,6 +38,7 @@ var all_question_queue: Array
 # }]
 # 
 var chosen_questions: Array
+var _is_goto_state: bool = false
 
 # used to track whether the timer has run out or not. If it has, need to stop taking responses
 # and move to next stage
@@ -65,6 +66,10 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
+	if _is_goto_state:
+		printerr("Already transitioning to state")
+		return
+	_is_goto_state = true
 	#tell players that the state is changing
 	_quiplash_room_manager.host_change_state(state)
 	
@@ -80,11 +85,11 @@ func _go_to_state(state: int):
 					_active_state.exit()
 				_active_state = child
 				_active_state.enter()
-				
 				#start host timer and start all player timers
 				_host_timer.start_timer(_active_state.STATE_DURATION)
 				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
 			child.visible = is_active
+	_is_goto_state = false
 
 #reads all questions from the questions_list file and adds them to an array
 func _read_questions():
@@ -166,12 +171,11 @@ func prompting_finished():
 
 func voting_finished():
 	_active_state.update_and_score()
-	
-	#
-	
+
 	if (len(chosen_questions) > 0):
 		_go_to_state(States.VOTING)
-		
+	else:
+		_go_to_state(States.SCORING)
 	for i in _player_data:
 		print(_player_data[i]["username"])
 		print(_player_data[i]["score"])

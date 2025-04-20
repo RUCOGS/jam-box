@@ -5,6 +5,7 @@ extends Control
 @export var _player_timer: Control
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
+var _is_goto_state: bool = false
 
 enum States {
 	QUESTIONS = 1,
@@ -40,6 +41,11 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
+	if _is_goto_state:
+		printerr("Already transitioning to state")
+		return
+	_is_goto_state = true
+	
 	#search through children
 	#get STATE_NUM from child, see if it matches state
 	#if it does, activate it.
@@ -53,6 +59,7 @@ func _go_to_state(state: int):
 				_active_state = child
 				_active_state.enter()
 			child.visible = is_active
+	_is_goto_state = false
 
 func hide_timer():
 	_player_timer.visible = false

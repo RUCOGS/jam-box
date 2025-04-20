@@ -24,7 +24,6 @@ var _current_question_id: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	STATE_NUM = States.QUESTIONS
-	STATE_DURATION = Duration.QUESTIONS
 	_submit_button.pressed.connect(_on_submit_pressed)
 	_question_text_edit.text_changed.connect(_update_button)
 
