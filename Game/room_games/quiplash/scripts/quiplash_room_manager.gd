@@ -63,7 +63,7 @@ func host_send_questions_to_player(player_id: int, questions: Array):
 	_packet_buffer.put_u8(len(questions))
 	for question in questions:
 		_packet_buffer.put_u8(question.id)
-		_packet_buffer.put_string(question.text)
+		_packet_buffer.put_utf8_string(question.text)
 	send_to_player(_packet_buffer.data_array, player_id)
 
 
@@ -82,17 +82,17 @@ func player_send_response(question_id: int, response: String):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.PLAYER_SEND_RESPONSE)
 	_packet_buffer.put_u8(question_id)
-	_packet_buffer.put_string(response)
+	_packet_buffer.put_utf8_string(response)
 	send_to_host(_packet_buffer.data_array)
 
 func host_send_vote_question(question: Dictionary):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.HOST_SEND_VOTE_QUESTION)
-	_packet_buffer.put_string(question["question"])
+	_packet_buffer.put_utf8_string(question["question"])
 	_packet_buffer.put_u8(len(question["responses"]))
 	for player_response in question["responses"]:
 		_packet_buffer.put_u32(player_response["respondent_id"])
-		_packet_buffer.put_string(player_response["response"])
+		_packet_buffer.put_utf8_string(player_response["response"])
 	send_to_all_players(_packet_buffer.data_array)
 
 func player_send_vote(chosen_id: int):

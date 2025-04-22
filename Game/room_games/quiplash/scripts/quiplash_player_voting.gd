@@ -20,13 +20,13 @@ func _ready() -> void:
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if packet_id == _quiplash_room_manager.PacketID.HOST_SEND_VOTE_QUESTION:
 		_current_question = {
-			"question": buffer.get_string(),
+			"question": buffer.get_utf8_string(),
 			"responses": []
 		}
 		var num_responses = buffer.get_u8()
 		for i in range(num_responses):
 			var player_id = buffer.get_u32()
-			var player_response = buffer.get_string()
+			var player_response = buffer.get_utf8_string()
 			_current_question["responses"].append({
 				"respondent_id": player_id,
 				"response": player_response

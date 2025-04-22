@@ -170,7 +170,7 @@ text = "VOTE"
 
 [node name="Question" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "What should we do?"
+text = "Loading..."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
 layout_mode = 2
@@ -184,7 +184,7 @@ layout_mode = 2
 [node name="Response1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Response 1 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+text = "Loading..."
 autowrap_mode = 2
 
 [node name="PanelContainer3" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
@@ -196,7 +196,7 @@ layout_mode = 2
 [node name="Response2" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Response 2 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+text = "Loading..."
 autowrap_mode = 2
 
 [node name="ProgressBar" type="ProgressBar" parent="HostManager/Voting/UI/VBoxContainer"]

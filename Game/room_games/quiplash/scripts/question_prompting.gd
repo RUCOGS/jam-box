@@ -15,7 +15,7 @@ func _ready() -> void:
 func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if packet_id == QuiplashRoomManager.PacketID.PLAYER_SEND_RESPONSE:
 		var question_id = buffer.get_u8()
-		var response = buffer.get_string()
+		var response = buffer.get_utf8_string()
 		print("Received player response from: %s: question: %s: %s" % [sender_id, question_id, response])
 		
 		for _player_response in _quiplash_host_manager.chosen_questions[question_id]["responses"]:
@@ -47,6 +47,7 @@ func enter():
 	# Reset
 	_responses = 0
 	_expected_responses = 0
+	_quiplash_room_manager.host_start_new_round()
 	
 	# Distribute questions -- first question goes to first two players, second goes to next to...
 	# ... and so on

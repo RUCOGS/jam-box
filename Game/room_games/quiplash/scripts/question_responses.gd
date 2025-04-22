@@ -37,7 +37,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		var question_count = buffer.get_u8()
 		for i in range(question_count):
 			var question_id = buffer.get_u8()
-			var question_text = buffer.get_string()
+			var question_text = buffer.get_utf8_string()
 			_questions_to_answer.append({
 				"id": question_id,
 				"text": question_text
@@ -74,7 +74,6 @@ func _on_submit_pressed():
 		_question_panel.visible = false
 		_quiplash_player_manager.hide_timer()
 		return
-
 
 # Overwrite base update
 func update(_delta: float):
