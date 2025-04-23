@@ -7,6 +7,7 @@ extends Node
 @export var game_description: String
 @export var min_players: int
 @export var max_players: int
+@export var allow_audience: bool = false
 
 var _room_manager: RoomManager
 var _packet_buffer = ByteBuffer.new_little_endian()

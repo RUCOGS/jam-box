@@ -24,7 +24,7 @@ _host_manager = NodePath("HostManager")
 _player_manager = NodePath("PlayerManager")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
-min_players = 1
+min_players = 2
 max_players = 16
 
 [node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_quiplash_room_manager")]
