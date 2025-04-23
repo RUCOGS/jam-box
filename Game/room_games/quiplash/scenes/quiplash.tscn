@@ -1,14 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=18 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
 [ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
 [ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" uid="uid://ck74xov620pcd" path="res://room_games/quiplash/scripts/audio_manager.gd" id="4_hqale"]
 [ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
+[ext_resource type="AudioStream" uid="uid://bb7cw0gmnvu6y" path="res://room_games/quiplash/assets/music/Jam_Question_Screen.mp3" id="5_05xg6"]
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://b3s2u1c6y4jog" path="res://room_games/quiplash/scripts/questions_music.gd" id="6_6seu4"]
 [ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
 [ext_resource type="Script" uid="uid://cn30abn5v0gqp" path="res://room_games/quiplash/scripts/host_scores.gd" id="7_sbl8u"]
+[ext_resource type="Script" uid="uid://cqbj57qj6obpt" path="res://room_games/quiplash/scripts/final_screen.gd" id="8_bpeo8"]
 [ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
 [ext_resource type="Script" uid="uid://bp06xm1q1fl1g" path="res://room_games/quiplash/scripts/player_scores.gd" id="11_i12cv"]
 
@@ -27,7 +31,7 @@ game_description = "COGS quiplash!"
 min_players = 1
 max_players = 16
 
-[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_quiplash_room_manager")]
+[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_final_screen", "_host_timer", "_quiplash_room_manager", "_audio_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,10 +41,27 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("2_n6iy2")
+_final_screen = NodePath("FinalScreen")
 _host_timer = NodePath("UI")
 _quiplash_room_manager = NodePath("..")
+_audio_manager = NodePath("AudioManager")
+_num_rounds = 1
+
+[node name="AudioManager" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_room_manager", "_quiplash_host_manager")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_hqale")
+_quiplash_room_manager = NodePath("../..")
+_quiplash_host_manager = NodePath("..")
+
+[node name="QuestionsMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+stream = ExtResource("5_05xg6")
+autoplay = true
+script = ExtResource("6_6seu4")
 
 [node name="UI" type="Control" parent="HostManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,6 +94,7 @@ layout_mode = 2
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
+horizontal_alignment = 1
 
 [node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
 visible = false
@@ -129,6 +151,7 @@ text = "Players Ready (3/4)
 * sdf (DONE)"
 
 [node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,6 +230,22 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hwj0q")
 value = 50.0
 show_percentage = false
 
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(200, 10)
+layout_mode = 2
+text = "Loading..."
+autowrap_mode = 2
+
 [node name="Scores" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label")]
 visible = false
 layout_mode = 1
@@ -248,7 +287,56 @@ text = "* joe: 10
 * shmoe: 30
 * roe: 40"
 
+[node name="FinalScreen" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label", "_winner_label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_bpeo8")
+_host_manager = NodePath("..")
+_scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
+_winner_label = NodePath("UI/Panel/VBoxContainer/WinnerText")
+
+[node name="UI" type="MarginContainer" parent="HostManager/FinalScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="HostManager/FinalScreen/UI"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/FinalScreen/UI/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "FINAL SCORES"
+
+[node name="ScoresLabel" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "* joe: 10
+* bob: 50
+* shmoe: 30
+* roe: 40"
+
+[node name="WinnerText" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.67451, 0.133333, 0.152941, 1)
+theme_override_constants/shadow_outline_size = 8
+text = "aoiwejo iajwelk jaowie jaowkle joiaw ejfoiaw ejfoaiw ejfaoiwe jfoiaw jef"
+vertical_alignment = 1
+
 [node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager", "_player_timer")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -295,6 +383,7 @@ layout_mode = 2
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
+horizontal_alignment = 1
 
 [node name="QuestionResponses" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
 visible = false
@@ -469,7 +558,7 @@ text = "SIT TIGHT..."
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Scores" type="Control" parent="PlayerManager"]
+[node name="Scores" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_waiting_panel")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -477,9 +566,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_i12cv")
+_waiting_panel = NodePath("Waiting/UI/PanelContainer")
 
 [node name="Waiting" type="Control" parent="PlayerManager/Scores"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

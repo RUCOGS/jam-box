@@ -18,7 +18,7 @@ func update(_delta: float):
 #overwrite base enter
 func enter():
 	var players = _host_manager._player_data.values()
-	players.sort_custom(func(a, b): return a["score"] - b["score"])
+	players.sort_custom(func(a, b): return a["score"] > b["score"])
 	var text = ""
 	for i in range(len(players)):
 		var player = players[i]
