@@ -40,6 +40,8 @@ pub enum PacketID {
     JoinRoom = 129,
     /// Client (Player/Host) is sending data.
     ServerRelayData = 130,
+    /// Client host sets the room's state
+    SetRoomState = 131,
 }
 
 /// Packets destined for the server. Clients send server packets to the server.
@@ -57,10 +59,11 @@ pub const SERVER_PACKETS: [PacketID; 7] = [
 
 /// Packets destined for the client. The server sends client packets to a client.
 /// These packets are meant to be processed by the client.
-pub const CLIENT_PACKETS: [PacketID; 3] = [
+pub const CLIENT_PACKETS: [PacketID; 4] = [
     PacketID::HostRoom,
     PacketID::JoinRoom,
     PacketID::ServerRelayData,
+    PacketID::SetRoomState,
 ];
 
 impl PacketID {

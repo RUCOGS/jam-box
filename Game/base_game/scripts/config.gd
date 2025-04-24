@@ -9,6 +9,7 @@ class GameInfo:
 	var packed_scene: PackedScene
 	var min_players: int
 	var max_players: int
+	var allow_audience: bool
 
 static var global: Config
 
@@ -38,6 +39,7 @@ func _enter_tree() -> void:
 		game_info.min_players = room_manager.min_players
 		game_info.max_players = room_manager.max_players
 		game_info.packed_scene = game_scene
+		game_info.allow_audience = room_manager.allow_audience
 		game_infos.append(game_info)
 		root.queue_free()
 

@@ -133,7 +133,14 @@ enum PacketID {
 	# Client player attempts to join a game room.
 	JOIN_ROOM = 129,
 	# Client (Player/Host) is sending data.
-	SERVER_RELAY_DATA = 130
+	SERVER_RELAY_DATA = 130,
+	# Client host sets the room's state
+	SET_ROOM_STATE = 131
+}
+
+enum RoomState {
+	LOBBY = 0,
+	IN_GAME = 1
 }
 
 
@@ -141,10 +148,18 @@ func send_packet(bytes: PackedByteArray):
 	_socket.send(bytes)
 
 
-func send_host_room(max_players: int):
+func send_set_room_state(room_state: RoomState):
+	_peer_buffer.clear()
+	_peer_buffer.put_u8(PacketID.SET_ROOM_STATE)
+	_peer_buffer.put_u8(int(room_state))
+	send_packet(_peer_buffer.data_array)
+
+
+func send_host_room(max_players: int, allow_audience: bool):
 	_peer_buffer.clear()
 	_peer_buffer.put_u8(PacketID.HOST_ROOM)
 	_peer_buffer.put_u16(max_players)
+	_peer_buffer.put_u8(allow_audience)
 	send_packet(_peer_buffer.data_array)
 
 

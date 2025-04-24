@@ -1,16 +1,12 @@
 use std::{
     collections::{HashMap, HashSet},
+    fmt::Debug,
     io::Read,
 };
 
-use bytebuffer::ByteBuffer;
 use log::info;
-use rand::{
-    distributions::{Alphanumeric, DistString},
-    prelude::Distribution,
-    rngs::StdRng,
-    Rng, SeedableRng,
-};
+use num_enum::{IntoPrimitive, TryFromPrimitive};
+use rand::{distributions::DistString, prelude::Distribution, rngs::StdRng, Rng, SeedableRng};
 use thiserror::Error;
 
 use crate::{
@@ -31,6 +27,14 @@ pub enum RoomManagerError {
     ByteBufferError(ByteBufferExtError),
     #[error("buffer io error: {0}")]
     BufferIOError(std::io::Error),
+    #[error("try from primitive error: {0}")]
+    TryFromPrimitiveError(Box<dyn std::error::Error>),
+}
+
+impl From<<RoomState as TryFromPrimitive>::Error> for RoomManagerError {
+    fn from(value: <RoomState as TryFromPrimitive>::Error) -> Self {
+        RoomManagerError::TryFromPrimitiveError(Box::new(value))
+    }
 }
 
 impl From<ByteBufferExtError> for RoomManagerError {
@@ -54,6 +58,13 @@ impl From<std::io::Error> for RoomManagerError {
 // RoomID is unique for a room, and is also the string users use to access a room.
 pub type RoomID = String;
 
+#[derive(Debug, IntoPrimitive, TryFromPrimitive, PartialEq, PartialOrd)]
+#[repr(u8)]
+pub enum RoomState {
+    Lobby = 0,
+    InGame = 1,
+}
+
 /// A group of clients who are playing a game together
 #[derive(Debug)]
 pub struct Room {
@@ -62,16 +73,20 @@ pub struct Room {
     pub players: HashSet<ClientID>,
     pub usernames: HashSet<String>,
     pub max_players: u16,
+    pub allow_audience: bool,
+    pub state: RoomState,
 }
 
 impl Room {
-    pub fn new(id: RoomID, owner: ClientID, max_players: u16) -> Self {
+    pub fn new(id: RoomID, owner: ClientID, max_players: u16, allow_audience: bool) -> Self {
         Self {
             id,
             owner,
             players: HashSet::new(),
             usernames: HashSet::new(),
             max_players,
+            allow_audience,
+            state: RoomState::Lobby,
         }
     }
 
@@ -170,12 +185,13 @@ impl RoomManager {
             PacketID::HostRoom => {
                 // Create room with a random game code, and make the client a host using that game code
                 let max_players = p_buffer.read_u16()?;
+                let allow_audience = p_buffer.read_bool()?;
 
                 let mut room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 while self.rooms.contains_key(&room_id) {
                     room_id = AlphabetCaps.sample_string(&mut self.rng, 4);
                 }
-                let room = Room::new(room_id.clone(), client_id, max_players);
+                let room = Room::new(room_id.clone(), client_id, max_players, allow_audience);
                 client.room_id = Some(room_id.clone());
                 self.rooms.insert(room_id.clone(), room);
 
@@ -199,6 +215,14 @@ impl RoomManager {
                 } else if let Some(room) = self.rooms.get_mut(&room_id) {
                     if room.is_full() {
                         client.send_client_request_error("Room is full.").await?;
+                        return Ok(());
+                    }
+                    if !room.allow_audience && room.state == RoomState::InGame {
+                        client
+                            .send_client_request_error(
+                                "Room minigame does not allow audiences joining mid-game.",
+                            )
+                            .await?;
                         return Ok(());
                     }
                     if !room.usernames.contains(&username) {
@@ -263,6 +287,30 @@ impl RoomManager {
                             if let Some(host) = self.clients.get_mut(&room.owner) {
                                 host.send_client_relay_data(client_id, &p_data).await?;
                             }
+                        }
+                    } else {
+                        client
+                            .send_client_request_error("Client room does not exist.")
+                            .await?;
+                    }
+                } else {
+                    client
+                        .send_client_request_error("Client is not in a room.")
+                        .await?;
+                }
+            }
+            PacketID::SetRoomState => {
+                // Set the room state (only if this is from the host of the room)
+                if let Some(room_id) = &client.room_id {
+                    if let Some(room) = self.rooms.get_mut(room_id) {
+                        if room.owner == client_id {
+                            // We are the host, we update the room's state
+                            let state = p_buffer.read_u8()?;
+                            room.state = RoomState::try_from_primitive(state)?;
+                        } else {
+                            client
+                                .send_client_request_error("Only host can set room state.")
+                                .await?;
                         }
                     } else {
                         client

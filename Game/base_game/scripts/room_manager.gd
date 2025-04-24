@@ -28,6 +28,12 @@ var state: State = State.IDLE :
 		var old = state
 		state = v
 		if old != v:
+			if is_host:
+				# Notify relay server of room state updatesSSU
+				if state == State.IN_GAME:
+					_network.send_set_room_state(Network.RoomState.IN_GAME)
+				elif state == State.IN_ROOM:
+					_network.send_set_room_state(Network.RoomState.LOBBY)
 			state_changed.emit()
 var room_code: String = ""
 # Current player's username. Set if you are not the host.
@@ -85,6 +91,7 @@ var is_player_host: bool = false :
 @export var _network: Network
 @export var min_players: int = 2
 @export var max_players: int = 4
+@export var allow_audience: bool = false
 
 var _peer_buffer = ByteBuffer.new_little_endian()
 
@@ -127,7 +134,8 @@ func host_room(_game_info_id: int):
 		printerr("GameInfo is NULL!")
 	min_players = game_info.min_players
 	max_players = game_info.max_players
-	_network.send_host_room(max_players)
+	allow_audience = game_info.allow_audience
+	_network.send_host_room(max_players, game_info.allow_audience)
 
 
 func _on_disconnected():
@@ -142,6 +150,7 @@ func _on_disconnected():
 	max_players = 0
 	players.clear()
 	player_host = 0
+	allow_audience = false
 	game_ended.emit()
 
 
