@@ -1,11 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=18 format=3 uid="uid://lcfau7tnyuti"]
 
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
+[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
+[ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/question_response.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
+[ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
+[ext_resource type="Script" uid="uid://ck74xov620pcd" path="res://room_games/quiplash/scripts/audio_manager.gd" id="4_hqale"]
+[ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
+[ext_resource type="AudioStream" uid="uid://bb7cw0gmnvu6y" path="res://room_games/quiplash/assets/music/Jam_Question_Screen.mp3" id="5_05xg6"]
+[ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
+[ext_resource type="Script" uid="uid://b3s2u1c6y4jog" path="res://room_games/quiplash/scripts/questions_music.gd" id="6_6seu4"]
+[ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
+[ext_resource type="Script" uid="uid://cn30abn5v0gqp" path="res://room_games/quiplash/scripts/host_scores.gd" id="7_sbl8u"]
+[ext_resource type="Script" uid="uid://cqbj57qj6obpt" path="res://room_games/quiplash/scripts/final_screen.gd" id="8_bpeo8"]
+[ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
+[ext_resource type="Script" uid="uid://bp06xm1q1fl1g" path="res://room_games/quiplash/scripts/player_scores.gd" id="11_i12cv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
 bg_color = Color(0.266724, 0.528293, 0.898438, 1)
@@ -15,33 +24,56 @@ bg_color = Color(0.835938, 0.195923, 0.195923, 1)
 
 [node name="QuiplashRoomManager" type="Node" node_paths=PackedStringArray("_host_manager", "_player_manager")]
 script = ExtResource("1_nxac8")
-_host_manager = NodePath("")
-_player_manager = NodePath("")
+_host_manager = NodePath("HostManager")
+_player_manager = NodePath("PlayerManager")
 game_name = "Quiplash"
 game_description = "COGS quiplash!"
-min_players = 1
+min_players = 2
 max_players = 16
 
-[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_final_screen", "_host_timer", "_quiplash_room_manager", "_audio_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("2_n6iy2")
+_final_screen = NodePath("FinalScreen")
+_host_timer = NodePath("UI")
 _quiplash_room_manager = NodePath("..")
+_audio_manager = NodePath("AudioManager")
+_num_rounds = 1
 
-[node name="_UI" type="Control" parent="HostManager"]
+[node name="AudioManager" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_room_manager", "_quiplash_host_manager")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_hqale")
+_quiplash_room_manager = NodePath("../..")
+_quiplash_host_manager = NodePath("..")
+
+[node name="QuestionsMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+stream = ExtResource("5_05xg6")
+autoplay = true
+script = ExtResource("6_6seu4")
+
+[node name="UI" type="Control" parent="HostManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_ivliu")
+_parent_manager = NodePath("..")
+_timer_text = NodePath("Timer/Panel2/Label")
 
-[node name="Timer" type="MarginContainer" parent="HostManager/_UI"]
+[node name="Timer" type="MarginContainer" parent="HostManager/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -55,38 +87,37 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="HostManager/_UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="HostManager/UI/Timer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/_UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="HostManager/UI/Timer/Panel2"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
+horizontal_alignment = 1
 
-[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
+[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("3_s2o1g")
-_quiplash_host_manager = NodePath("")
+_quiplash_host_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
+_players_label = NodePath("UI/Panel/VBoxContainer/PlayersLabel")
 
 [node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -131.5
-offset_top = -123.5
-offset_right = 131.5
-offset_bottom = 123.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI"]
 layout_mode = 2
@@ -109,7 +140,7 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="Label" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="PlayersLabel" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Players Ready (3/4)
 
@@ -119,7 +150,7 @@ text = "Players Ready (3/4)
 * sdf (DONE)
 * sdf (DONE)"
 
-[node name="Voting" type="Control" parent="HostManager"]
+[node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -127,6 +158,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_75c40")
+_quiplash_host_manager = NodePath("..")
+_quiplash_room_manager = NodePath("../..")
+_voting_question_label = NodePath("UI/VBoxContainer/PanelContainer/VBoxContainer/Question")
+_voting_option_1 = NodePath("UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Response1")
+_voting_option_2 = NodePath("UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer/Response2")
+_vote_bar = NodePath("UI/VBoxContainer/ProgressBar")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Voting"]
 layout_mode = 1
@@ -154,7 +193,7 @@ text = "VOTE"
 
 [node name="Question" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "What should we do?"
+text = "Loading..."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
 layout_mode = 2
@@ -165,10 +204,10 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Response1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Response 1 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+text = "Loading..."
 autowrap_mode = 2
 
 [node name="PanelContainer3" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
@@ -177,10 +216,10 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
+[node name="Response2" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Response 2 lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+text = "Loading..."
 autowrap_mode = 2
 
 [node name="ProgressBar" type="ProgressBar" parent="HostManager/Voting/UI/VBoxContainer"]
@@ -191,7 +230,23 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hwj0q")
 value = 50.0
 show_percentage = false
 
-[node name="Scores" type="Control" parent="HostManager"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(200, 10)
+layout_mode = 2
+text = "Loading..."
+autowrap_mode = 2
+
+[node name="Scores" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -199,6 +254,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_sbl8u")
+_host_manager = NodePath("..")
+_scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
 
 [node name="UI" type="MarginContainer" parent="HostManager/Scores"]
 layout_mode = 1
@@ -221,25 +280,27 @@ layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SCORES"
 
-[node name="Label" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
+[node name="ScoresLabel" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
 layout_mode = 2
 text = "* joe: 10
 * bob: 50
 * shmoe: 30
 * roe: 40"
 
-[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
-layout_mode = 3
+[node name="FinalScreen" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label", "_winner_label")]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_mvu8m")
-script = ExtResource("4_emmnh")
-_quiplash_room_manager = NodePath("..")
+mouse_filter = 2
+script = ExtResource("8_bpeo8")
+_host_manager = NodePath("..")
+_scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
+_winner_label = NodePath("UI/Panel/VBoxContainer/WinnerText")
 
-[node name="_UI" type="Control" parent="PlayerManager"]
+[node name="UI" type="MarginContainer" parent="HostManager/FinalScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,7 +308,60 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Timer" type="MarginContainer" parent="PlayerManager/_UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/FinalScreen/UI"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/FinalScreen/UI/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "FINAL SCORES"
+
+[node name="ScoresLabel" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "* joe: 10
+* bob: 50
+* shmoe: 30
+* roe: 40"
+
+[node name="WinnerText" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.67451, 0.133333, 0.152941, 1)
+theme_override_constants/shadow_outline_size = 8
+text = "aoiwejo iajwelk jaowie jaowkle joiaw ejfoiaw ejfoaiw ejfaoiwe jfoiaw jef"
+vertical_alignment = 1
+
+[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager", "_player_timer")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_mvu8m")
+script = ExtResource("4_emmnh")
+_quiplash_room_manager = NodePath("..")
+_player_timer = NodePath("UI")
+
+[node name="UI" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_ivliu")
+_parent_manager = NodePath("..")
+_timer_text = NodePath("Timer/Panel2/Label")
+
+[node name="Timer" type="MarginContainer" parent="PlayerManager/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -256,20 +370,22 @@ offset_left = -51.0
 offset_right = 51.0
 offset_bottom = 96.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="PlayerManager/_UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="PlayerManager/UI/Timer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerManager/_UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="PlayerManager/UI/Timer/Panel2"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
+horizontal_alignment = 1
 
-[node name="QuestionResponse" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager")]
+[node name="QuestionResponses" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -277,64 +393,89 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("5_24io3")
-_quiplash_host_manager = NodePath("")
+_quiplash_player_manager = NodePath("..")
 _quiplash_room_manager = NodePath("../..")
+_question_label = NodePath("UI/QuestionPanel/VBoxContainer/QuestionLabel")
+_question_text_edit = NodePath("UI/QuestionPanel/VBoxContainer/QuestionTextEdit")
+_submit_button = NodePath("UI/QuestionPanel/VBoxContainer/SubmitButton")
+_question_panel = NodePath("UI/QuestionPanel")
+_waiting_panel = NodePath("UI/WaitingPanel")
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponse"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponses"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -233.5
-offset_right = 150.0
-offset_bottom = 233.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="PlayerManager/QuestionResponse/UI"]
+[node name="QuestionPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI"]
+visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/QuestionResponse/UI/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponse/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="Label" type="Label" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="QuestionLabel" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 text = "What color is the sky? What color is the sky? What color is the sky? What color is the sky? "
 autowrap_mode = 3
 
-[node name="Padding" type="Control" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="Padding" type="Control" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="PlayerManager/QuestionResponse/UI/Panel/VBoxContainer"]
+[node name="QuestionTextEdit" type="TextEdit" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "Blue!
 Blue!
 Blue!
 "
+placeholder_text = "Type your response here!"
 
-[node name="Voting" type="Control" parent="PlayerManager"]
+[node name="SubmitButton" type="Button" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+layout_mode = 2
+text = "Submit"
+
+[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/WaitingPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "SIT TIGHT..."
+
+[node name="Question" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer"]
+layout_mode = 2
+text = "We're moving onto the next section!"
+
+[node name="Voting" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_voting_panel", "_waiting_panel", "_question_label", "_answer_button_1", "_answer_button_2")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -342,6 +483,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_wm86t")
+_quiplash_player_manager = NodePath("..")
+_quiplash_room_manager = NodePath("../..")
+_voting_panel = NodePath("UI/VotingPanel")
+_waiting_panel = NodePath("UI/WaitingPanel")
+_question_label = NodePath("UI/VotingPanel/VBoxContainer/Question")
+_answer_button_1 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton")
+_answer_button_2 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton2")
 
 [node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
 layout_mode = 1
@@ -350,75 +500,105 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+[node name="VotingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "VOTE"
 
-[node name="Question" type="Label" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 text = "QUESTION HERE!"
 
-[node name="Control" type="Control" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="Waiting" type="Control" parent="PlayerManager"]
+[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="UI" type="MarginContainer" parent="PlayerManager/Waiting"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Waiting/UI"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Waiting/UI/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/WaitingPanel"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SIT TIGHT..."
 
-[node name="Question" type="Label" parent="PlayerManager/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
+layout_mode = 2
+text = "We're moving onto the next section!"
+
+[node name="Scores" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_waiting_panel")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_i12cv")
+_waiting_panel = NodePath("Waiting/UI/PanelContainer")
+
+[node name="Waiting" type="Control" parent="PlayerManager/Scores"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UI" type="MarginContainer" parent="PlayerManager/Scores/Waiting"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Scores/Waiting/UI"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Scores/Waiting/UI/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "SIT TIGHT..."
+
+[node name="Question" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "We're moving onto the next section!"

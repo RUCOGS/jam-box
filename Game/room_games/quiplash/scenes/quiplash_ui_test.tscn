@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://ca00t3kplrvkl"]
 
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_21x37"]
+[ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_21x37"]
 [ext_resource type="PackedScene" uid="uid://ck0ymjq7e3a7s" path="res://room_games/quiplash/scenes/quiplash_dup.tscn" id="2_xeudv"]
-[ext_resource type="Script" path="res://base_game/scripts/ui_scaler.gd" id="3_hqyh8"]
+[ext_resource type="Script" uid="uid://dyag6nyqsfa1k" path="res://base_game/scripts/ui_scaler.gd" id="3_hqyh8"]
 [ext_resource type="Texture2D" uid="uid://cs7pm0utdn8i5" path="res://base_game/assets/art/cogs-bg.PNG" id="4_uoukq"]
 [ext_resource type="Texture2D" uid="uid://qxuxsf10ddot" path="res://base_game/assets/art/jambox-full.PNG" id="5_4pi7f"]
 [ext_resource type="Texture2D" uid="uid://b0535plqbdoea" path="res://base_game/assets/art/gradient.png" id="6_py8rm"]
