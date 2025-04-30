@@ -55,7 +55,7 @@ func put_uvec3(vec: Vector3i):
 # write: Fn(ByteBuffer, T)
 func put_array_u8_len(array: Array, write: Callable):
 	if array.size() > U8_MAX_SIZE:
-		printerr("ByteBuffer: put_array_u8_len but len > U8_MAX_SIZE")
+		LimboConsole.error("ByteBuffer: put_array_u8_len but len > U8_MAX_SIZE")
 		return
 	self.put_u8(array.size())
 	for elem in array:
@@ -66,7 +66,7 @@ func put_array_u8_len(array: Array, write: Callable):
 # write: Fn(ByteBuffer, T)
 func put_array_u16_len(array: Array, write: Callable):
 	if array.size() > U16_MAX_SIZE:
-		printerr("ByteBuffer: put_array_u16_len but len > U16_MAX_SIZE")
+		LimboConsole.error("ByteBuffer: put_array_u16_len but len > U16_MAX_SIZE")
 		return
 	self.put_u16(array.size())
 	for elem in array:
@@ -77,7 +77,7 @@ func put_array_u16_len(array: Array, write: Callable):
 # write: Fn(ByteBuffer, T)
 func put_array_u32_len(array: Array, write: Callable):
 	if array.size() > U32_MAX_SIZE:
-		printerr("ByteBuffer: put_array_u32_len but len > U32_MAX_SIZE")
+		LimboConsole.error("ByteBuffer: put_array_u32_len but len > U32_MAX_SIZE")
 		return
 	self.put_u32(array.size())
 	for elem in array:

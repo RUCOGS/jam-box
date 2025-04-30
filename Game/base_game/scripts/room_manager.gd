@@ -173,20 +173,20 @@ func _on_received_packet(packet_id: Network.PacketID, buffer: ByteBuffer):
 			if packet_id == Network.PacketID.ROOM_PLAYER_CONNECTED:
 				var id = buffer.get_u16()
 				var _username = buffer.get_utf8_string()
-				print("Player [%s] \"%s\" connected" % [id, _username])
+				LimboConsole.print_line("Player [%s] \"%s\" connected" % [id, _username])
 				players[id] = _username
 				_host_update_player_host()
 				_host_update_player_host()
 				
 				player_connected.emit(id, _username)
-				print("  Lobby: ", players)
+				LimboConsole.print_line("  Lobby: %s" % players)
 			elif packet_id == Network.PacketID.ROOM_PLAYER_DISCONNECTED:
 				var client_id = buffer.get_u16()
-				print("Player [%s] disconnected" % client_id)
+				LimboConsole.print_line("Player [%s] disconnected" % client_id)
 				players.erase(client_id)
 				_host_update_player_host()
 				player_disconnected.emit(client_id)
-				print("  Lobby: ", players)
+				LimboConsole.print_line("  Lobby: %s" % players)
 		
 
 

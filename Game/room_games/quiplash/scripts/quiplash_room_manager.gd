@@ -29,15 +29,15 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	print("Quiplash initialized!")
+	LimboConsole.print_line("Quiplash initialized!")
 
 
 func _game_started():
-	print("Quiplash game started!")
+	LimboConsole.print_line("Quiplash game started!")
 
 
 func _game_ended():
-	print("Quiplash game ended!")
+	LimboConsole.print_line("Quiplash game ended!")
 	_room_manager.players
 
 
@@ -68,9 +68,11 @@ func host_send_questions_to_player(player_id: int, questions: Array):
 
 
 func host_start_new_round():
+	LimboConsole.print_line("		begin host_start_new_round()")
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.HOST_START_ROUND)
 	send_to_all_players(_packet_buffer.data_array)
+	LimboConsole.print_line("		finish host_start_new_round()")
 
 func host_start_timer(duration: int):
 	_packet_buffer.clear()

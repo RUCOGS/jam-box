@@ -17,6 +17,7 @@ func update(_delta: float):
 
 #overwrite base enter
 func enter():
+	LimboConsole.print_line("Enter scores")
 	var players = _host_manager._player_data.values()
 	players.sort_custom(func(a, b): return a["score"] - b["score"])
 	var text = ""

@@ -67,7 +67,7 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 
 func _go_to_state(state: int):
 	if _is_goto_state:
-		printerr("Already transitioning to state")
+		LimboConsole.print_lineerr("Already transitioning to state")
 		return
 	_is_goto_state = true
 	#tell players that the state is changing
@@ -87,8 +87,8 @@ func _go_to_state(state: int):
 				_active_state.enter()
 				#start host timer and start all player timers
 				_host_timer.start_timer(_active_state.STATE_DURATION)
-				if (state == States.SCORING):
-					_host_timer.visible = false
+				#if (state == States.SCORING):
+				_host_timer.visible = true
 				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
 			child.visible = is_active
 	_is_goto_state = false
@@ -106,7 +106,7 @@ func _read_questions():
 # and returns the chosen question string.
 func get_new_question() -> Dictionary:
 	if len(all_question_queue) == 0:
-		printerr("all_question_queue is empty! Not enough questions")
+		LimboConsole.print_lineerr("all_question_queue is empty! Not enough questions")
 		return {}
 	var question_data = {
 		"question": all_question_queue.pop_back(),
@@ -183,17 +183,17 @@ func voting_finished():
 	else:
 		_go_to_state(States.SCORING)
 	for i in _player_data:
-		print(_player_data[i]["username"])
-		print(_player_data[i]["score"])
+		LimboConsole.print_line(str(_player_data[i]["username"]))
+		LimboConsole.print_line(str(_player_data[i]["score"]))
 
 func scoring_finished():
 	_go_to_state(States.QUESTIONS)
 	
 func print_questions():
 	for question in chosen_questions:
-		print(question["question"])
+		LimboConsole.print_line(str(question["question"]))
 		for question_response in question["responses"]:
-			print(question_response)
+			LimboConsole.print_line(str(question_response))
 
 func _on_game_end():
 	pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene load_steps=23 format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" uid="uid://6u14ul0vqh3c" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" uid="uid://lsuv82fyxgev" path="res://base_game/scripts/network.gd" id="1_51f1j"]
@@ -18,9 +18,10 @@
 [ext_resource type="Texture2D" uid="uid://cfkju7wiwvilr" path="res://base_game/assets/art/pogs_box.png" id="7_t64cq"]
 [ext_resource type="Script" uid="uid://piqhgiwrbcd8" path="res://base_game/scripts/ui/in_game_panel.gd" id="10_h4wvk"]
 [ext_resource type="Script" uid="uid://b2dgqh0qw02dw" path="res://base_game/scripts/config.gd" id="14_pn2eo"]
+[ext_resource type="Script" uid="uid://de7wlgi4f6oo1" path="res://base_game/scripts/console_button.gd" id="15_0gn3v"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
 [ext_resource type="Script" uid="uid://dyag6nyqsfa1k" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
-[ext_resource type="Script" uid="uid://doihve1hx7ilu" path="res://base_game/scripts/menu_music.gd" id="18_22xdf"]
+[ext_resource type="Script" path="res://base_game/scripts/menu_music.gd" id="18_22xdf"]
 
 [node name="Main" type="Node"]
 
@@ -439,6 +440,30 @@ layout_mode = 2
 text = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="ConsoleButton" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/ConsoleButton"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="ConsoleButton" type="Button" parent="CanvasLayer/MainMenu/ConsoleButton/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "CONSOLE"
+script = ExtResource("15_0gn3v")
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("1_51f1j")
