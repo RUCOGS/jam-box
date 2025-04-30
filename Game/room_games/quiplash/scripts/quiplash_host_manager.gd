@@ -1,8 +1,8 @@
 class_name QuiplashHostManager
 extends Control
 
+@export var _host_timer: QuiplashTimerUI
 @export var _final_screen: Control
-@export var _host_timer: Control
 @export var _quiplash_room_manager: QuiplashRoomManager
 @export var _audio_manager: QuiplashAudioManager
 @export var _num_rounds: int
@@ -140,6 +140,7 @@ func _on_game_start():
 
 func hide_timer():
 	_host_timer.visible = false
+	_host_timer.stop_timer()
 
 func _timer_up():
 	#what happens when we run out of time?
@@ -178,9 +179,10 @@ func prompting_finished():
 	_go_to_state(States.VOTING)
 
 func voting_finished():
-	_active_state.update_and_score()
+	hide_timer()
+	await _active_state.update_and_score()
 	
-	if (len(chosen_questions) > 0):
+	if len(chosen_questions) > 0:
 		_go_to_state(States.VOTING)
 	else:
 		_go_to_state(States.SCORING)

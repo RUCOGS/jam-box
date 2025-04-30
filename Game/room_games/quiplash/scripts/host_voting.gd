@@ -28,24 +28,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_update_bar()
 		if _players_responded >= _total_players:
 			# Wait 5 seconds to show results
-			show_results()
-
-
-func show_results():
-	var resp1_player_id = _current_question["responses"][0]["respondent_id"]
-	var resp2_player_id = _current_question["responses"][1]["respondent_id"]
-	var resp1_player = _quiplash_host_manager._player_data[resp1_player_id]
-	var resp2_player = _quiplash_host_manager._player_data[resp2_player_id]
-	var p1_result = ""
-	var p2_result = "(WINS)"
-	if _response_1_votes > _response_2_votes:
-		p1_result = "(WINS)"
-		p2_result = ""
-	_voting_option_1.text += "\n\n%s\n+%s = %s   %s" % [resp1_player["username"], get_player_score(1), resp1_player["score"] + get_player_score(1), p1_result]
-	_voting_option_2.text += "\n\n%s\n+%s = %s   %s" % [resp2_player["username"], get_player_score(2), resp2_player["score"] + get_player_score(2), p2_result]
-	LimboConsole.print_line("resp1_player: %s" % resp1_player)
-	await get_tree().create_timer(5.0).timeout
-	_quiplash_host_manager.voting_finished()
+			_quiplash_host_manager.voting_finished()
 
 #when the state is first entered.
 func enter():
@@ -84,11 +67,29 @@ func get_player_score(player: int = 1):
 	else:
 		LimboConsole.error("Unknown player: %s" % player)
 
+
 func update_and_score():
+	var p1_gain = 0
+	var p2_gain = 0
 	if (_response_1_votes + _response_2_votes > 0):
-		_quiplash_host_manager._player_data[_current_question["responses"][0]["respondent_id"]]["score"] += get_player_score(1)
-		_quiplash_host_manager._player_data[_current_question["responses"][1]["respondent_id"]]["score"] += get_player_score(2)
+		p1_gain = get_player_score(1)
+		p2_gain = get_player_score(2)
+		_quiplash_host_manager._player_data[_current_question["responses"][0]["respondent_id"]]["score"] += p1_gain
+		_quiplash_host_manager._player_data[_current_question["responses"][1]["respondent_id"]]["score"] += p2_gain
 	
+	var resp1_player_id = _current_question["responses"][0]["respondent_id"]
+	var resp2_player_id = _current_question["responses"][1]["respondent_id"]
+	var resp1_player = _quiplash_host_manager._player_data[resp1_player_id]
+	var resp2_player = _quiplash_host_manager._player_data[resp2_player_id]
+	var p1_result = ""
+	var p2_result = "(WINS)"
+	if _response_1_votes > _response_2_votes:
+		p1_result = "(WINS)"
+		p2_result = ""
+	_voting_option_1.text += "\n\n%s\n+%s = %s   %s" % [resp1_player["username"], p1_gain, resp1_player["score"], p1_result]
+	_voting_option_2.text += "\n\n%s\n+%s = %s   %s" % [resp2_player["username"], p2_gain, resp2_player["score"], p2_result]
+	LimboConsole.print_line("resp1_player: %s" % resp1_player)
+	await get_tree().create_timer(5.0).timeout
 
 func _update_bar():
 	var progress_value = (_response_1_votes * 100.0) / (_response_1_votes + _response_2_votes)

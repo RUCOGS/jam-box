@@ -1,3 +1,4 @@
+class_name QuiplashTimerUI
 extends Control
 
 var _time_remaining: float = 0
@@ -28,3 +29,6 @@ func start_timer(duration: int) -> void:
 	visible = true
 	_time_remaining = duration
 	_timer_running = true
+
+func stop_timer():
+	_timer_running = false

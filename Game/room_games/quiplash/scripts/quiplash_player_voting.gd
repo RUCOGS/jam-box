@@ -57,10 +57,8 @@ func _button1_pressed():
 	_quiplash_room_manager.player_send_vote(_current_question["responses"][0]["respondent_id"])
 	_waiting_panel.visible = true
 	_voting_panel.visible = false
-	_quiplash_player_manager.hide_timer()
 
 func _button2_pressed():
 	_quiplash_room_manager.player_send_vote(_current_question["responses"][1]["respondent_id"])
 	_waiting_panel.visible = true
 	_voting_panel.visible = false
-	_quiplash_player_manager.hide_timer()

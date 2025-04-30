@@ -5,11 +5,11 @@
 [ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="3_mvu8m"]
 [ext_resource type="Script" uid="uid://d3vwbu5v2va1" path="res://room_games/quiplash/scripts/question_prompting.gd" id="3_s2o1g"]
 [ext_resource type="Script" uid="uid://b1h3sdl08116q" path="res://room_games/quiplash/scripts/player_manager.gd" id="4_emmnh"]
-[ext_resource type="Script" uid="uid://ck74xov620pcd" path="res://room_games/quiplash/scripts/audio_manager.gd" id="4_hqale"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/audio_manager.gd" id="4_hqale"]
 [ext_resource type="Script" uid="uid://cdf4pnsm4j8nq" path="res://room_games/quiplash/scripts/quiplash_timer_ui.gd" id="4_ivliu"]
 [ext_resource type="AudioStream" uid="uid://bb7cw0gmnvu6y" path="res://room_games/quiplash/assets/music/Jam_Question_Screen.mp3" id="5_05xg6"]
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
-[ext_resource type="Script" uid="uid://b3s2u1c6y4jog" path="res://room_games/quiplash/scripts/questions_music.gd" id="6_6seu4"]
+[ext_resource type="Script" path="res://room_games/quiplash/scripts/questions_music.gd" id="6_6seu4"]
 [ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
 [ext_resource type="AudioStream" uid="uid://bg8i0cbho15cj" path="res://room_games/quiplash/assets/music/Jam_Answer_Screen.mp3" id="7_ojnhi"]
 [ext_resource type="Script" uid="uid://b2fn6xvb2uf80" path="res://room_games/quiplash/scripts/voting_music.gd" id="7_s0vbr"]
@@ -33,7 +33,7 @@ game_description = "COGS quiplash!"
 min_players = 2
 max_players = 16
 
-[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_final_screen", "_host_timer", "_quiplash_room_manager", "_audio_manager")]
+[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_final_screen", "_quiplash_room_manager", "_audio_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,8 +43,8 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("2_n6iy2")
-_final_screen = NodePath("FinalScreen")
 _host_timer = NodePath("UI")
+_final_screen = NodePath("FinalScreen")
 _quiplash_room_manager = NodePath("..")
 _audio_manager = NodePath("AudioManager")
 _num_rounds = 2
@@ -358,7 +358,7 @@ theme_override_constants/shadow_outline_size = 8
 text = "aoiwejo iajwelk jaowie jaowkle joiaw ejfoiaw ejfoaiw ejfaoiwe jfoiaw jef"
 vertical_alignment = 1
 
-[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager", "_player_timer")]
+[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -370,7 +370,6 @@ mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
-_player_timer = NodePath("UI")
 
 [node name="UI" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 layout_mode = 1
