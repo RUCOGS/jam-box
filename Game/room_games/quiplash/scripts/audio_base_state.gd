@@ -29,5 +29,6 @@ func enter():
 	if _tween:
 		_tween.kill()
 	_tween = create_tween()
+	print(_original_volume)
 	_tween.tween_property(self, "volume_db", _original_volume, 3) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)

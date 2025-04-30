@@ -16,18 +16,16 @@ func go_to_state(state: int):
 		printerr("Already transitioning music")
 		return
 	_music_changing = true
-	
+	if (not (_active_music == null)):
+		_active_music.exit()
 	#if it does, activate it.
 	for child: Node in get_children():
-		if "STATE_NUM" in child:
+		if "MUSIC_NUM" in child:
 			var is_active = child.MUSIC_NUM == state
 			if is_active:
 				#exit previous state, set state to active state, enter state
-				if (not (_active_music == null)):
-					_active_music.exit()
 				_active_music = child
 				_active_music.enter()
-			child.visible = is_active
 	_music_changing = false
 
 func _on_game_end():

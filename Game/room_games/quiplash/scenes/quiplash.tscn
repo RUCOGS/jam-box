@@ -45,7 +45,7 @@ _final_screen = NodePath("FinalScreen")
 _host_timer = NodePath("UI")
 _quiplash_room_manager = NodePath("..")
 _audio_manager = NodePath("AudioManager")
-_num_rounds = 1
+_num_rounds = 2
 
 [node name="AudioManager" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_room_manager", "_quiplash_host_manager")]
 anchors_preset = 0
@@ -151,7 +151,6 @@ text = "Players Ready (3/4)
 * sdf (DONE)"
 
 [node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,6 +242,15 @@ layout_mode = 2
 [node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer"]
 custom_minimum_size = Vector2(200, 10)
 layout_mode = 2
+text = "laejfi jawoiefj aliwe jfoiawje flkajw efoij awlekfj aoiwefj lawej fliajwe flajw eofij awifelj awoief jlawkej fliaw jeflja wojeifj lakjf oiajw rlkg eanoigj alerf iawj felija wliefj airjgo ieajr giaje roigj aeoig joieajr goia jroig jaoierg"
+autowrap_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+custom_minimum_size = Vector2(200, 10)
+layout_mode = 2
 text = "Loading..."
 autowrap_mode = 2
 
@@ -288,6 +296,7 @@ text = "* joe: 10
 * roe: 40"
 
 [node name="FinalScreen" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label", "_winner_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

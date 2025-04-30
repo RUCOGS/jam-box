@@ -406,7 +406,7 @@ text = "Relay"
 [node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "ws://127.0.0.1:9955"
+text = "wss://atlinx.net/jambox/server"
 placeholder_text = "Address"
 
 [node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
