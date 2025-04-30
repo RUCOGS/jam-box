@@ -2,7 +2,6 @@ class_name QuiplashPlayerManager
 extends Control
 
 @export var _quiplash_room_manager: QuiplashRoomManager
-@export var _player_timer: Control
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
 var _is_goto_state: bool = false
@@ -29,17 +28,9 @@ func _process(delta: float) -> void:
 
 
 func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
-	
 	#Host Change State
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_CHANGE_STATE):
 		_go_to_state(buffer.get_u8())
-	
-	if (packet_id == _quiplash_room_manager.PacketID.HOST_START_TIMER):
-		# TODO: Remove timer from local player, b/c of possibilities of desyncs
-		pass
-		#_player_timer.start_timer(buffer.get_u8())
-		#if (_active_state.STATE_NUM == States.SCORING):
-			#_player_timer.visible = false
 
 	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)
@@ -64,13 +55,6 @@ func _go_to_state(state: int):
 				_active_state.enter()
 			child.visible = is_active
 	_is_goto_state = false
-
-func hide_timer():
-	_player_timer.visible = false
-
-func _timer_up():
-	#could be left blank?
-	pass
 
 func _on_game_start():
 	visible = true

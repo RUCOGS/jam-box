@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
 [ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
 [ext_resource type="Script" uid="uid://cn30abn5v0gqp" path="res://room_games/quiplash/scripts/host_scores.gd" id="7_sbl8u"]
-[ext_resource type="Script" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
+[ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
 [ext_resource type="Script" path="res://room_games/quiplash/scripts/player_scores.gd" id="11_i12cv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvqwo"]
@@ -256,7 +256,7 @@ text = "* joe: 10
 * shmoe: 30
 * roe: 40"
 
-[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager", "_player_timer")]
+[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -267,7 +267,6 @@ mouse_filter = 2
 theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
-_player_timer = NodePath("UI")
 
 [node name="UI" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 layout_mode = 1

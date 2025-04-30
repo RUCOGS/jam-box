@@ -72,7 +72,6 @@ func _on_submit_pressed():
 		# transition to waiting
 		_waiting_panel.visible = true
 		_question_panel.visible = false
-		_quiplash_player_manager.hide_timer()
 		return
 
 # Overwrite base update
