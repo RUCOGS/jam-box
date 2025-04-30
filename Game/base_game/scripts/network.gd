@@ -103,7 +103,7 @@ func _process(delta):
 		state = State.IDLE
 		# The code will be -1 if the disconnection was not properly notified by the remote peer.
 		var code = _socket.get_close_code()
-		print("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
+		LimboConsole.print_line("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
 		set_process(false)
 		if auto_reconnect and not _suppress_auto_reconnect:
 			restart_socket()

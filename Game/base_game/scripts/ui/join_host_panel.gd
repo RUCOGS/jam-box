@@ -31,7 +31,7 @@ func _ready() -> void:
 
 
 func _on_resolution_platform_changed(is_mobile: bool):
-	print("Platform changed: ", is_mobile)
+	LimboConsole.print_line("Platform changed: ", is_mobile)
 	_can_host_question.visible = is_mobile
 	_host_buttons.visible = not is_mobile
 

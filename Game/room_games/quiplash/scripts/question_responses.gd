@@ -33,7 +33,7 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_START_ROUND):
 		_questions_to_answer.clear()
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_SEND_QUESTIONS):
-		print("Questions Received!")
+		LimboConsole.print_line("Questions Received!")
 		var question_count = buffer.get_u8()
 		for i in range(question_count):
 			var question_id = buffer.get_u8()
@@ -89,4 +89,5 @@ func exit():
 	pass
 
 func _update_button():
-	_submit_button.disabled = len(_question_text_edit.get_text()) <= 0
+	LimboConsole.print_line("question_text_edit text: '%s'" % [_question_text_edit.get_text()])
+	_submit_button.disabled = false # len(_question_text_edit.get_text()) <= 0

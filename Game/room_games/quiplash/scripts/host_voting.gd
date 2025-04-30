@@ -27,10 +27,29 @@ func received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 			_response_2_votes += 1
 		_update_bar()
 		if _players_responded >= _total_players:
-			_quiplash_host_manager.voting_finished()
+			# Wait 5 seconds to show results
+			show_results()
+
+
+func show_results():
+	var resp1_player_id = _current_question["responses"][0]["respondent_id"]
+	var resp2_player_id = _current_question["responses"][1]["respondent_id"]
+	var resp1_player = _quiplash_host_manager._player_data[resp1_player_id]
+	var resp2_player = _quiplash_host_manager._player_data[resp2_player_id]
+	var p1_result = ""
+	var p2_result = "(WINS)"
+	if _response_1_votes > _response_2_votes:
+		p1_result = "(WINS)"
+		p2_result = ""
+	_voting_option_1.text += "\n\n%s\n+%s = %s   %s" % [resp1_player["username"], get_player_score(1), resp1_player["score"] + get_player_score(1), p1_result]
+	_voting_option_2.text += "\n\n%s\n+%s = %s   %s" % [resp2_player["username"], get_player_score(2), resp2_player["score"] + get_player_score(2), p2_result]
+	LimboConsole.print_line("resp1_player: %s" % resp1_player)
+	await get_tree().create_timer(5.0).timeout
+	_quiplash_host_manager.voting_finished()
 
 #when the state is first entered.
 func enter():
+	LimboConsole.print_line("Enter voting")
 	if len(_quiplash_host_manager.chosen_questions) == 0:
 		await get_tree().create_timer(1).timeout
 		_quiplash_host_manager.voting_finished()
@@ -57,10 +76,18 @@ func exit():
 func update(_delta: float):
 	pass
 
+func get_player_score(player: int = 1):
+	if player == 1:
+		return (_response_1_votes * 500) / (_response_1_votes + _response_2_votes)
+	elif player == 2:
+		return (_response_2_votes * 500) / (_response_1_votes + _response_2_votes)
+	else:
+		LimboConsole.error("Unknown player: %s" % player)
+
 func update_and_score():
 	if (_response_1_votes + _response_2_votes > 0):
-		_quiplash_host_manager._player_data[_current_question["responses"][0]["respondent_id"]]["score"] += (_response_1_votes * 500) / (_response_1_votes + _response_2_votes)
-		_quiplash_host_manager._player_data[_current_question["responses"][1]["respondent_id"]]["score"] += (_response_2_votes * 500) / (_response_1_votes + _response_2_votes)
+		_quiplash_host_manager._player_data[_current_question["responses"][0]["respondent_id"]]["score"] += get_player_score(1)
+		_quiplash_host_manager._player_data[_current_question["responses"][1]["respondent_id"]]["score"] += get_player_score(2)
 	
 
 func _update_bar():

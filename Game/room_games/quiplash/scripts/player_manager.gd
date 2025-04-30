@@ -35,16 +35,18 @@ func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
 		_go_to_state(buffer.get_u8())
 	
 	if (packet_id == _quiplash_room_manager.PacketID.HOST_START_TIMER):
-		_player_timer.start_timer(buffer.get_u8())
-		if (_active_state.STATE_NUM == States.SCORING):
-			_player_timer.visible = false
+		# TODO: Remove timer from local player, b/c of possibilities of desyncs
+		pass
+		#_player_timer.start_timer(buffer.get_u8())
+		#if (_active_state.STATE_NUM == States.SCORING):
+			#_player_timer.visible = false
 
 	if (not (_active_state == null)):
 		_active_state.received_packet(sender_id, packet_id, buffer)
 
 func _go_to_state(state: int):
 	if _is_goto_state:
-		printerr("Already transitioning to state")
+		LimboConsole.error("Already transitioning to state")
 		return
 	_is_goto_state = true
 	
