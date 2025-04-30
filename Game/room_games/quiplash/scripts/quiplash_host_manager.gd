@@ -2,7 +2,11 @@ class_name QuiplashHostManager
 extends Control
 
 @export var _host_timer: QuiplashTimerUI
+@export var _final_screen: Control
 @export var _quiplash_room_manager: QuiplashRoomManager
+@export var _audio_manager: QuiplashAudioManager
+@export var _num_rounds: int
+var _current_round: int = 0
 var _room_manager: RoomManager
 var _active_state: QuiplashBaseState
 
@@ -15,6 +19,7 @@ var _active_state: QuiplashBaseState
 #	"voted": false
 #	"question_ids": [2, 3, 1]
 # }
+
 var _player_data: Dictionary
 enum States {
 	QUESTIONS = 1,
@@ -26,7 +31,7 @@ enum States {
 # We can pop from queue to get a new random question
 var all_question_queue: Array
 #number of questions needed
-@export var questions_needed: int
+var questions_needed: int
 
 # Array of active question data:
 # [{
@@ -39,10 +44,6 @@ var all_question_queue: Array
 # 
 var chosen_questions: Array
 var _is_goto_state: bool = false
-
-# used to track whether the timer has run out or not. If it has, need to stop taking responses
-# and move to next stage
-var _time_up: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -90,6 +91,7 @@ func _go_to_state(state: int):
 				#if (state == States.SCORING):
 				_host_timer.visible = true
 				_quiplash_room_manager.host_start_timer(_active_state.STATE_DURATION)
+				_audio_manager.go_to_state(state)
 			child.visible = is_active
 	_is_goto_state = false
 
@@ -179,8 +181,8 @@ func prompting_finished():
 func voting_finished():
 	hide_timer()
 	await _active_state.update_and_score()
-
-	if (len(chosen_questions) > 0):
+	
+	if len(chosen_questions) > 0:
 		_go_to_state(States.VOTING)
 	else:
 		_go_to_state(States.SCORING)
@@ -189,7 +191,15 @@ func voting_finished():
 		LimboConsole.print_line(str(_player_data[i]["score"]))
 
 func scoring_finished():
-	_go_to_state(States.QUESTIONS)
+	_current_round += 1
+	if (_current_round < _num_rounds):
+		_go_to_state(States.QUESTIONS)
+		return
+	_quiplash_room_manager.host_end_game()
+	_active_state.visible = false
+	_host_timer.hide()
+	_final_screen.visible = true
+	_final_screen.update()
 	
 func print_questions():
 	for question in chosen_questions:

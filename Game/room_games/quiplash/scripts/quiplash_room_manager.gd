@@ -13,6 +13,7 @@ enum PacketID {
 	HOST_START_ROUND = 3,
 	HOST_START_TIMER = 4,
 	HOST_SEND_VOTE_QUESTION = 5,
+	HOST_END_GAME = 6,
 	
 	# PLAYER PACKETS
 	PLAYER_SEND_RESPONSE = 128,
@@ -66,7 +67,6 @@ func host_send_questions_to_player(player_id: int, questions: Array):
 		_packet_buffer.put_utf8_string(question.text)
 	send_to_player(_packet_buffer.data_array, player_id)
 
-
 func host_start_new_round():
 	LimboConsole.print_line("		begin host_start_new_round()")
 	_packet_buffer.clear()
@@ -80,13 +80,6 @@ func host_start_timer(duration: int):
 	_packet_buffer.put_u8(duration)
 	send_to_all_players(_packet_buffer.data_array)
 
-func player_send_response(question_id: int, response: String):
-	_packet_buffer.clear()
-	_packet_buffer.put_u8(PacketID.PLAYER_SEND_RESPONSE)
-	_packet_buffer.put_u8(question_id)
-	_packet_buffer.put_utf8_string(response)
-	send_to_host(_packet_buffer.data_array)
-
 func host_send_vote_question(question: Dictionary):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.HOST_SEND_VOTE_QUESTION)
@@ -97,6 +90,18 @@ func host_send_vote_question(question: Dictionary):
 		_packet_buffer.put_utf8_string(player_response["response"])
 	send_to_all_players(_packet_buffer.data_array)
 
+func host_end_game():
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.HOST_END_GAME)
+	send_to_all_players(_packet_buffer.data_array)
+
+func player_send_response(question_id: int, response: String):
+	_packet_buffer.clear()
+	_packet_buffer.put_u8(PacketID.PLAYER_SEND_RESPONSE)
+	_packet_buffer.put_u8(question_id)
+	_packet_buffer.put_utf8_string(response)
+	send_to_host(_packet_buffer.data_array)
+	
 func player_send_vote(chosen_id: int):
 	_packet_buffer.clear()
 	_packet_buffer.put_u8(PacketID.PlAYER_SEND_VOTE)

@@ -17,6 +17,7 @@ min_players = 1
 max_players = 16
 
 [node name="PlayerManager" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -111,7 +112,6 @@ Blue!
 "
 
 [node name="Voting" type="Control" parent="PlayerManager"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -200,7 +200,6 @@ layout_mode = 2
 text = "We're moving onto the next section!"
 
 [node name="HostManager" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -210,6 +209,7 @@ grow_vertical = 2
 theme = ExtResource("2_gign5")
 
 [node name="UI" type="Control" parent="HostManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -240,6 +240,7 @@ theme_type_variation = &"HeaderLarge"
 text = "96"
 
 [node name="PromptQuestions" type="Control" parent="HostManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -358,6 +359,7 @@ value = 50.0
 show_percentage = false
 
 [node name="Scores" type="Control" parent="HostManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
