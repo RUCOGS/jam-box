@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene load_steps=20 format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://deaw2mebbqdrl" path="res://room_games/quiplash/scripts/question_responses.gd" id="5_24io3"]
 [ext_resource type="Script" uid="uid://b3s2u1c6y4jog" path="res://room_games/quiplash/scripts/questions_music.gd" id="6_6seu4"]
 [ext_resource type="Script" uid="uid://bel6ulg7kdt85" path="res://room_games/quiplash/scripts/host_voting.gd" id="6_75c40"]
+[ext_resource type="AudioStream" uid="uid://bg8i0cbho15cj" path="res://room_games/quiplash/assets/music/Jam_Answer_Screen.mp3" id="7_ojnhi"]
+[ext_resource type="Script" uid="uid://b2fn6xvb2uf80" path="res://room_games/quiplash/scripts/voting_music.gd" id="7_s0vbr"]
 [ext_resource type="Script" uid="uid://cn30abn5v0gqp" path="res://room_games/quiplash/scripts/host_scores.gd" id="7_sbl8u"]
 [ext_resource type="Script" uid="uid://cqbj57qj6obpt" path="res://room_games/quiplash/scripts/final_screen.gd" id="8_bpeo8"]
 [ext_resource type="Script" uid="uid://da60maecdkch2" path="res://room_games/quiplash/scripts/quiplash_player_voting.gd" id="8_wm86t"]
@@ -59,6 +61,11 @@ _quiplash_host_manager = NodePath("..")
 stream = ExtResource("5_05xg6")
 autoplay = true
 script = ExtResource("6_6seu4")
+
+[node name="VotingMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+stream = ExtResource("7_ojnhi")
+autoplay = true
+script = ExtResource("7_s0vbr")
 
 [node name="UI" type="Control" parent="HostManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 visible = false

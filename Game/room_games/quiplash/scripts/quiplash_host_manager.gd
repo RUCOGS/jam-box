@@ -45,10 +45,6 @@ var questions_needed: int
 var chosen_questions: Array
 var _is_goto_state: bool = false
 
-# used to track whether the timer has run out or not. If it has, need to stop taking responses
-# and move to next stage
-var _time_up: bool
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#all sorts of connections
