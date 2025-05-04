@@ -21,7 +21,7 @@ func exit():
 	if _tween:
 		_tween.kill()
 	_tween = create_tween()
-	_tween.tween_property(self, "volume_db", -80, 3) \
+	_tween.tween_property(self, "volume_db", -80, 2) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 
 
@@ -30,5 +30,5 @@ func enter():
 		_tween.kill()
 	_tween = create_tween()
 	print(_original_volume)
-	_tween.tween_property(self, "volume_db", _original_volume, 3) \
+	_tween.tween_property(self, "volume_db", _original_volume, 2) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)

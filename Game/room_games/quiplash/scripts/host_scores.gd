@@ -2,6 +2,7 @@ extends QuiplashBaseState
 
 @export var _host_manager: QuiplashHostManager
 @export var _scores_label: Label
+@export var _podium_sound: AudioStreamPlayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,6 +18,7 @@ func update(_delta: float):
 
 #overwrite base enter
 func enter():
+	_podium_sound.play()
 	LimboConsole.print_line("Enter scores")
 	var players = _host_manager._player_data.values()
 	players.sort_custom(func(a, b): return a["score"] > b["score"])
