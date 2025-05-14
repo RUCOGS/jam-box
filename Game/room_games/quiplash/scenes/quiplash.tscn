@@ -272,7 +272,6 @@ mouse_filter = 2
 script = ExtResource("7_sbl8u")
 _host_manager = NodePath("..")
 _scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
-STATE_DURATION = 20
 
 [node name="UI" type="MarginContainer" parent="HostManager/Scores"]
 layout_mode = 1

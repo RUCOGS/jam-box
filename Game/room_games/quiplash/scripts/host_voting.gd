@@ -1,5 +1,9 @@
 extends QuiplashBaseState
 
+
+@export var results_duration: float = 2.5
+
+@export_group("Dependencies")
 @export var _quiplash_host_manager: QuiplashHostManager
 @export var _quiplash_room_manager: QuiplashRoomManager
 
@@ -89,7 +93,7 @@ func update_and_score():
 	_voting_option_1.text += "\n\n%s\n+%s = %s   %s" % [resp1_player["username"], p1_gain, resp1_player["score"], p1_result]
 	_voting_option_2.text += "\n\n%s\n+%s = %s   %s" % [resp2_player["username"], p2_gain, resp2_player["score"], p2_result]
 	LimboConsole.print_line("resp1_player: %s" % resp1_player)
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(results_duration).timeout
 
 func _update_bar():
 	var progress_value = (_response_1_votes * 100.0) / (_response_1_votes + _response_2_votes)
