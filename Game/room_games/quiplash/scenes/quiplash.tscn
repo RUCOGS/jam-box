@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://lcfau7tnyuti"]
+[gd_scene format=3 uid="uid://lcfau7tnyuti"]
 
 [ext_resource type="Script" uid="uid://w23cxg4t31qr" path="res://room_games/quiplash/scripts/quiplash_room_manager.gd" id="1_nxac8"]
 [ext_resource type="Script" uid="uid://rpesap4nircp" path="res://room_games/quiplash/scripts/quiplash_host_manager.gd" id="2_n6iy2"]
@@ -27,7 +27,7 @@ bg_color = Color(0.266724, 0.528293, 0.898438, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwj0q"]
 bg_color = Color(0.835938, 0.195923, 0.195923, 1)
 
-[node name="QuiplashRoomManager" type="Node" node_paths=PackedStringArray("_host_manager", "_player_manager")]
+[node name="QuiplashRoomManager" type="Node" unique_id=1657736532 node_paths=PackedStringArray("_host_manager", "_player_manager")]
 script = ExtResource("1_nxac8")
 _host_manager = NodePath("HostManager")
 _player_manager = NodePath("PlayerManager")
@@ -36,7 +36,7 @@ game_description = "COGS quiplash!"
 min_players = 2
 max_players = 16
 
-[node name="HostManager" type="Control" parent="." node_paths=PackedStringArray("_host_timer", "_final_screen", "_quiplash_room_manager", "_audio_manager")]
+[node name="HostManager" type="Control" parent="." unique_id=136267294 node_paths=PackedStringArray("_host_timer", "_final_screen", "_quiplash_room_manager", "_audio_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,7 +52,7 @@ _quiplash_room_manager = NodePath("..")
 _audio_manager = NodePath("AudioManager")
 _num_rounds = 2
 
-[node name="AudioManager" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_room_manager", "_quiplash_host_manager")]
+[node name="AudioManager" type="Control" parent="HostManager" unique_id=36176878 node_paths=PackedStringArray("_quiplash_room_manager", "_quiplash_host_manager")]
 visible = false
 anchors_preset = 0
 offset_right = 40.0
@@ -61,25 +61,25 @@ script = ExtResource("4_hqale")
 _quiplash_room_manager = NodePath("../..")
 _quiplash_host_manager = NodePath("..")
 
-[node name="QuestionsMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+[node name="QuestionsMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager" unique_id=1574392426]
 stream = ExtResource("5_05xg6")
 autoplay = true
 parameters/looping = true
 script = ExtResource("6_6seu4")
 
-[node name="VotingMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+[node name="VotingMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager" unique_id=153007637]
 stream = ExtResource("7_ojnhi")
 autoplay = true
 parameters/looping = true
 script = ExtResource("7_s0vbr")
 
-[node name="ScoringMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager"]
+[node name="ScoringMusic" type="AudioStreamPlayer" parent="HostManager/AudioManager" unique_id=1325564199]
 stream = ExtResource("9_rhkeb")
 autoplay = true
 parameters/looping = true
 script = ExtResource("9_cj3ur")
 
-[node name="UI" type="Control" parent="HostManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
+[node name="UI" type="Control" parent="HostManager" unique_id=1444709884 node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -92,7 +92,7 @@ script = ExtResource("4_ivliu")
 _parent_manager = NodePath("..")
 _timer_text = NodePath("Timer/Panel2/Label")
 
-[node name="Timer" type="MarginContainer" parent="HostManager/UI"]
+[node name="Timer" type="MarginContainer" parent="HostManager/UI" unique_id=1100273170]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -107,17 +107,17 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="HostManager/UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="HostManager/UI/Timer" unique_id=1657746676]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HostManager/UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="HostManager/UI/Timer/Panel2" unique_id=213470531]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuestionPrompting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
+[node name="QuestionPrompting" type="Control" parent="HostManager" unique_id=1979276174 node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_players_label")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -132,7 +132,7 @@ _quiplash_room_manager = NodePath("../..")
 _players_label = NodePath("UI/Panel/VBoxContainer/PlayersLabel")
 STATE_DURATION = 75
 
-[node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting"]
+[node name="UI" type="MarginContainer" parent="HostManager/QuestionPrompting" unique_id=1435266740]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -141,12 +141,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/QuestionPrompting/UI" unique_id=1423758839]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="HostManager/QuestionPrompting/UI/Panel" unique_id=840023615]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -154,15 +154,15 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/QuestionPrompting/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/QuestionPrompting/UI/Panel" unique_id=1625160201]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer" unique_id=1272444199]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="PlayersLabel" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer"]
+[node name="PlayersLabel" type="Label" parent="HostManager/QuestionPrompting/UI/Panel/VBoxContainer" unique_id=1433089956]
 layout_mode = 2
 text = "Players Ready (3/4)
 
@@ -172,7 +172,7 @@ text = "Players Ready (3/4)
 * sdf (DONE)
 * sdf (DONE)"
 
-[node name="Voting" type="Control" parent="HostManager" node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
+[node name="Voting" type="Control" parent="HostManager" unique_id=451155970 node_paths=PackedStringArray("_quiplash_host_manager", "_quiplash_room_manager", "_voting_question_label", "_voting_option_1", "_voting_option_2", "_vote_bar")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -190,7 +190,7 @@ _voting_option_2 = NodePath("UI/VBoxContainer/HBoxContainer/PanelContainer3/VBox
 _vote_bar = NodePath("UI/VBoxContainer/ProgressBar")
 STATE_DURATION = 20
 
-[node name="UI" type="MarginContainer" parent="HostManager/Voting"]
+[node name="UI" type="MarginContainer" parent="HostManager/Voting" unique_id=94028628]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -198,56 +198,56 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI" unique_id=923237123]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer" unique_id=831873356]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer" unique_id=457729174]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer" unique_id=41198757]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "VOTE"
 
-[node name="Question" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="HostManager/Voting/UI/VBoxContainer/PanelContainer/VBoxContainer" unique_id=113026626]
 layout_mode = 2
 text = "Loading..."
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer" unique_id=271556928]
 layout_mode = 2
 
-[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer" unique_id=1355545456]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2" unique_id=1842756589]
 layout_mode = 2
 
-[node name="Response1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Response1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer" unique_id=2141648844]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Loading..."
 autowrap_mode = 2
 
-[node name="PanelContainer3" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer"]
+[node name="PanelContainer3" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer" unique_id=1239005816]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3" unique_id=541298439]
 layout_mode = 2
 
-[node name="Response2" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
+[node name="Response2" type="Label" parent="HostManager/Voting/UI/VBoxContainer/HBoxContainer/PanelContainer3/VBoxContainer" unique_id=2039338089]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Loading..."
 autowrap_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="HostManager/Voting/UI/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="HostManager/Voting/UI/VBoxContainer" unique_id=1788130171]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_uvqwo")
@@ -255,32 +255,32 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hwj0q")
 value = 50.0
 show_percentage = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Voting/UI/VBoxContainer" unique_id=599386133]
 visible = false
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer" unique_id=491983554]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1464256733]
 layout_mode = 2
 
-[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer" unique_id=1587801199]
 custom_minimum_size = Vector2(200, 10)
 layout_mode = 2
 text = "laejfi jawoiefj aliwe jfoiawje flkajw efoij awlekfj aoiwefj lawej fliajwe flajw eofij awifelj awoief jlawkej fliaw jeflja wojeifj lakjf oiajw rlkg eanoigj alerf iawj felija wliefj airjgo ieajr giaje roigj aeoig joieajr goia jroig jaoierg"
 autowrap_mode = 2
 
-[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=806876004]
 layout_mode = 2
 
-[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+[node name="Tag1" type="Label" parent="HostManager/Voting/UI/VBoxContainer/VBoxContainer/HBoxContainer/PanelContainer2" unique_id=1734212933]
 custom_minimum_size = Vector2(200, 10)
 layout_mode = 2
 text = "Loading..."
 autowrap_mode = 2
 
-[node name="Scores" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label", "_podium_sound")]
+[node name="Scores" type="Control" parent="HostManager" unique_id=1033376155 node_paths=PackedStringArray("_host_manager", "_scores_label", "_podium_sound")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -295,7 +295,7 @@ _scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
 _podium_sound = NodePath("JamPodiumEffect")
 STATE_DURATION = 20
 
-[node name="UI" type="MarginContainer" parent="HostManager/Scores"]
+[node name="UI" type="MarginContainer" parent="HostManager/Scores" unique_id=2075433719]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -303,30 +303,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="HostManager/Scores/UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/Scores/UI" unique_id=2082041582]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Scores/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/Scores/UI/Panel" unique_id=120616267]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer" unique_id=261651281]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SCORES"
 
-[node name="ScoresLabel" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer"]
+[node name="ScoresLabel" type="Label" parent="HostManager/Scores/UI/Panel/VBoxContainer" unique_id=1849746898]
 layout_mode = 2
 text = "* joe: 10
 * bob: 50
 * shmoe: 30
 * roe: 40"
 
-[node name="JamPodiumEffect" type="AudioStreamPlayer" parent="HostManager/Scores"]
+[node name="JamPodiumEffect" type="AudioStreamPlayer" parent="HostManager/Scores" unique_id=1716174177]
 stream = ExtResource("13_eq5d1")
 
-[node name="FinalScreen" type="Control" parent="HostManager" node_paths=PackedStringArray("_host_manager", "_scores_label", "_winner_label")]
+[node name="FinalScreen" type="Control" parent="HostManager" unique_id=2006372637 node_paths=PackedStringArray("_host_manager", "_scores_label", "_winner_label")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -340,7 +340,7 @@ _host_manager = NodePath("..")
 _scores_label = NodePath("UI/Panel/VBoxContainer/ScoresLabel")
 _winner_label = NodePath("UI/Panel/VBoxContainer/WinnerText")
 
-[node name="UI" type="MarginContainer" parent="HostManager/FinalScreen"]
+[node name="UI" type="MarginContainer" parent="HostManager/FinalScreen" unique_id=1909747123]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -348,34 +348,34 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="HostManager/FinalScreen/UI"]
+[node name="Panel" type="PanelContainer" parent="HostManager/FinalScreen/UI" unique_id=123085013]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/FinalScreen/UI/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HostManager/FinalScreen/UI/Panel" unique_id=2022837234]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer" unique_id=1100925968]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "FINAL SCORES"
 
-[node name="ScoresLabel" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+[node name="ScoresLabel" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer" unique_id=671798232]
 layout_mode = 2
 text = "* joe: 10
 * bob: 50
 * shmoe: 30
 * roe: 40"
 
-[node name="WinnerText" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer"]
+[node name="WinnerText" type="Label" parent="HostManager/FinalScreen/UI/Panel/VBoxContainer" unique_id=811542936]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0.67451, 0.133333, 0.152941, 1)
 theme_override_constants/shadow_outline_size = 8
 text = "aoiwejo iajwelk jaowie jaowkle joiaw ejfoiaw ejfoaiw ejfaoiwe jfoiaw jef"
 vertical_alignment = 1
 
-[node name="PlayerManager" type="Control" parent="." node_paths=PackedStringArray("_quiplash_room_manager")]
+[node name="PlayerManager" type="Control" parent="." unique_id=96552290 node_paths=PackedStringArray("_quiplash_room_manager")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -388,7 +388,7 @@ theme = ExtResource("3_mvu8m")
 script = ExtResource("4_emmnh")
 _quiplash_room_manager = NodePath("..")
 
-[node name="UI" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_parent_manager", "_timer_text")]
+[node name="UI" type="Control" parent="PlayerManager" unique_id=217936061 node_paths=PackedStringArray("_parent_manager", "_timer_text")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -400,7 +400,7 @@ script = ExtResource("4_ivliu")
 _parent_manager = NodePath("..")
 _timer_text = NodePath("Timer/Panel2/Label")
 
-[node name="Timer" type="MarginContainer" parent="PlayerManager/UI"]
+[node name="Timer" type="MarginContainer" parent="PlayerManager/UI" unique_id=675183189]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -416,17 +416,17 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Panel2" type="PanelContainer" parent="PlayerManager/UI/Timer"]
+[node name="Panel2" type="PanelContainer" parent="PlayerManager/UI/Timer" unique_id=459145384]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerManager/UI/Timer/Panel2"]
+[node name="Label" type="Label" parent="PlayerManager/UI/Timer/Panel2" unique_id=828127692]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "96"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuestionResponses" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
+[node name="QuestionResponses" type="Control" parent="PlayerManager" unique_id=1379163735 node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_question_label", "_question_text_edit", "_submit_button", "_question_panel", "_waiting_panel")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -445,7 +445,7 @@ _question_panel = NodePath("UI/QuestionPanel")
 _waiting_panel = NodePath("UI/WaitingPanel")
 STATE_DURATION = 75
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponses"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/QuestionResponses" unique_id=1504963657]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,39 +454,39 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="QuestionPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI"]
+[node name="QuestionPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI" unique_id=1732092277]
 visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel" unique_id=690468697]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/QuestionPanel" unique_id=877005712]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer" unique_id=1489719714]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "QUESTION TIME!"
 
-[node name="QuestionLabel" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+[node name="QuestionLabel" type="Label" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer" unique_id=111911321]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 text = "What color is the sky? What color is the sky? What color is the sky? What color is the sky? "
 autowrap_mode = 3
 
-[node name="Padding" type="Control" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+[node name="Padding" type="Control" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer" unique_id=1823574690]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="QuestionTextEdit" type="TextEdit" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+[node name="QuestionTextEdit" type="TextEdit" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer" unique_id=1374801528]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "Blue!
@@ -495,29 +495,29 @@ Blue!
 "
 placeholder_text = "Type your response here!"
 
-[node name="SubmitButton" type="Button" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer"]
+[node name="SubmitButton" type="Button" parent="PlayerManager/QuestionResponses/UI/QuestionPanel/VBoxContainer" unique_id=890927239]
 layout_mode = 2
 text = "Submit"
 
-[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI"]
+[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/QuestionResponses/UI" unique_id=1752045980]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/WaitingPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/QuestionResponses/UI/WaitingPanel" unique_id=1966334229]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer" unique_id=2034155944]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SIT TIGHT..."
 
-[node name="Question" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/QuestionResponses/UI/WaitingPanel/VBoxContainer" unique_id=1840749111]
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Voting" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_voting_panel", "_waiting_panel", "_question_label", "_answer_button_1", "_answer_button_2")]
+[node name="Voting" type="Control" parent="PlayerManager" unique_id=1374148250 node_paths=PackedStringArray("_quiplash_player_manager", "_quiplash_room_manager", "_voting_panel", "_waiting_panel", "_question_label", "_answer_button_1", "_answer_button_2")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -536,7 +536,7 @@ _answer_button_1 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerBu
 _answer_button_2 = NodePath("UI/VotingPanel/VBoxContainer/VBoxContainer/AnswerButton2")
 STATE_DURATION = 20
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/Voting"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/Voting" unique_id=1320260576]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -545,63 +545,63 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VotingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+[node name="VotingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI" unique_id=1134890780]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel" unique_id=367922935]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer" unique_id=902912206]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "VOTE"
 
-[node name="Question" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer" unique_id=1685486583]
 layout_mode = 2
 text = "QUESTION HERE!"
 
-[node name="Control" type="Control" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
+[node name="Control" type="Control" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer" unique_id=438471031]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer" unique_id=404042104]
 layout_mode = 2
 
-[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer" unique_id=1251992310]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer"]
+[node name="AnswerButton2" type="Button" parent="PlayerManager/Voting/UI/VotingPanel/VBoxContainer/VBoxContainer" unique_id=14274657]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet, consectetur quis. Lorem ipsum dolor sit amet, consectetur quis."
 autowrap_mode = 3
 
-[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI"]
+[node name="WaitingPanel" type="PanelContainer" parent="PlayerManager/Voting/UI" unique_id=897476446]
 visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/WaitingPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Voting/UI/WaitingPanel" unique_id=62346936]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer" unique_id=2011295586]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SIT TIGHT..."
 
-[node name="Question" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Voting/UI/WaitingPanel/VBoxContainer" unique_id=1144487999]
 layout_mode = 2
 text = "We're moving onto the next section!"
 
-[node name="Scores" type="Control" parent="PlayerManager" node_paths=PackedStringArray("_waiting_panel")]
+[node name="Scores" type="Control" parent="PlayerManager" unique_id=1739370985 node_paths=PackedStringArray("_waiting_panel")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -612,7 +612,7 @@ script = ExtResource("11_i12cv")
 _waiting_panel = NodePath("Waiting/UI/PanelContainer")
 STATE_DURATION = 20
 
-[node name="Waiting" type="Control" parent="PlayerManager/Scores"]
+[node name="Waiting" type="Control" parent="PlayerManager/Scores" unique_id=1407084778]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -621,7 +621,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="UI" type="MarginContainer" parent="PlayerManager/Scores/Waiting"]
+[node name="UI" type="MarginContainer" parent="PlayerManager/Scores/Waiting" unique_id=1732034400]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -629,20 +629,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Scores/Waiting/UI"]
+[node name="PanelContainer" type="PanelContainer" parent="PlayerManager/Scores/Waiting/UI" unique_id=974682024]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Scores/Waiting/UI/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager/Scores/Waiting/UI/PanelContainer" unique_id=282670334]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer" unique_id=1667446551]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "SIT TIGHT..."
 
-[node name="Question" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer"]
+[node name="Question" type="Label" parent="PlayerManager/Scores/Waiting/UI/PanelContainer/VBoxContainer" unique_id=507636441]
 layout_mode = 2
 text = "We're moving onto the next section!"

@@ -21,7 +21,7 @@ func enter():
 	_podium_sound.play()
 	LimboConsole.print_line("Enter scores")
 	var players = _host_manager._player_data.values()
-	players.sort_custom(func(a, b): return b["score"] - a["score"])
+	players.sort_custom(func(a, b): return b["score"] < a["score"])
 	var text = ""
 	for i in range(len(players)):
 		var player = players[i]
