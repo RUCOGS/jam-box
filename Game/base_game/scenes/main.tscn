@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://buhi6arioj2je"]
+[gd_scene format=3 uid="uid://buhi6arioj2je"]
 
 [ext_resource type="Script" uid="uid://6u14ul0vqh3c" path="res://base_game/scripts/ui/menu_manager.gd" id="1_1hdj3"]
 [ext_resource type="Script" uid="uid://lsuv82fyxgev" path="res://base_game/scripts/network.gd" id="1_51f1j"]
@@ -21,14 +21,14 @@
 [ext_resource type="Script" uid="uid://de7wlgi4f6oo1" path="res://base_game/scripts/console_button.gd" id="15_0gn3v"]
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
 [ext_resource type="Script" uid="uid://dyag6nyqsfa1k" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
-[ext_resource type="Script" path="res://base_game/scripts/menu_music.gd" id="18_22xdf"]
+[ext_resource type="Script" uid="uid://doihve1hx7ilu" path="res://base_game/scripts/menu_music.gd" id="18_22xdf"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=1613544907]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=945791875]
 layer = -10
 
-[node name="MainMenu" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("_network", "_menu_manager")]
+[node name="MainMenu" type="Control" parent="CanvasLayer" unique_id=1462201824 node_paths=PackedStringArray("_network", "_menu_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +42,7 @@ _network = NodePath("../../Network")
 _menu_manager = NodePath("MenuManager")
 metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu" unique_id=334241429]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,7 +54,7 @@ expand_mode = 2
 stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/TextureRect"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/TextureRect" unique_id=11278449]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,7 +63,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.4, 0, 0.101961, 0.403922)
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect" unique_id=724337087]
 custom_minimum_size = Vector2(1024, 1024)
 layout_mode = 1
 anchors_preset = 6
@@ -80,7 +80,7 @@ texture = ExtResource("4_3u43p")
 expand_mode = 4
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect"]
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/TextureRect" unique_id=1891558162]
 self_modulate = Color(0, 0, 0, 0.470588)
 layout_mode = 1
 anchors_preset = 15
@@ -91,7 +91,7 @@ grow_vertical = 2
 texture = ExtResource("5_q1q6t")
 expand_mode = 1
 
-[node name="POGS" type="TextureRect" parent="CanvasLayer/MainMenu"]
+[node name="POGS" type="TextureRect" parent="CanvasLayer/MainMenu" unique_id=991236546]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -103,7 +103,7 @@ texture = ExtResource("6_nkhmq")
 expand_mode = 2
 stretch_mode = 6
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/POGS"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MainMenu/POGS" unique_id=1685990903]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -112,7 +112,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.347019, 0.00094163, 0.523593, 0.403922)
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/POGS"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainMenu/POGS" unique_id=306666783]
 custom_minimum_size = Vector2(1024, 1024)
 layout_mode = 1
 anchors_preset = 6
@@ -130,7 +130,7 @@ texture = ExtResource("7_t64cq")
 expand_mode = 4
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/POGS"]
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/MainMenu/POGS" unique_id=2008511305]
 self_modulate = Color(0, 0, 0, 0.470588)
 layout_mode = 1
 anchors_preset = 15
@@ -141,7 +141,7 @@ grow_vertical = 2
 texture = ExtResource("5_q1q6t")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/POGS"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/POGS" unique_id=160646258]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 400.0
@@ -150,7 +150,7 @@ offset_bottom = 445.0
 theme_override_font_sizes/font_size = 37
 text = "made in google drawings"
 
-[node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_room_manager")]
+[node name="MenuManager" type="Control" parent="CanvasLayer/MainMenu" unique_id=1706198645 node_paths=PackedStringArray("_room_manager")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -160,7 +160,7 @@ grow_vertical = 2
 script = ExtResource("1_1hdj3")
 _room_manager = NodePath("../../../RoomManager")
 
-[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config", "_ui_scaler", "_can_host_question", "_host_buttons")]
+[node name="JoinHostPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" unique_id=1218112100 node_paths=PackedStringArray("_network", "_room_manager", "_menu_manager", "_code_line_edit", "_name_line_edit", "_join_button", "_host_button", "_game_option_button", "_config", "_ui_scaler", "_can_host_question", "_host_buttons")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -188,54 +188,54 @@ _ui_scaler = NodePath("../../../../UIScaler")
 _can_host_question = NodePath("VBoxContainer/CanHostQuestion")
 _host_buttons = NodePath("VBoxContainer/HostButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel" unique_id=998110900]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=1939953898]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "JAM Box"
 uppercase = true
 
-[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=408815206]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="CodeLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="CodeLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=1159206931]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter 4-Letter Code"
 max_length = 6
 
-[node name="UsernameLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="UsernameLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=155188067]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter Your Name"
 max_length = 12
 
-[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=193642261]
 layout_mode = 2
 text = "Join"
 
-[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=475661624]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="HostButton" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="HostButton" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=1018131665]
 layout_mode = 2
 
-[node name="GameOptionButton" type="OptionButton" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton"]
+[node name="GameOptionButton" type="OptionButton" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton" unique_id=260357977]
 layout_mode = 2
 selected = 0
 item_count = 1
 popup/item_0/text = "TEST GAME"
 popup/item_0/id = 0
 
-[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton"]
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer/HostButton" unique_id=1354528360]
 layout_mode = 2
 text = "Host"
 
-[node name="CanHostQuestion" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer"]
+[node name="CanHostQuestion" type="Label" parent="CanvasLayer/MainMenu/MenuManager/JoinHostPanel/VBoxContainer" unique_id=2124727]
 visible = false
 self_modulate = Color(1, 1, 1, 0.392157)
 custom_minimum_size = Vector2(10, 10)
@@ -243,7 +243,7 @@ layout_mode = 2
 text = "Want to host a game? Get on your computer or tablet!"
 autowrap_mode = 2
 
-[node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
+[node name="HostLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" unique_id=1607268133 node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_players_label", "_quit_button")]
 visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
@@ -265,33 +265,33 @@ _code_label = NodePath("VBoxContainer/CodeLabel")
 _players_label = NodePath("VBoxContainer/ScrollContainer/PlayersLabel")
 _quit_button = NodePath("VBoxContainer/QuitButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel" unique_id=1224064081]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer" unique_id=109861165]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "LOBBY"
 uppercase = true
 
-[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer" unique_id=299209264]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "QVWD"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer" unique_id=1565865955]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
-[node name="PlayersLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer/ScrollContainer"]
+[node name="PlayersLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer/ScrollContainer" unique_id=417572670]
 layout_mode = 2
 text = "P1"
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/HostLobbyPanel/VBoxContainer" unique_id=1198399185]
 layout_mode = 2
 text = "Quit"
 
-[node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_username_label", "_test_button", "_quit_button", "_start_button")]
+[node name="PlayerLobbyPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/MenuManager" unique_id=819874039 node_paths=PackedStringArray("_network", "_room_manager", "_code_label", "_username_label", "_test_button", "_quit_button", "_start_button")]
 visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -315,40 +315,40 @@ _test_button = NodePath("VBoxContainer/TestButton")
 _quit_button = NodePath("VBoxContainer/QuitButton")
 _start_button = NodePath("VBoxContainer/StartButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel" unique_id=172430203]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=1729591337]
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "LOBBY"
 
-[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="CodeLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=175396373]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "QVWD"
 
-[node name="UsernameLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="UsernameLabel" type="Label" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=1376494070]
 layout_mode = 2
 text = "Username"
 
-[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=939043851]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="TestButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=987727876]
 layout_mode = 2
 text = "Test Input"
 
-[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="StartButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=581569707]
 layout_mode = 2
 text = "Start"
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/PlayerLobbyPanel/VBoxContainer" unique_id=2052977601]
 layout_mode = 2
 text = "Quit"
 
-[node name="InGamePanel" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager" node_paths=PackedStringArray("_network", "_quit_button")]
+[node name="InGamePanel" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuManager" unique_id=256536091 node_paths=PackedStringArray("_network", "_quit_button")]
 layout_mode = 1
 offset_right = 100.0
 offset_bottom = 63.0
@@ -361,11 +361,11 @@ script = ExtResource("10_h4wvk")
 _network = NodePath("../../../../Network")
 _quit_button = NodePath("QuitButton")
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/InGamePanel"]
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MenuManager/InGamePanel" unique_id=952514633]
 layout_mode = 2
 text = "Quit"
 
-[node name="RelayPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_network", "_config_relay_button", "_connect_relay_button", "_relay_address_line_edit", "_config_panel", "_config_label")]
+[node name="RelayPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" unique_id=613725048 node_paths=PackedStringArray("_network", "_config_relay_button", "_connect_relay_button", "_relay_address_line_edit", "_config_panel", "_config_label")]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -388,39 +388,39 @@ _relay_address_line_edit = NodePath("VBoxContainer/ConfigPanel/VBoxContainer/Add
 _config_panel = NodePath("VBoxContainer/ConfigPanel")
 _config_label = NodePath("VBoxContainer/ConfigPanel/VBoxContainer/ConfigLabel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel" unique_id=244572258]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 2
 
-[node name="ConfigPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer"]
+[node name="ConfigPanel" type="PanelContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer" unique_id=1079252089]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel" unique_id=1406181062]
 layout_mode = 2
 
-[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
+[node name="ConfigLabel" type="Label" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer" unique_id=1203277805]
 layout_mode = 2
 text = "Relay"
 
-[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
+[node name="AddressLineEdit" type="LineEdit" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer" unique_id=231686507]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "wss://atlinx.net/jambox/server"
 placeholder_text = "Address"
 
-[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer"]
+[node name="ConnectButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer/ConfigPanel/VBoxContainer" unique_id=620330743]
 layout_mode = 2
 text = "Connect"
 
-[node name="ConfigButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer"]
+[node name="ConfigButton" type="Button" parent="CanvasLayer/MainMenu/RelayPanel/VBoxContainer" unique_id=1339776986]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Config Relay"
 
-[node name="ErrorPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" node_paths=PackedStringArray("_network", "_error_label")]
+[node name="ErrorPanel" type="MarginContainer" parent="CanvasLayer/MainMenu" unique_id=1483609230 node_paths=PackedStringArray("_network", "_error_label")]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -434,14 +434,14 @@ script = ExtResource("7_rwkk3")
 _network = NodePath("../../../Network")
 _error_label = NodePath("ErrorLabel")
 
-[node name="ErrorLabel" type="Label" parent="CanvasLayer/MainMenu/ErrorPanel"]
+[node name="ErrorLabel" type="Label" parent="CanvasLayer/MainMenu/ErrorPanel" unique_id=1695528337]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 text = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ConsoleButton" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+[node name="ConsoleButton" type="MarginContainer" parent="CanvasLayer/MainMenu" unique_id=1547150074]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,37 +454,37 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/ConsoleButton"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/ConsoleButton" unique_id=93916510]
 layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="ConsoleButton" type="Button" parent="CanvasLayer/MainMenu/ConsoleButton/VBoxContainer"]
+[node name="ConsoleButton" type="Button" parent="CanvasLayer/MainMenu/ConsoleButton/VBoxContainer" unique_id=1622992521]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "CONSOLE"
 script = ExtResource("15_0gn3v")
 
-[node name="Network" type="Node" parent="."]
+[node name="Network" type="Node" parent="." unique_id=1429207056]
 script = ExtResource("1_51f1j")
 server_address = "wss://atlinx.net/jambox/server"
 auto_reconnect = true
 
-[node name="RoomManager" type="Node" parent="." node_paths=PackedStringArray("_config", "_network")]
+[node name="RoomManager" type="Node" parent="." unique_id=1028106716 node_paths=PackedStringArray("_config", "_network")]
 script = ExtResource("6_olaue")
 _config = NodePath("../Config")
 _network = NodePath("../Network")
 max_players = 3
 
-[node name="MenuMusic" type="AudioStreamPlayer" parent="RoomManager" node_paths=PackedStringArray("_room_manager")]
+[node name="MenuMusic" type="AudioStreamPlayer" parent="RoomManager" unique_id=1227931023 node_paths=PackedStringArray("_room_manager")]
 stream = ExtResource("1_rpxnp")
 autoplay = true
 script = ExtResource("18_22xdf")
 _room_manager = NodePath("..")
 
-[node name="Config" type="Node" parent="."]
+[node name="Config" type="Node" parent="." unique_id=1722098996]
 script = ExtResource("14_pn2eo")
 games = Array[PackedScene]([ExtResource("15_ftrbr")])
 
-[node name="UIScaler" type="Node" parent="."]
+[node name="UIScaler" type="Node" parent="." unique_id=738934849]
 script = ExtResource("17_diokc")

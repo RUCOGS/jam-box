@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://cvnf3xtqitxrh"]
+[gd_resource type="Theme" format=3 uid="uid://cvnf3xtqitxrh"]
 
 [ext_resource type="FontFile" uid="uid://cnim54s3ohddb" path="res://base_game/assets/fonts/coolvetica/coolvetica_rg.otf" id="1_5aq4d"]
 [ext_resource type="FontFile" uid="uid://c87jyoxq1wdca" path="res://base_game/assets/fonts/the_bold_font.otf" id="1_r1t73"]
