@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://lcfau7tnyuti" path="res://room_games/quiplash/scenes/quiplash.tscn" id="15_ftrbr"]
 [ext_resource type="Script" uid="uid://dyag6nyqsfa1k" path="res://base_game/scripts/ui_scaler.gd" id="17_diokc"]
 [ext_resource type="Script" uid="uid://doihve1hx7ilu" path="res://base_game/scripts/menu_music.gd" id="18_22xdf"]
+[ext_resource type="PackedScene" uid="uid://c4ppmprabkq21" path="res://room_games/coggle_league/scenes/coggle.tscn" id="22_gc6pi"]
 
 [node name="Main" type="Node" unique_id=1613544907]
 
@@ -484,7 +485,7 @@ _room_manager = NodePath("..")
 
 [node name="Config" type="Node" parent="." unique_id=1722098996]
 script = ExtResource("14_pn2eo")
-games = Array[PackedScene]([ExtResource("15_ftrbr")])
+games = Array[PackedScene]([ExtResource("15_ftrbr"), ExtResource("22_gc6pi")])
 
 [node name="UIScaler" type="Node" parent="." unique_id=738934849]
 script = ExtResource("17_diokc")

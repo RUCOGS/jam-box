@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://c4ppmprabkq21"]
+
+[ext_resource type="Script" uid="uid://duxacsqj5eyq6" path="res://room_games/coggle_league/scripts/coggle.gd" id="1_pt7sh"]
+[ext_resource type="Theme" uid="uid://cvnf3xtqitxrh" path="res://base_game/assets/cogs_box_theme.tres" id="2_ttsw1"]
+[ext_resource type="Script" uid="uid://6jxw5vwm5tyu" path="res://room_games/coggle_league/scripts/coggle_host_manager.gd" id="3_ubovi"]
+[ext_resource type="Script" uid="uid://0s616lhak21b" path="res://room_games/coggle_league/scripts/coggle_player_manager.gd" id="4_iivd4"]
+
+[node name="CoggleRoomManager" type="Node" unique_id=2094685050 node_paths=PackedStringArray("_host_manager", "_player_manager")]
+script = ExtResource("1_pt7sh")
+_host_manager = NodePath("HostManager")
+_player_manager = NodePath("PlayerManager")
+id = 1
+game_name = "Coggle League"
+game_description = "COGS Bobble League!"
+min_players = 2
+max_players = 8
+
+[node name="HostManager" type="Control" parent="." unique_id=1176798325 node_paths=PackedStringArray("_coggle_room_manager")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_ttsw1")
+script = ExtResource("3_ubovi")
+_coggle_room_manager = NodePath("..")
+
+[node name="PlayerManager" type="Control" parent="." unique_id=1262389612 node_paths=PackedStringArray("_coggle_room_manager")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_ttsw1")
+script = ExtResource("4_iivd4")
+_coggle_room_manager = NodePath("..")
