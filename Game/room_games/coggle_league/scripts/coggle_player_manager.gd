@@ -1,5 +1,5 @@
 class_name CogglePlayerManager
-extends Control
+extends Node2D
 
 @export var _coggle_room_manager: CoggleRoomManager
 var _room_manager: RoomManager

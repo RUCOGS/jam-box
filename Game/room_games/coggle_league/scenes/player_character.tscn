@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cybvl1mkl3a1j"]
+
+[ext_resource type="Script" uid="uid://bxp68mv1eyq2e" path="res://room_games/coggle_league/scripts/player_character.gd" id="1_xhk65"]
+[ext_resource type="Texture2D" uid="uid://cq4snqvnf8r7n" path="res://room_games/coggle_league/assets/white-circle.png" id="2_jybtb"]
+
+[node name="PlayerCharacter" type="Node2D" unique_id=154049052]
+script = ExtResource("1_xhk65")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434708120]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_jybtb")

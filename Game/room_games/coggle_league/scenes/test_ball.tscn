@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://c6pjpml2iogs3"]
+
+[ext_resource type="Script" uid="uid://dx40osa2xmfi7" path="res://room_games/coggle_league/scripts/test_ball.gd" id="1_7u5bb"]
+[ext_resource type="Texture2D" uid="uid://cq4snqvnf8r7n" path="res://room_games/coggle_league/assets/white-circle.png" id="2_e5683"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_42lg8"]
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4w2ts"]
+
+[node name="TestBall" type="RigidBody2D" unique_id=1243525304 node_paths=PackedStringArray("_ball_collider", "sprites")]
+physics_material_override = SubResource("PhysicsMaterial_42lg8")
+gravity_scale = 0.0
+continuous_cd = 2
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_7u5bb")
+_ball_collider = NodePath("CollisionShape2D")
+sprites = NodePath("Sprites")
+
+[node name="Sprites" type="Node2D" parent="." unique_id=1123459978]
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprites" unique_id=1063583825]
+modulate = Color(0.15294118, 1, 1, 1)
+scale = Vector2(0.039138697, 0.039138697)
+texture = ExtResource("2_e5683")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=810910569]
+shape = SubResource("CircleShape2D_4w2ts")
