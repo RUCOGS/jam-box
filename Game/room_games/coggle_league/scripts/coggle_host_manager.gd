@@ -32,8 +32,7 @@ func _ready() -> void:
 	visible = false
 
 func _on_received_packet(sender_id: int, packet_id: int, buffer: ByteBuffer):
-	#handle packets here
-	pass
+	_host_world.received_packet(sender_id, packet_id, buffer)
 
 func _on_game_start():
 	#get all players, add them to a dictionary with some information about them
@@ -43,6 +42,9 @@ func _on_game_start():
 			"team": 0,
 			#etc
 		}
+		
+	#tell the physics sim that the game is starting
+	_host_world.game_start()
 	visible = true
 	
 func _on_game_end():

@@ -11,6 +11,33 @@
 [ext_resource type="PackedScene" uid="uid://bc5h3ofa4ww33" path="res://room_games/coggle_league/scenes/board_collision.tscn" id="6_cq6o2"]
 [ext_resource type="Script" uid="uid://1hacn6jcsnv2" path="res://room_games/coggle_league/scripts/host_ui.gd" id="8_pecen"]
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_apgmr"]
+distance = -100.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_32ghe"]
+normal = Vector2(0, 1)
+distance = -100.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_h60rw"]
+normal = Vector2(1, 0)
+distance = -200.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_y4yll"]
+normal = Vector2(-1, 0)
+distance = -200.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_apgmr"]
+size = Vector2(25, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_32ghe"]
+size = Vector2(25, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h60rw"]
+size = Vector2(25, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4yll"]
+size = Vector2(25, 50)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pecen"]
 bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
 
@@ -38,13 +65,27 @@ _host_manager = NodePath("..")
 _game_borders = NodePath("GameBorders")
 _test_ball_prefab = ExtResource("4_apgmr")
 
-[node name="GameBorders" type="StaticBody2D" parent="HostManager/HostWorld" unique_id=1230159726 node_paths=PackedStringArray("_collider", "_visual_board")]
+[node name="GameBorders" type="StaticBody2D" parent="HostManager/HostWorld" unique_id=1230159726 node_paths=PackedStringArray("_collider", "_visual_board", "_border_array", "_corner_array")]
 physics_material_override = ExtResource("4_unucm")
 script = ExtResource("4_o7jlg")
 _collider = NodePath("CollisionPolygon2D")
 _visual_board = NodePath("Visuals")
+_border_array = [NodePath("BottomBorder"), NodePath("TopBorder"), NodePath("LeftBorder"), NodePath("RightBorder")]
+_corner_array = [NodePath("TopLeftCorner"), NodePath("TopRightCorner"), NodePath("BottomLeftCorner"), NodePath("BottomRightCorner")]
 
 [node name="CollisionPolygon2D" parent="HostManager/HostWorld/GameBorders" unique_id=1301710764 instance=ExtResource("6_cq6o2")]
+
+[node name="BottomBorder" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=1245376656]
+shape = SubResource("WorldBoundaryShape2D_apgmr")
+
+[node name="TopBorder" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=986151366]
+shape = SubResource("WorldBoundaryShape2D_32ghe")
+
+[node name="LeftBorder" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=1535294598]
+shape = SubResource("WorldBoundaryShape2D_h60rw")
+
+[node name="RightBorder" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=1130600397]
+shape = SubResource("WorldBoundaryShape2D_y4yll")
 
 [node name="Visuals" type="Node2D" parent="HostManager/HostWorld/GameBorders" unique_id=1994395205]
 
@@ -63,6 +104,22 @@ texture = ExtResource("6_2ebc0")
 position = Vector2(187.5, -1.4305115e-06)
 scale = Vector2(0.7812499, 3.125)
 texture = ExtResource("6_2ebc0")
+
+[node name="TopLeftCorner" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=720559845]
+position = Vector2(-187.5, -75)
+shape = SubResource("RectangleShape2D_apgmr")
+
+[node name="TopRightCorner" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=2141601978]
+position = Vector2(187.5, -75)
+shape = SubResource("RectangleShape2D_32ghe")
+
+[node name="BottomLeftCorner" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=817629927]
+position = Vector2(-187.5, 75)
+shape = SubResource("RectangleShape2D_h60rw")
+
+[node name="BottomRightCorner" type="CollisionShape2D" parent="HostManager/HostWorld/GameBorders" unique_id=1185314496]
+position = Vector2(187.5, 75)
+shape = SubResource("RectangleShape2D_y4yll")
 
 [node name="HostUI" type="MarginContainer" parent="HostManager" unique_id=1426699099]
 anchors_preset = 15
