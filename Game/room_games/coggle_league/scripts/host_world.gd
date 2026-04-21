@@ -30,10 +30,10 @@ func update_bounding_rect(viewport: Vector2i):
 	_game_scale = 	_bounding_rect.size.x / 400
 	_game_borders.update_game_size(_bounding_rect, _game_scale)
 
-func _spawn_ball(size_scale: int, location: Vector2, vel: Vector2):
+func _spawn_ball(size_scale: float, location: Vector2, vel: Vector2):
 	var _ball_instance: ball = _test_ball_prefab.instantiate()
-	self.add_child(_ball_instance)
 	_ball_instance.ball_construct(size_scale, location, vel, _friction)
+	self.add_child(_ball_instance)
 
 func game_start():
 	#note -- use relative spawn locations (i.e. bounding_rect.x * 0.2 or something)

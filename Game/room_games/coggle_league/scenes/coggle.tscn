@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://cg6od4u56e0ds" path="res://room_games/coggle_league/assets/whitebox.png" id="6_2ebc0"]
 [ext_resource type="PackedScene" uid="uid://bc5h3ofa4ww33" path="res://room_games/coggle_league/scenes/board_collision.tscn" id="6_cq6o2"]
 [ext_resource type="Script" uid="uid://1hacn6jcsnv2" path="res://room_games/coggle_league/scripts/host_ui.gd" id="8_pecen"]
+[ext_resource type="Script" uid="uid://ckifgo6kbdnah" path="res://room_games/coggle_league/scripts/player_world.gd" id="11_32ghe"]
+[ext_resource type="Script" uid="uid://b4bkohhir76li" path="res://room_games/coggle_league/scripts/player_borders.gd" id="12_h60rw"]
+[ext_resource type="PackedScene" uid="uid://cybvl1mkl3a1j" path="res://room_games/coggle_league/scenes/player_character.tscn" id="12_y4yll"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_apgmr"]
 distance = -100.0
@@ -43,6 +46,9 @@ bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apgmr"]
 bg_color = Color(0.15127608, 0.15127608, 0.15127605, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xhwse"]
+size = Vector2(400, 200)
 
 [node name="CoggleRoomManager" type="Node" unique_id=2094685050 node_paths=PackedStringArray("_host_manager", "_player_manager")]
 script = ExtResource("1_pt7sh")
@@ -178,11 +184,45 @@ wef
 wef oij oiwaje o"
 autowrap_mode = 3
 
-[node name="PlayerManager" type="Node2D" parent="." unique_id=1214273280 node_paths=PackedStringArray("_coggle_room_manager")]
+[node name="PlayerManager" type="Node2D" parent="." unique_id=1214273280 node_paths=PackedStringArray("_coggle_room_manager", "_player_world")]
+visible = false
 script = ExtResource("4_iivd4")
 _coggle_room_manager = NodePath("..")
+_player_world = NodePath("PlayerWorld")
 
-[node name="PlayerWorld" type="Node2D" parent="PlayerManager" unique_id=1755954667]
+[node name="PlayerWorld" type="Node2D" parent="PlayerManager" unique_id=1755954667 node_paths=PackedStringArray("_player_manager", "_player_border")]
+script = ExtResource("11_32ghe")
+_player_manager = NodePath("..")
+_player_border = NodePath("PlayerBorders")
+_player_character_prefab = ExtResource("12_y4yll")
+
+[node name="PlayerBorders" type="StaticBody2D" parent="PlayerManager/PlayerWorld" unique_id=1012129693 node_paths=PackedStringArray("_collider", "_player_visuals")]
+input_pickable = true
+script = ExtResource("12_h60rw")
+_collider = NodePath("CollisionShape2D")
+_player_visuals = NodePath("PlayerVisuals")
+
+[node name="PlayerVisuals" type="Node2D" parent="PlayerManager/PlayerWorld/PlayerBorders" unique_id=1740389744]
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/PlayerWorld/PlayerBorders/PlayerVisuals" unique_id=1016375230]
+modulate = Color(0.49747366, 0.49747366, 0.49747366, 1)
+position = Vector2(3.6358833e-06, 0)
+scale = Vector2(10.9375, 6.2109375)
+texture = ExtResource("6_2ebc0")
+
+[node name="Sprite2D2" type="Sprite2D" parent="PlayerManager/PlayerWorld/PlayerBorders/PlayerVisuals" unique_id=1853030235]
+position = Vector2(-187.5, 3.0994415e-06)
+scale = Vector2(0.7812499, 3.1250002)
+texture = ExtResource("6_2ebc0")
+
+[node name="Sprite2D3" type="Sprite2D" parent="PlayerManager/PlayerWorld/PlayerBorders/PlayerVisuals" unique_id=1192790206]
+position = Vector2(187.5, -1.4305115e-06)
+scale = Vector2(0.7812499, 3.125)
+texture = ExtResource("6_2ebc0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/PlayerWorld/PlayerBorders" unique_id=1915985620]
+shape = SubResource("RectangleShape2D_xhwse")
+disabled = true
 
 [node name="PlayerUI" type="Control" parent="PlayerManager" unique_id=997313828]
 layout_mode = 3
@@ -191,4 +231,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 1
+
+[connection signal="input_event" from="PlayerManager/PlayerWorld/PlayerBorders" to="PlayerManager/PlayerWorld" method="_on_player_borders_input_event"]

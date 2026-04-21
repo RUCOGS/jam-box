@@ -9,12 +9,13 @@ point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jybtb"]
 
-[node name="PlayerCharacter" type="Node2D" unique_id=154049052 node_paths=PackedStringArray("_sprite_base", "_projectile_path", "_highlight", "_click_detector")]
+[node name="PlayerCharacter" type="Node2D" unique_id=154049052 node_paths=PackedStringArray("_sprite_base", "_projectile_path", "_highlight", "_click_detector", "_click_detector_collider")]
 script = ExtResource("1_xhk65")
 _sprite_base = NodePath("Base")
 _projectile_path = NodePath("Line2D")
 _highlight = NodePath("Highlight")
 _click_detector = NodePath("Area2D")
+_click_detector_collider = NodePath("Area2D/CollisionShape2D")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=991280654]
 points = PackedVector2Array(0, 0, 20, 0, 40, 0, 60, 0, 80, 0)
@@ -36,6 +37,10 @@ scale = Vector2(0.039, 0.039)
 texture = ExtResource("2_jybtb")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=144075545]
+collision_layer = 128
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1142225479]
 shape = SubResource("CircleShape2D_jybtb")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
