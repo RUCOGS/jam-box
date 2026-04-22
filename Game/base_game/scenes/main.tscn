@@ -158,6 +158,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_1hdj3")
 _room_manager = NodePath("../../../RoomManager")
 
@@ -479,6 +480,7 @@ max_players = 3
 
 [node name="MenuMusic" type="AudioStreamPlayer" parent="RoomManager" unique_id=1227931023 node_paths=PackedStringArray("_room_manager")]
 stream = ExtResource("1_rpxnp")
+volume_db = -80.0
 autoplay = true
 script = ExtResource("18_22xdf")
 _room_manager = NodePath("..")
